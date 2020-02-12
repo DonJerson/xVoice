@@ -6,19 +6,21 @@ const app = express();
 var mysql      = require('mysql');
 var connection = mysql.createConnection({
   host     : '3.81.8.219',
-  user     : 'kamailio',
-  password : 'kamailiorw',
+  user     : 'root',
+  password : 'Pri3to.Server',
   database : 'kamailio'
 });
 
-connection.connect();
-
-connection.query('SELECT * FROM subscriber', function (error, results, fields) {
-  if (error) throw error;
-  console.log('The solution is: ', results);
-});
-connection.end();
-
+const getSubscribers=()=>{
+  connection.connect();
+  connection.query('SELECT * FROM subscriber', function (error, results, fields) {
+    if (error) throw error;
+    console.log('The solution is: ', results);
+  });
+  connection.end();
+  return
+}
+getSubscribers()
 
 app.use(express.static(path.join(__dirname, '../build')));
 
@@ -30,4 +32,4 @@ app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, '../build', 'index.html'));
 });
 
-app.listen(process.env.PORT || 8080);
+app.listen(process.env.PORT || 80);
