@@ -14,10 +14,26 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
-from kamailio import views
+from django.urls import path, include
+from django.conf.urls.static import static
+from kamailio import views as views2
+from django.urls import path, include
+from rest_framework.routers import SimpleRouter
+from kamailio.api import *
+from rest_framework_jwt.views import obtain_jwt_token
+
+router = SimpleRouter()
+router.register(r'customer', CustomerViewSet, base_name='customer')
+router.register(r'recarga', RecargaViewSet, base_name='recarga')
+router.register(r'consumeApi', ApiUsageViewSet, base_name='consumeApi')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('subscriber/', views.subscriber),
+    path('token-auth/', obtain_jwt_token),
+    path('subscriber/', views2.subscriber),
+    path('current_user/', get_current_user),
+    #path('recarga/', recarga),
+    path('api/',include(router.urls)),
+    path('consumeApiOG/', ApiUsageOG),
+    path('recargaOG/', RecargaOG),
 ]

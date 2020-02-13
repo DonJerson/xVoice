@@ -69,34 +69,60 @@ const Registration=(props)=>{
   const handleLogin=()=>{
     props.userPack.handleLogin()
   }
-  const toggleRegistration=()=>{
-    setRegistration(prev=>!prev)
+  const setRegistering=()=>{
+    setRegistration(true)
   }
+  const setLogging=()=>{
+    setRegistration(false)
+  }
+  const settingUp = registration?"active":""
+  const logging = !registration?"active":""
+  //console.log(active, "act")
   return(
     <>
-    <div className="login-container">
+    <div className="login-container" style={{marginBottom:"62px"}}>
 	<form action="" className="form-login">
 		<ul className="login-nav">
-			<li className="login-nav__item active">
-				<a href="#">Sign In</a>
+			<li className={"login-nav__item "+logging}>
+				<a onClick={setLogging}>Sign In</a>
 			</li>
-			<li className="login-nav__item">
-				<a href="#">Sign Up</a>
+			<li className={"login-nav__item "+settingUp}>
+				<a onClick={setRegistering}>Sign Up</a>
 			</li>
 		</ul>
 		<label for="login-input-user" className="login__label">
-			Username
+			Email
 		</label>
 		<input id="login-input-user" className="login__input" type="text" />
 		<label for="login-input-password" className="login__label">
 			Password
 		</label>
 		<input id="login-input-password" className="login__input" type="password" />
+    {registration?
+    <>
+    		<label for="login-input-user" className="login__label">
+			Nombre
+		</label>
+		<input id="login-input-user" className="login__input" type="text" />
+    <label for="login-input-user" className="login__label">
+			Celular
+		</label>
+		<input id="login-input-user" className="login__input" type="text" />
 		<label for="login-sign-up" className="login__label--checkbox">
 			<input id="login-sign-up" type="checkbox" className="login__input--checkbox" />
-			Keep me Signed in
+			Estoy de acuerdo con las condiciones
 		</label>
-		<button className="login__submit" onClick={handleLogin}>Sign in</button>
+		<button className="login__submit" onClick={handleLogin}>Registrarme</button>
+    </>
+    :
+    <>
+    <label for="login-sign-up" className="login__label--checkbox">
+    <input id="login-sign-up" type="checkbox" className="login__input--checkbox" />
+      Mantenme logueado
+    </label>
+    <button className="login__submit" onClick={handleLogin}>Entrar</button>
+    </>
+  }
 	</form>
 	<a href="#" className="login__forgot">Forgot Password?</a>
 </div>

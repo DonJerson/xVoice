@@ -14,25 +14,26 @@ SECRET_KEY = '^$am8n_mab&2u^lobwr4gd9wwi8f04jg5frtil^0u_*z214%2('
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1','192.168.2.104','3.14.1.3','192.168.2.100']
+ALLOWED_HOSTS = ['127.0.0.1','192.168.2.104','3.14.1.3','192.168.2.100','3.81.8.219']
 
 # Application definition   
 CORS_ORIGIN_ALLOW_ALL = True
 #CSRF_COOKIE_SECURE = True
 
-#AUTH_USER_MODEL = 'kamailio.Customer'
+AUTH_USER_MODEL = 'kamailio.Customer'
 
 INSTALLED_APPS = [
+    'rest_framework',
     'django.contrib.contenttypes',
     'django.contrib.auth',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     'kamailio',
     'django.contrib.admin',
     'corsheaders',
     'storages',
-    'rest_framework',
     'django_filters',
 ]
 
@@ -149,8 +150,8 @@ if True:
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'kamailio',
-        'USER': 'kamailio',
-        'PASSWORD': 'kamailiorw',
+        'USER': 'root',
+        'PASSWORD': 'Pri3to.Server',
         'HOST': '3.81.8.219',
         'PORT': '3306',
     }
