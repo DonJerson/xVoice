@@ -1,64 +1,23 @@
+from django.db import models
+
+# Create your models here.
 # This is an auto-generated Django model module.
 # You'll have to do the following manually to clean this up:
 #   * Rearrange models' order
 #   * Make sure each model has one field with primary_key=True
 #   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
-#   * Remove `managed = True` lines if you wish to allow Django to create, modify, and delete the table
+#   * Remove `` lines if you wish to allow Django to create, modify, and delete the table
 # Feel free to rename the models, but don't rename db_table values or field names.
-from django.db import models
-from django.contrib.auth.models import User, AbstractUser
+
+from django.contrib.auth.models import User, AbstractUser,AbstractBaseUser,UserManager,BaseUserManager
+from django.contrib.auth.models import UserManager
+from django.utils import timezone
+import datetime
 
 SERVICES_CHOICES = [('GENVZ','GENVZ'),('CALL','CALL')]
 PAYMENT_CHOICES = [('CASH','CASH'),('BTC','BTC')]
 
-class Customer(AbstractUser):
-	name = models.CharField(max_length=20,null=True,blank=True);
-	balance = models.DecimalField(max_digits=6,decimal_places=3,default=0.000)
-	phoneNumber = models.CharField(max_length=10,null=True,blank=True)
-	verified = models.BooleanField(default=False)
 
-	def __str__(self):
-		if self.name:
-			return self.name
-		else:
-			return "No identificado"
-	
-	@property
-	def recargasHistory(self):
-		return self.recarga_set.all()
-
-	@property
-	def apiUsageHistory(self):
-		return self.apiusage_set.all()
-	pass
-
-class ApiUsage(models.Model):
-	consumer = models.ForeignKey(Customer,on_delete=models.CASCADE);
-	serviceProvided=models.CharField(max_length=10,choices=SERVICES_CHOICES)
-	def __str__(self):
-		return self.serviceProvided
-
-class Recarga(models.Model):
-	beneficiary = models.ForeignKey(Customer,on_delete=models.CASCADE);
-	amount = models.DecimalField(max_digits=4,decimal_places=3)
-	validated = models.BooleanField(default=False);
-	methodOfPayment = models.CharField(max_length=10,choices=PAYMENT_CHOICES,default="CASH")
-	def __str__(self):
-		return self.amount
-	pass
-
-class Acc(models.Model):
-    method = models.CharField(max_length=16)
-    from_tag = models.CharField(max_length=64)
-    to_tag = models.CharField(max_length=64)
-    callid = models.CharField(max_length=255)
-    sip_code = models.CharField(max_length=3)
-    sip_reason = models.CharField(max_length=128)
-    time = models.DateTimeField()
-
-    class Meta:
-        managed = True
-        db_table = 'acc'
 
 
 class AccCdrs(models.Model):
@@ -67,7 +26,7 @@ class AccCdrs(models.Model):
     duration = models.FloatField()
 
     class Meta:
-        managed = True
+        
         db_table = 'acc_cdrs'
 
 
@@ -100,7 +59,7 @@ class ActiveWatchers(models.Model):
     user_agent = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
-        managed = True
+        
         db_table = 'active_watchers'
         unique_together = (('callid', 'to_tag', 'from_tag'),)
 
@@ -113,7 +72,7 @@ class Address(models.Model):
     tag = models.CharField(max_length=64, blank=True, null=True)
 
     class Meta:
-        managed = True
+        
         db_table = 'address'
 
 
@@ -142,81 +101,15 @@ class Aliases(models.Model):
     partition = models.IntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 'aliases'
-
-
-class AuthGroup(models.Model):
-    name = models.CharField(unique=True, max_length=150)
-
-    class Meta:
-        managed = True
-        db_table = 'auth_group'
-
-
-class AuthGroupPermissions(models.Model):
-    group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
-    permission = models.ForeignKey('AuthPermission', models.DO_NOTHING)
-
-    class Meta:
-        managed = True
-        db_table = 'auth_group_permissions'
-        unique_together = (('group', 'permission'),)
-
-
-class AuthPermission(models.Model):
-    name = models.CharField(max_length=255)
-    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING)
-    codename = models.CharField(max_length=100)
-
-    class Meta:
-        managed = True
-        db_table = 'auth_permission'
-        unique_together = (('content_type', 'codename'),)
-
-
-class AuthUser(models.Model):
-    password = models.CharField(max_length=128)
-    last_login = models.DateTimeField(blank=True, null=True)
-    is_superuser = models.IntegerField()
-    username = models.CharField(unique=True, max_length=150)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=150)
-    email = models.CharField(max_length=254)
-    is_staff = models.IntegerField()
-    is_active = models.IntegerField()
-    date_joined = models.DateTimeField()
-
-    class Meta:
-        managed = True
-        db_table = 'auth_user'
-
-
-class AuthUserGroups(models.Model):
-    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
-    group = models.ForeignKey(AuthGroup, models.DO_NOTHING)
-
-    class Meta:
-        managed = True
-        db_table = 'auth_user_groups'
-        unique_together = (('user', 'group'),)
-
-
-class AuthUserUserPermissions(models.Model):
-    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
-    permission = models.ForeignKey(AuthPermission, models.DO_NOTHING)
-
-    class Meta:
-        managed = True
-        db_table = 'auth_user_user_permissions'
-        unique_together = (('user', 'permission'),)
 
 
 class CarrierName(models.Model):
     carrier = models.CharField(max_length=64, blank=True, null=True)
 
     class Meta:
-        managed = True
+        
         db_table = 'carrier_name'
 
 
@@ -232,7 +125,7 @@ class Carrierfailureroute(models.Model):
     description = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
-        managed = True
+        
         db_table = 'carrierfailureroute'
 
 
@@ -250,7 +143,7 @@ class Carrierroute(models.Model):
     description = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
-        managed = True
+        
         db_table = 'carrierroute'
 
 
@@ -261,7 +154,7 @@ class Cpl(models.Model):
     cpl_bin = models.TextField(blank=True, null=True)
 
     class Meta:
-        managed = True
+        
         db_table = 'cpl'
         unique_together = (('username', 'domain'),)
 
@@ -273,7 +166,7 @@ class Dbaliases(models.Model):
     domain = models.CharField(max_length=64)
 
     class Meta:
-        managed = True
+        
         db_table = 'dbaliases'
 
 
@@ -303,7 +196,7 @@ class Dialog(models.Model):
     xdata = models.CharField(max_length=512, blank=True, null=True)
 
     class Meta:
-        managed = True
+        
         db_table = 'dialog'
 
 
@@ -314,7 +207,7 @@ class DialogVars(models.Model):
     dialog_value = models.CharField(max_length=512)
 
     class Meta:
-        managed = True
+        
         db_table = 'dialog_vars'
 
 
@@ -329,7 +222,7 @@ class Dialplan(models.Model):
     attrs = models.CharField(max_length=64)
 
     class Meta:
-        managed = True
+        
         db_table = 'dialplan'
 
 
@@ -342,52 +235,8 @@ class Dispatcher(models.Model):
     description = models.CharField(max_length=64)
 
     class Meta:
-        managed = True
+        
         db_table = 'dispatcher'
-
-
-class DjangoAdminLog(models.Model):
-    action_time = models.DateTimeField()
-    object_id = models.TextField(blank=True, null=True)
-    object_repr = models.CharField(max_length=200)
-    action_flag = models.PositiveSmallIntegerField()
-    change_message = models.TextField()
-    content_type = models.ForeignKey('DjangoContentType', models.DO_NOTHING, blank=True, null=True)
-    user = models.ForeignKey(AuthUser, models.DO_NOTHING)
-
-    class Meta:
-        managed = True
-        db_table = 'django_admin_log'
-
-
-class DjangoContentType(models.Model):
-    app_label = models.CharField(max_length=100)
-    model = models.CharField(max_length=100)
-
-    class Meta:
-        managed = True
-        db_table = 'django_content_type'
-        unique_together = (('app_label', 'model'),)
-
-
-class DjangoMigrations(models.Model):
-    app = models.CharField(max_length=255)
-    name = models.CharField(max_length=255)
-    applied = models.DateTimeField()
-
-    class Meta:
-        managed = True
-        db_table = 'django_migrations'
-
-
-class DjangoSession(models.Model):
-    session_key = models.CharField(primary_key=True, max_length=40)
-    session_data = models.TextField()
-    expire_date = models.DateTimeField()
-
-    class Meta:
-        managed = True
-        db_table = 'django_session'
 
 
 class Domain(models.Model):
@@ -396,7 +245,7 @@ class Domain(models.Model):
     last_modified = models.DateTimeField()
 
     class Meta:
-        managed = True
+        
         db_table = 'domain'
 
 
@@ -408,7 +257,7 @@ class DomainAttrs(models.Model):
     last_modified = models.DateTimeField()
 
     class Meta:
-        managed = True
+        
         db_table = 'domain_attrs'
 
 
@@ -416,7 +265,7 @@ class DomainName(models.Model):
     domain = models.CharField(max_length=64, blank=True, null=True)
 
     class Meta:
-        managed = True
+        
         db_table = 'domain_name'
 
 
@@ -428,7 +277,7 @@ class Domainpolicy(models.Model):
     description = models.CharField(max_length=255)
 
     class Meta:
-        managed = True
+        
         db_table = 'domainpolicy'
         unique_together = (('rule', 'att', 'val'),)
 
@@ -443,7 +292,7 @@ class DrGateways(models.Model):
     description = models.CharField(max_length=128)
 
     class Meta:
-        managed = True
+        
         db_table = 'dr_gateways'
 
 
@@ -454,7 +303,7 @@ class DrGroups(models.Model):
     description = models.CharField(max_length=128)
 
     class Meta:
-        managed = True
+        
         db_table = 'dr_groups'
 
 
@@ -463,7 +312,7 @@ class DrGwLists(models.Model):
     description = models.CharField(max_length=128)
 
     class Meta:
-        managed = True
+        
         db_table = 'dr_gw_lists'
 
 
@@ -478,7 +327,7 @@ class DrRules(models.Model):
     description = models.CharField(max_length=128)
 
     class Meta:
-        managed = True
+        
         db_table = 'dr_rules'
 
 
@@ -488,7 +337,7 @@ class Globalblacklist(models.Model):
     description = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
-        managed = True
+        
         db_table = 'globalblacklist'
 
 
@@ -499,7 +348,7 @@ class Grp(models.Model):
     last_modified = models.DateTimeField()
 
     class Meta:
-        managed = True
+        
         db_table = 'grp'
         unique_together = (('username', 'domain', 'grp'),)
 
@@ -512,7 +361,7 @@ class Htable(models.Model):
     expires = models.IntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 'htable'
 
 
@@ -523,7 +372,7 @@ class ImcMembers(models.Model):
     flag = models.IntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 'imc_members'
         unique_together = (('username', 'domain', 'room'),)
 
@@ -534,7 +383,7 @@ class ImcRooms(models.Model):
     flag = models.IntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 'imc_rooms'
         unique_together = (('name', 'domain'),)
 
@@ -555,7 +404,7 @@ class LcrGw(models.Model):
     defunct = models.PositiveIntegerField(blank=True, null=True)
 
     class Meta:
-        managed = True
+        
         db_table = 'lcr_gw'
 
 
@@ -569,7 +418,7 @@ class LcrRule(models.Model):
     enabled = models.PositiveIntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 'lcr_rule'
         unique_together = (('lcr_id', 'prefix', 'from_uri'),)
 
@@ -582,7 +431,7 @@ class LcrRuleTarget(models.Model):
     weight = models.PositiveIntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 'lcr_rule_target'
         unique_together = (('rule_id', 'gw_id'),)
 
@@ -612,7 +461,7 @@ class Location(models.Model):
     partition = models.IntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 'location'
 
 
@@ -626,7 +475,7 @@ class LocationAttrs(models.Model):
     last_modified = models.DateTimeField()
 
     class Meta:
-        managed = True
+        
         db_table = 'location_attrs'
 
 
@@ -640,7 +489,7 @@ class MissedCalls(models.Model):
     time = models.DateTimeField()
 
     class Meta:
-        managed = True
+        
         db_table = 'missed_calls'
 
 
@@ -653,7 +502,7 @@ class Mohqcalls(models.Model):
     call_time = models.DateTimeField()
 
     class Meta:
-        managed = True
+        
         db_table = 'mohqcalls'
 
 
@@ -665,7 +514,7 @@ class Mohqueues(models.Model):
     debug = models.IntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 'mohqueues'
 
 
@@ -674,7 +523,7 @@ class Mtree(models.Model):
     tvalue = models.CharField(max_length=128)
 
     class Meta:
-        managed = True
+        
         db_table = 'mtree'
 
 
@@ -684,7 +533,7 @@ class Mtrees(models.Model):
     tvalue = models.CharField(max_length=128)
 
     class Meta:
-        managed = True
+        
         db_table = 'mtrees'
         unique_together = (('tname', 'tprefix', 'tvalue'),)
 
@@ -695,7 +544,7 @@ class Pdt(models.Model):
     domain = models.CharField(max_length=128)
 
     class Meta:
-        managed = True
+        
         db_table = 'pdt'
         unique_together = (('sdomain', 'prefix'),)
 
@@ -706,7 +555,7 @@ class PlPipes(models.Model):
     plimit = models.IntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 'pl_pipes'
 
 
@@ -722,7 +571,7 @@ class Presentity(models.Model):
     priority = models.IntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 'presentity'
         unique_together = (('username', 'domain', 'event', 'etag'),)
 
@@ -748,7 +597,7 @@ class Pua(models.Model):
     extra_headers = models.TextField()
 
     class Meta:
-        managed = True
+        
         db_table = 'pua'
         unique_together = (('etag', 'tuple_id', 'call_id', 'from_tag'),)
 
@@ -760,7 +609,7 @@ class Purplemap(models.Model):
     ext_pass = models.CharField(max_length=64, blank=True, null=True)
 
     class Meta:
-        managed = True
+        
         db_table = 'purplemap'
 
 
@@ -769,7 +618,7 @@ class ReGrp(models.Model):
     group_id = models.IntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 're_grp'
 
 
@@ -784,7 +633,7 @@ class RlsPresentity(models.Model):
     reason = models.CharField(max_length=64)
 
     class Meta:
-        managed = True
+        
         db_table = 'rls_presentity'
         unique_together = (('rlsubs_did', 'resource_uri'),)
 
@@ -815,7 +664,7 @@ class RlsWatchers(models.Model):
     updated = models.IntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 'rls_watchers'
         unique_together = (('callid', 'to_tag', 'from_tag'),)
 
@@ -828,7 +677,7 @@ class Rtpengine(models.Model):
     stamp = models.DateTimeField()
 
     class Meta:
-        managed = True
+        
         db_table = 'rtpengine'
         unique_together = (('setid', 'url'),)
 
@@ -841,7 +690,7 @@ class Rtpproxy(models.Model):
     description = models.CharField(max_length=64)
 
     class Meta:
-        managed = True
+        
         db_table = 'rtpproxy'
 
 
@@ -861,7 +710,7 @@ class ScaSubscriptions(models.Model):
     server_id = models.IntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 'sca_subscriptions'
         unique_together = (('subscriber', 'call_id', 'from_tag', 'to_tag'),)
 
@@ -881,7 +730,7 @@ class Silo(models.Model):
     status = models.IntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 'silo'
 
 
@@ -900,7 +749,7 @@ class SipTrace(models.Model):
     direction = models.CharField(max_length=4)
 
     class Meta:
-        managed = True
+        
         db_table = 'sip_trace'
 
 
@@ -915,24 +764,87 @@ class SpeedDial(models.Model):
     description = models.CharField(max_length=64)
 
     class Meta:
-        managed = True
+        
         db_table = 'speed_dial'
         unique_together = (('username', 'domain', 'sd_domain', 'sd_username'),)
 
 
-class Subscriber(models.Model):
-    username = models.CharField(max_length=64)
-    domain = models.CharField(max_length=64)
-    password = models.CharField(max_length=64)
+class Subscriber(AbstractUser):
+    username = models.CharField(max_length=64,unique=True)
+    domain = models.CharField(max_length=64,unique=True)
     ha1 = models.CharField(max_length=128)
     ha1b = models.CharField(max_length=128)
     email_address = models.CharField(max_length=128, blank=True, null=True)
+    email = models.CharField(max_length=128, blank=True, null=True)
     rpid = models.CharField(max_length=128, blank=True, null=True)
+    name = models.CharField(max_length=20,null=True,blank=True)
+    balance = models.DecimalField(max_digits=6,decimal_places=3,null=True,blank=True,default=0)
+    phoneNumber = models.CharField(max_length=10,null=True,blank=True)
+    verified = models.BooleanField(default=False,null=True,blank=True)
+    date_joined = models.DateTimeField(null=True,blank=True,auto_now_add=True)
+    
+    # objects = UserManager()
+
+    # USERNAME_FIELD = 'username'
+    # EMAIL_FIELD = 'email_address'
 
     class Meta:
-        managed = True
         db_table = 'subscriber'
         unique_together = (('username', 'domain'),)
+
+    def __str__(self):
+        if self.name:
+            return self.name
+        else:
+            return "No identificado"
+	
+    @property
+    def recargasHistory(self):
+        return self.recarga_set.all()
+
+    @property
+    def apiUsageHistory(self):
+        return self.apiusage_set.all()
+    pass
+    @property
+    def usageHistory(self):
+        return self.acc_set.all()
+    pass
+
+class Acc(models.Model):
+    consumer = models.ForeignKey(Subscriber,on_delete=models.CASCADE,null=True,blank=True)
+    method = models.CharField(max_length=16)
+    from_tag = models.CharField(max_length=64)
+    to_tag = models.CharField(max_length=64)
+    callid = models.CharField(max_length=255)
+    sip_code = models.CharField(max_length=3)
+    sip_reason = models.CharField(max_length=128)
+    time = models.DateTimeField()
+    src_user=models.CharField(max_length=64)
+    src_domain=models.CharField(max_length=128)
+    src_ip =models.CharField(max_length=64)
+    dst_ouser=models.CharField(max_length=64)
+    dst_user =models.CharField(max_length=64)
+    dst_domain =models.CharField(max_length=128)
+    class Meta:
+        
+        db_table = 'acc'
+
+class ApiUsage(models.Model):
+	consumer = models.ForeignKey(Subscriber,on_delete=models.CASCADE)
+	serviceProvided=models.CharField(max_length=10,choices=SERVICES_CHOICES)
+	def __str__(self):
+		return self.serviceProvided
+
+class Recarga(models.Model):
+	beneficiary = models.ForeignKey(Subscriber,on_delete=models.CASCADE)
+	amount = models.DecimalField(max_digits=4,decimal_places=3)
+	validated = models.BooleanField(default=False)
+	methodOfPayment = models.CharField(max_length=10,choices=PAYMENT_CHOICES,default="CASH")
+	def __str__(self):
+		return self.amount
+	pass
+        
 
 
 class ToposD(models.Model):
@@ -961,7 +873,7 @@ class ToposD(models.Model):
     b_socket = models.CharField(max_length=128)
 
     class Meta:
-        managed = True
+        
         db_table = 'topos_d'
 
 
@@ -992,7 +904,7 @@ class ToposT(models.Model):
     b_socket = models.CharField(max_length=128)
 
     class Meta:
-        managed = True
+        
         db_table = 'topos_t'
 
 
@@ -1005,7 +917,7 @@ class Trusted(models.Model):
     priority = models.IntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 'trusted'
 
 
@@ -1025,7 +937,7 @@ class Uacreg(models.Model):
     reg_delay = models.IntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 'uacreg'
 
 
@@ -1040,7 +952,7 @@ class UidCredentials(models.Model):
     uid = models.CharField(max_length=64)
 
     class Meta:
-        managed = True
+        
         db_table = 'uid_credentials'
 
 
@@ -1050,7 +962,7 @@ class UidDomain(models.Model):
     flags = models.PositiveIntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 'uid_domain'
 
 
@@ -1062,7 +974,7 @@ class UidDomainAttrs(models.Model):
     flags = models.PositiveIntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 'uid_domain_attrs'
         unique_together = (('did', 'name', 'value'),)
 
@@ -1074,7 +986,7 @@ class UidGlobalAttrs(models.Model):
     flags = models.PositiveIntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 'uid_global_attrs'
         unique_together = (('name', 'value'),)
 
@@ -1087,7 +999,7 @@ class UidUri(models.Model):
     scheme = models.CharField(max_length=8)
 
     class Meta:
-        managed = True
+        
         db_table = 'uid_uri'
 
 
@@ -1101,7 +1013,7 @@ class UidUriAttrs(models.Model):
     scheme = models.CharField(max_length=8)
 
     class Meta:
-        managed = True
+        
         db_table = 'uid_uri_attrs'
         unique_together = (('username', 'did', 'name', 'value', 'scheme'),)
 
@@ -1114,7 +1026,7 @@ class UidUserAttrs(models.Model):
     flags = models.PositiveIntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 'uid_user_attrs'
         unique_together = (('uid', 'name', 'value'),)
 
@@ -1126,7 +1038,7 @@ class Uri(models.Model):
     last_modified = models.DateTimeField()
 
     class Meta:
-        managed = True
+        
         db_table = 'uri'
         unique_together = (('username', 'domain', 'uri_user'),)
 
@@ -1138,7 +1050,7 @@ class Userblacklist(models.Model):
     whitelist = models.IntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 'userblacklist'
 
 
@@ -1152,7 +1064,7 @@ class UsrPreferences(models.Model):
     last_modified = models.DateTimeField()
 
     class Meta:
-        managed = True
+        
         db_table = 'usr_preferences'
 
 
@@ -1161,7 +1073,7 @@ class Version(models.Model):
     table_version = models.PositiveIntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 'version'
 
 
@@ -1175,7 +1087,7 @@ class Watchers(models.Model):
     inserted_time = models.IntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 'watchers'
         unique_together = (('presentity_uri', 'watcher_username', 'watcher_domain', 'event'),)
 
@@ -1191,5 +1103,5 @@ class Xcap(models.Model):
     port = models.IntegerField()
 
     class Meta:
-        managed = True
+        
         db_table = 'xcap'

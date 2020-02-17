@@ -9,18 +9,48 @@ from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework import permissions
+from datetime import timedelta
+datetimeFormat = '%Y-%m-%d %H:%M:%S.%f'
 
-@api_view(['GET'])
+@api_view(['POST'])
 #@permission_classes([])
-def get_subscribers(request):
-    subscribers = Subscriber.objects.all()
-    return Response(SubscriberSerializer(subscribers,many=True).data)
+def get_subscriber(request):
+    subscribers = Subscriber.objects.get(username=request.data["username"])
+    return Response(SubscriberSerializer(subscribers,many=False).data)
 
 
 @api_view(['GET'])
-def get_current_user(request):
-	serializer = CustomerSerializer(request.user)
-	return Response(serializer.data)
+def update_balance(request):
+	logs = Acc.objects.filter(consumer__isnull=True)
+	#logs = Acc.objects.all()
+	index = 0
+	while index < len(logs):
+		newLogs = logs.filter(callid=logs[index].callid)
+		print(newLogs)
+		if len(newLogs)==2:
+			consumer = Subscriber.objects.get(username=newLogs[index].src_user)
+			startDate=""
+			endDate=""
+
+			for log in newLogs:
+				log.consumer=consumer
+				log.save()
+				if log.method =="INVITE":
+					startDate=log.time
+				else: endDate=log.time
+			diff = (endDate-startDate).seconds/60
+			destination = logs[index].dst_user
+			if destination[0]=="1":
+				rate=0.010
+			try:
+				consumer.balance=float(consumer.balance)-rate*diff
+			except Exception as e:
+				consumer.balance=-rate*diff
+			consumer.save()
+			logs = logs.exclude(callid=logs[index].callid)
+		else:
+			index+=1
+	return Response(AccSerializer(logs,many=True).data)
 
 @api_view(['POST'])
 def ApiUsageOG(request):
@@ -45,12 +75,12 @@ def RecargaOG(request):
 	return Response({"message" : "SUCCESS"})
 
 class RecargaViewSet(viewsets.ModelViewSet):
-	queryset = Customer.objects.all()
+	queryset = Subscriber.objects.all()
 	serializer_class = RecargaSerializer
 	pass
 
 class ApiUsageViewSet(viewsets.ModelViewSet):
-	queryset = Customer.objects.all()
+	queryset = Subscriber.objects.all()
 	serializer_class = ApiUsageSerializer
 	pass
 
@@ -64,7 +94,7 @@ class ApiUsageViewSet(viewsets.ModelViewSet):
 # 		Response({"response" : "error", "message" : serializer.errors})
 # 	return Response({"response" : "success"})
 
-class CustomerViewSet(viewsets.ModelViewSet):
-	queryset = Customer.objects.all()
-	serializer_class = CustomerSerializer
+class SubscriberViewSet(viewsets.ModelViewSet):
+	queryset = Subscriber.objects.all()
+	serializer_class = SubscriberSerializer
 	pass

@@ -394,7 +394,7 @@ input {
 	max-width: 525px;
 	min-height: 680px;
   /*background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/283591/login-background.jpg);*/
-  background-image: url(https://www.voipreview.org/sites/voipreview.org/files/styles/blog_post/public/blog/featuredt_images/2017/11/voip-hacking-concept.jpg?itok=LeRQ6fvD);
+  background-image: url(https://i.kinja-img.com/gawker-media/image/upload/18rg9fv8xp54ejpg.jpg);
   background-size:cover;
   background-position: center; 
   box-shadow: 0 50px 70px -20px rgba(0, 0, 0, 0.85);
@@ -409,8 +409,8 @@ input {
 	right: 0;
 	bottom: 0;
 	left: 0;
-	/*background-image: radial-gradient(ellipse at left bottom, rgba(22, 24, 47, 1) 0%,rgba(38, 20, 72, .9) 59%, rgba(17, 27, 75, .9) 100%);*/
-  background-image: radial-gradient(ellipse at left bottom, rgb(47, 24, 22) 0%,rgba(72, 26, 20, 0.9) 59%, rgba(102, 28, 19, 0.9) 100%);
+	background-image: radial-gradient(ellipse at left bottom, rgba(22, 24, 47, 1) 0%,rgba(38, 20, 72, .9) 59%, rgba(17, 27, 75, .9) 100%);
+  /*background-image: radial-gradient(ellipse at left bottom, rgb(47, 22, 22) 0%,rgba(72, 26, 20, 0.9) 59%, rgba(102, 28, 19, 0.9) 100%);*/
   box-shadow: 0 -20px 150px -20px rgba(0, 0, 0, 0.5);
 }
 

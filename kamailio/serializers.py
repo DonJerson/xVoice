@@ -4,29 +4,29 @@ from .models import *
 from decimal import Decimal
 from rest_framework.response import Response
 
-class CustomerReferenceSerializer(serializers.ModelSerializer):
+class AccSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
 
     class Meta:
-        model=Customer
-        fields=('id',)
-        
-class SubscriberSerializer(serializers.ModelSerializer):
+        model=Acc
+        fields='__all__'
+
+class SubscriberReferenceSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
 
     class Meta:
         model=Subscriber
-        fields='__all__'
-
+        fields=('id',)
+        
 class RecargaSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
-    beneficiary = CustomerReferenceSerializer(read_only=False,many=False)
+    beneficiary = SubscriberReferenceSerializer(read_only=False,many=False)
 
     def create(self, validated_data):
         beneficiary = validated_data.pop('beneficiary')
         amount = validated_data.pop('amount')
         try:
-            myBeneficiary = Customer.objects.get(id=beneficiary['id'])
+            myBeneficiary = Customer.objects.get(id=beneficiary['id'])  
             print("encontrado")
         except:
             print("not found")
@@ -42,14 +42,14 @@ class RecargaSerializer(serializers.ModelSerializer):
 
 class ApiUsageSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
-    consumer = CustomerReferenceSerializer(read_only=False,many=False)
+    consumer = SubscriberReferenceSerializer(read_only=False,many=False)
 
     def create(self, validated_data):
 
         serviceProvided = validated_data.pop('serviceProvided')
         consumer = validated_data.pop('consumer')
         try:
-            myConsumer = Customer.objects.get(id=consumer['id'])
+            myConsumer = Subscribers.objects.get(id=consumer['id'])
             print("found")
         except:
             print("not found")
@@ -65,15 +65,14 @@ class ApiUsageSerializer(serializers.ModelSerializer):
         model=ApiUsage
         fields='__all__'
 
-class CustomerSerializer(serializers.ModelSerializer):
+class SubscriberSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
     apiUsageHistory=ApiUsageSerializer(read_only=True,many=True)
     recargasHistory=RecargaSerializer(read_only=True,many=True)
-
+    usergaHistory=AccSerializer(read_only=True,many=True)
     class Meta:
-        model=Customer
+        model=Subscriber
         fields='__all__'
-
 
 class CustomerWithTokenSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
@@ -87,6 +86,6 @@ class CustomerWithTokenSerializer(serializers.ModelSerializer):
         return token
     
     class Meta:
-        model = Customer
+        model = Subscriber
         fields = ('token', 'username', 'password', 'first_name',
         'last_name')
