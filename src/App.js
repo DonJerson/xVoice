@@ -54,10 +54,6 @@ const NavBar=(props)=>{
       </ul>
       </>
     }
-          
-
-
-
         </header> 
     </>
   )
@@ -66,6 +62,42 @@ const Registration=(props)=>{
   const [registration,setRegistration]=React.useState(false)
   const [username,setUsername]=React.useState("")
   const [password,setPassword]=React.useState("")
+  const [remember,setRemember]=React.useState(false)
+  const [agree,setAgree]=React.useState(false)
+  const [name,setName]=React.useState("")
+  const [cellphone,setCellphone]=React.useState("")
+
+  const handleName=(e)=>{
+    setName(e.target.value)
+  }
+  const handleCellphone=(e)=>{
+    const received = e.target.value
+    if(received===""){
+      setCellphone(received)
+    }
+    try{
+      const myInt = parseInt(received)
+      console.log(myInt)
+      if(isNaN(myInt)){
+        return
+      }
+    }catch(error){
+      console.log("error",error)
+      return}
+    setCellphone(received.replace(/[^\d]+/g,''))
+  }
+  const handleRemember=()=>{
+    setRemember(prev=>!prev)
+  }
+  const handleAgree=()=>{
+    setAgree(prev=>!prev)
+  }
+  const handleUsername=(e)=>{
+    setUsername(e.target.value)
+  }
+  const handlePassword=(e)=>{
+    setPassword(e.target.value)
+  }
   const handleLogin=()=>{
     props.userPack.handleLogin()
   }
@@ -90,34 +122,34 @@ const Registration=(props)=>{
 				<a onClick={setRegistering}>Sign Up</a>
 			</li>
 		</ul>
-		<label for="login-input-user" className="login__label">
+		<label htmlFor="login-input-user" className="login__label">
 			Email
 		</label>
-		<input id="login-input-user" className="login__input" type="text" />
-		<label for="login-input-password" className="login__label">
+		<input id="login-input-user" value={username} onChange={handleUsername} className="login__input" type="text" />
+		<label htmlFor="login-input-password" className="login__label">
 			Password
 		</label>
-		<input id="login-input-password" className="login__input" type="password" />
+		<input id="login-input-password" value={password} onChange={handlePassword} className="login__input" type="password" />
     {registration?
     <>
-    		<label for="login-input-user" className="login__label">
+    		<label htmlFor="login-input-user" className="login__label">
 			Nombre
 		</label>
-		<input id="login-input-user" className="login__input" type="text" />
-    <label for="login-input-user" className="login__label">
+		<input id="login-input-user" value={name} onChange={handleName} className="login__input" type="text" />
+    <label htmlFor="login-input-user" className="login__label">
 			Celular
 		</label>
-		<input id="login-input-user" className="login__input" type="text" />
-		<label for="login-sign-up" className="login__label--checkbox">
-			<input id="login-sign-up" type="checkbox" className="login__input--checkbox" />
+		<input id="login-input-user" value={cellphone} onChange={handleCellphone} className="login__input" type="text" />
+		<label htmlFor="login-sign-up" className="login__label--checkbox">
+			<input id="login-sign-up" type="checkbox" checked={agree} onChange={handleAgree} className="login__input--checkbox" />
 			Estoy de acuerdo con las condiciones
 		</label>
 		<button className="login__submit" onClick={handleLogin}>Registrarme</button>
     </>
     :
     <>
-    <label for="login-sign-up" className="login__label--checkbox">
-    <input id="login-sign-up" type="checkbox" className="login__input--checkbox" />
+    <label htmlFor="login-sign-up" className="login__label--checkbox">
+    <input id="login-sign-up" type="checkbox" checked={remember} onChange={handleRemember} className="login__input--checkbox" />
       Mantenme logueado
     </label>
     <button className="login__submit" onClick={handleLogin}>Entrar</button>
