@@ -289,9 +289,15 @@ class App extends Component {
     const height = w.innerHeight || documentElement.clientHeight || body.clientHeight;
     let loading = false
     const token = window.localStorage.getItem("token")
-    if(token){
+    let logged=false
+    console.log(getUrl.host.substring(0,3))
+    if(getUrl.host.substring(0,3)==="127"){
+      logged=true
+    }
+    if(token && !logged){
       loading=true
       this.getUser()
+      
     }
     let myUsername = window.localStorage.getItem("username")
     let myPassword = window.localStorage.getItem("password")
@@ -301,8 +307,9 @@ class App extends Component {
       myUsername=""
       myPassword=""
     }
+
     this.state={
-      logged:true,dimensions:{width:width, height:height, isMobile:false},loading:false,
+      logged:logged,dimensions:{width:width, height:height, isMobile:false},loading:loading,
       email:myUsername,password:myPassword,customer:customerBase
     }
   }

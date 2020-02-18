@@ -7,13 +7,6 @@ import datetime
 SERVICES_CHOICES = [('GENVZ','GENVZ'),('CALL','CALL')]
 PAYMENT_CHOICES = [('CASH','CASH'),('BTC','BTC')]
 
-class AccCdrs(models.Model):
-    start_time = models.DateTimeField()
-    end_time = models.DateTimeField()
-    duration = models.FloatField()
-
-    class Meta:
-        db_table = 'acc_cdrs'
 
 class ActiveWatchers(models.Model):
     presentity_uri = models.CharField(max_length=128)
@@ -44,6 +37,7 @@ class ActiveWatchers(models.Model):
     user_agent = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
+        managed=False
         
         db_table = 'active_watchers'
         unique_together = (('callid', 'to_tag', 'from_tag'),)
@@ -57,7 +51,7 @@ class Address(models.Model):
     tag = models.CharField(max_length=64, blank=True, null=True)
 
     class Meta:
-        
+        managed=False
         db_table = 'address'
 
 
@@ -86,7 +80,7 @@ class Aliases(models.Model):
     partition = models.IntegerField()
 
     class Meta:
-        
+        managed=False
         db_table = 'aliases'
 
 
@@ -94,6 +88,7 @@ class CarrierName(models.Model):
     carrier = models.CharField(max_length=64, blank=True, null=True)
 
     class Meta:
+        managed=False
         
         db_table = 'carrier_name'
 
@@ -110,6 +105,7 @@ class Carrierfailureroute(models.Model):
     description = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
+        managed=False
         
         db_table = 'carrierfailureroute'
 
@@ -128,6 +124,7 @@ class Carrierroute(models.Model):
     description = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
+        managed=False
         
         db_table = 'carrierroute'
 
@@ -139,6 +136,7 @@ class Cpl(models.Model):
     cpl_bin = models.TextField(blank=True, null=True)
 
     class Meta:
+        managed=False
         
         db_table = 'cpl'
         unique_together = (('username', 'domain'),)
@@ -151,6 +149,7 @@ class Dbaliases(models.Model):
     domain = models.CharField(max_length=64)
 
     class Meta:
+        managed=False
         
         db_table = 'dbaliases'
 
@@ -181,6 +180,7 @@ class Dialog(models.Model):
     xdata = models.CharField(max_length=512, blank=True, null=True)
 
     class Meta:
+        managed=False
         
         db_table = 'dialog'
 
@@ -192,6 +192,7 @@ class DialogVars(models.Model):
     dialog_value = models.CharField(max_length=512)
 
     class Meta:
+        managed=False
         
         db_table = 'dialog_vars'
 
@@ -207,6 +208,7 @@ class Dialplan(models.Model):
     attrs = models.CharField(max_length=64)
 
     class Meta:
+        managed=False
         
         db_table = 'dialplan'
 
@@ -220,6 +222,7 @@ class Dispatcher(models.Model):
     description = models.CharField(max_length=64)
 
     class Meta:
+        managed=False
         
         db_table = 'dispatcher'
 
@@ -230,6 +233,7 @@ class Domain(models.Model):
     last_modified = models.DateTimeField()
 
     class Meta:
+        managed=False
         
         db_table = 'domain'
 
@@ -242,6 +246,7 @@ class DomainAttrs(models.Model):
     last_modified = models.DateTimeField()
 
     class Meta:
+        managed=False
         
         db_table = 'domain_attrs'
 
@@ -250,6 +255,7 @@ class DomainName(models.Model):
     domain = models.CharField(max_length=64, blank=True, null=True)
 
     class Meta:
+        managed=False
         
         db_table = 'domain_name'
 
@@ -262,6 +268,7 @@ class Domainpolicy(models.Model):
     description = models.CharField(max_length=255)
 
     class Meta:
+        managed=False
         
         db_table = 'domainpolicy'
         unique_together = (('rule', 'att', 'val'),)
@@ -277,6 +284,7 @@ class DrGateways(models.Model):
     description = models.CharField(max_length=128)
 
     class Meta:
+        managed=False
         
         db_table = 'dr_gateways'
 
@@ -288,6 +296,7 @@ class DrGroups(models.Model):
     description = models.CharField(max_length=128)
 
     class Meta:
+        managed=False
         
         db_table = 'dr_groups'
 
@@ -297,6 +306,7 @@ class DrGwLists(models.Model):
     description = models.CharField(max_length=128)
 
     class Meta:
+        managed=False
         
         db_table = 'dr_gw_lists'
 
@@ -312,6 +322,7 @@ class DrRules(models.Model):
     description = models.CharField(max_length=128)
 
     class Meta:
+        managed=False
         
         db_table = 'dr_rules'
 
@@ -322,6 +333,7 @@ class Globalblacklist(models.Model):
     description = models.CharField(max_length=255, blank=True, null=True)
 
     class Meta:
+        managed=False
         
         db_table = 'globalblacklist'
 
@@ -333,6 +345,7 @@ class Grp(models.Model):
     last_modified = models.DateTimeField()
 
     class Meta:
+        managed=False
         
         db_table = 'grp'
         unique_together = (('username', 'domain', 'grp'),)
@@ -346,6 +359,7 @@ class Htable(models.Model):
     expires = models.IntegerField()
 
     class Meta:
+        managed=False
         
         db_table = 'htable'
 
@@ -357,6 +371,7 @@ class ImcMembers(models.Model):
     flag = models.IntegerField()
 
     class Meta:
+        managed=False
         
         db_table = 'imc_members'
         unique_together = (('username', 'domain', 'room'),)
@@ -368,6 +383,7 @@ class ImcRooms(models.Model):
     flag = models.IntegerField()
 
     class Meta:
+        managed=False
         
         db_table = 'imc_rooms'
         unique_together = (('name', 'domain'),)
@@ -389,6 +405,7 @@ class LcrGw(models.Model):
     defunct = models.PositiveIntegerField(blank=True, null=True)
 
     class Meta:
+        managed=False
         
         db_table = 'lcr_gw'
 
@@ -403,6 +420,7 @@ class LcrRule(models.Model):
     enabled = models.PositiveIntegerField()
 
     class Meta:
+        managed=False
         
         db_table = 'lcr_rule'
         unique_together = (('lcr_id', 'prefix', 'from_uri'),)
@@ -416,6 +434,7 @@ class LcrRuleTarget(models.Model):
     weight = models.PositiveIntegerField()
 
     class Meta:
+        managed=False
         
         db_table = 'lcr_rule_target'
         unique_together = (('rule_id', 'gw_id'),)
@@ -446,6 +465,7 @@ class Location(models.Model):
     partition = models.IntegerField()
 
     class Meta:
+        managed=False
         
         db_table = 'location'
 
@@ -460,6 +480,7 @@ class LocationAttrs(models.Model):
     last_modified = models.DateTimeField()
 
     class Meta:
+        managed=False
         
         db_table = 'location_attrs'
 
@@ -474,6 +495,7 @@ class MissedCalls(models.Model):
     time = models.DateTimeField()
 
     class Meta:
+        managed=False
         
         db_table = 'missed_calls'
 
@@ -487,6 +509,7 @@ class Mohqcalls(models.Model):
     call_time = models.DateTimeField()
 
     class Meta:
+        managed=False
         
         db_table = 'mohqcalls'
 
@@ -499,6 +522,7 @@ class Mohqueues(models.Model):
     debug = models.IntegerField()
 
     class Meta:
+        managed=False
         
         db_table = 'mohqueues'
 
@@ -508,6 +532,7 @@ class Mtree(models.Model):
     tvalue = models.CharField(max_length=128)
 
     class Meta:
+        managed=False
         
         db_table = 'mtree'
 
@@ -518,6 +543,7 @@ class Mtrees(models.Model):
     tvalue = models.CharField(max_length=128)
 
     class Meta:
+        managed=False
         
         db_table = 'mtrees'
         unique_together = (('tname', 'tprefix', 'tvalue'),)
@@ -529,6 +555,7 @@ class Pdt(models.Model):
     domain = models.CharField(max_length=128)
 
     class Meta:
+        managed=False
         
         db_table = 'pdt'
         unique_together = (('sdomain', 'prefix'),)
@@ -540,6 +567,7 @@ class PlPipes(models.Model):
     plimit = models.IntegerField()
 
     class Meta:
+        managed=False
         
         db_table = 'pl_pipes'
 
@@ -556,6 +584,7 @@ class Presentity(models.Model):
     priority = models.IntegerField()
 
     class Meta:
+        managed=False
         
         db_table = 'presentity'
         unique_together = (('username', 'domain', 'event', 'etag'),)
@@ -582,6 +611,7 @@ class Pua(models.Model):
     extra_headers = models.TextField()
 
     class Meta:
+        managed=False
         
         db_table = 'pua'
         unique_together = (('etag', 'tuple_id', 'call_id', 'from_tag'),)
@@ -594,6 +624,7 @@ class Purplemap(models.Model):
     ext_pass = models.CharField(max_length=64, blank=True, null=True)
 
     class Meta:
+        managed=False
         
         db_table = 'purplemap'
 
@@ -603,6 +634,7 @@ class ReGrp(models.Model):
     group_id = models.IntegerField()
 
     class Meta:
+        managed=False
         
         db_table = 're_grp'
 
@@ -618,6 +650,7 @@ class RlsPresentity(models.Model):
     reason = models.CharField(max_length=64)
 
     class Meta:
+        managed=False
         
         db_table = 'rls_presentity'
         unique_together = (('rlsubs_did', 'resource_uri'),)
@@ -649,6 +682,7 @@ class RlsWatchers(models.Model):
     updated = models.IntegerField()
 
     class Meta:
+        managed=False
         
         db_table = 'rls_watchers'
         unique_together = (('callid', 'to_tag', 'from_tag'),)
@@ -662,6 +696,7 @@ class Rtpengine(models.Model):
     stamp = models.DateTimeField()
 
     class Meta:
+        managed=False
         
         db_table = 'rtpengine'
         unique_together = (('setid', 'url'),)
@@ -675,6 +710,7 @@ class Rtpproxy(models.Model):
     description = models.CharField(max_length=64)
 
     class Meta:
+        managed=False
         
         db_table = 'rtpproxy'
 
@@ -695,6 +731,7 @@ class ScaSubscriptions(models.Model):
     server_id = models.IntegerField()
 
     class Meta:
+        managed=False
         
         db_table = 'sca_subscriptions'
         unique_together = (('subscriber', 'call_id', 'from_tag', 'to_tag'),)
@@ -715,6 +752,7 @@ class Silo(models.Model):
     status = models.IntegerField()
 
     class Meta:
+        managed=False
         
         db_table = 'silo'
 
@@ -734,6 +772,7 @@ class SipTrace(models.Model):
     direction = models.CharField(max_length=4)
 
     class Meta:
+        managed=False
         db_table = 'sip_trace'
 
 
@@ -748,6 +787,7 @@ class SpeedDial(models.Model):
     description = models.CharField(max_length=64)
 
     class Meta:
+        managed=False
         db_table = 'speed_dial'
         unique_together = (('username', 'domain', 'sd_domain', 'sd_username'),)
 
@@ -857,6 +897,7 @@ class ToposD(models.Model):
     b_socket = models.CharField(max_length=128)
 
     class Meta:
+        managed=False
         
         db_table = 'topos_d'
 
@@ -888,6 +929,7 @@ class ToposT(models.Model):
     b_socket = models.CharField(max_length=128)
 
     class Meta:
+        managed=False
         
         db_table = 'topos_t'
 
@@ -901,6 +943,7 @@ class Trusted(models.Model):
     priority = models.IntegerField()
 
     class Meta:
+        managed=False
         
         db_table = 'trusted'
 
@@ -921,6 +964,7 @@ class Uacreg(models.Model):
     reg_delay = models.IntegerField()
 
     class Meta:
+        managed=False
         
         db_table = 'uacreg'
 
@@ -936,6 +980,7 @@ class UidCredentials(models.Model):
     uid = models.CharField(max_length=64)
 
     class Meta:
+        managed=False
         
         db_table = 'uid_credentials'
 
@@ -946,6 +991,7 @@ class UidDomain(models.Model):
     flags = models.PositiveIntegerField()
 
     class Meta:
+        managed=False
         
         db_table = 'uid_domain'
 
@@ -958,6 +1004,7 @@ class UidDomainAttrs(models.Model):
     flags = models.PositiveIntegerField()
 
     class Meta:
+        managed=False
         
         db_table = 'uid_domain_attrs'
         unique_together = (('did', 'name', 'value'),)
@@ -970,6 +1017,7 @@ class UidGlobalAttrs(models.Model):
     flags = models.PositiveIntegerField()
 
     class Meta:
+        managed=False
         
         db_table = 'uid_global_attrs'
         unique_together = (('name', 'value'),)
@@ -983,6 +1031,7 @@ class UidUri(models.Model):
     scheme = models.CharField(max_length=8)
 
     class Meta:
+        managed=False
         
         db_table = 'uid_uri'
 
@@ -997,6 +1046,7 @@ class UidUriAttrs(models.Model):
     scheme = models.CharField(max_length=8)
 
     class Meta:
+        managed=False
         
         db_table = 'uid_uri_attrs'
         unique_together = (('username', 'did', 'name', 'value', 'scheme'),)
@@ -1010,6 +1060,7 @@ class UidUserAttrs(models.Model):
     flags = models.PositiveIntegerField()
 
     class Meta:
+        managed=False
         
         db_table = 'uid_user_attrs'
         unique_together = (('uid', 'name', 'value'),)
@@ -1022,6 +1073,7 @@ class Uri(models.Model):
     last_modified = models.DateTimeField()
 
     class Meta:
+        managed=False
         
         db_table = 'uri'
         unique_together = (('username', 'domain', 'uri_user'),)
@@ -1034,6 +1086,7 @@ class Userblacklist(models.Model):
     whitelist = models.IntegerField()
 
     class Meta:
+        managed=False
         
         db_table = 'userblacklist'
 
@@ -1048,6 +1101,7 @@ class UsrPreferences(models.Model):
     last_modified = models.DateTimeField()
 
     class Meta:
+        managed=False
         
         db_table = 'usr_preferences'
 
@@ -1057,6 +1111,7 @@ class Version(models.Model):
     table_version = models.PositiveIntegerField()
 
     class Meta:
+        managed=False
         
         db_table = 'version'
 
@@ -1071,6 +1126,7 @@ class Watchers(models.Model):
     inserted_time = models.IntegerField()
 
     class Meta:
+        managed=False
         
         db_table = 'watchers'
         unique_together = (('presentity_uri', 'watcher_username', 'watcher_domain', 'event'),)
@@ -1087,5 +1143,6 @@ class Xcap(models.Model):
     port = models.IntegerField()
 
     class Meta:
+        managed=False
         
         db_table = 'xcap'
