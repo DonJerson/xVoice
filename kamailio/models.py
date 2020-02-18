@@ -734,7 +734,6 @@ class SipTrace(models.Model):
     direction = models.CharField(max_length=4)
 
     class Meta:
-        
         db_table = 'sip_trace'
 
 
@@ -749,7 +748,6 @@ class SpeedDial(models.Model):
     description = models.CharField(max_length=64)
 
     class Meta:
-        
         db_table = 'speed_dial'
         unique_together = (('username', 'domain', 'sd_domain', 'sd_username'),)
 
@@ -767,18 +765,15 @@ class Customer(AbstractUser):
     @property
     def recargasHistory(self):
         return self.recarga_set.all()
-
     @property
     def apiUsageHistory(self):
         return self.apiusage_set.all()
-    pass
     @property
     def usageHistory(self):
         return self.acc_set.all()
     @property
     def subscribers(self):
         return self.subscriber_set.all()
-    pass
 
 class Subscriber(models.Model):
     username = models.CharField(max_length=64,unique=True)
