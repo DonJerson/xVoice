@@ -136,8 +136,9 @@ EMAIL_HOST_USER = 'youremail@gmail.com'
 EMAIL_HOST_PASSWORD = 'yourpassword'
 EMAIL_PORT = 587
 
-CORS_ORIGIN_WHITE_LIST = '127.0.0.1',
+CORS_ORIGIN_WHITE_LIST = '127.0.0.1','127.0.0.1:3000',
 CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_ALLOW_ALL = True
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER' :   'kamailio.utils.custom_jwt_response_handler',
     'JWT_EXPIRATION_DELTA': datetime.timedelta(minutes=999999999)

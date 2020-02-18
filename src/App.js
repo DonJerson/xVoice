@@ -2,6 +2,18 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+const getUrl = window.location;
+let host
+if(getUrl.host.includes(":")){
+  host = getUrl.host.substring(0, getUrl.host.length - 5);
+}else{host = getUrl.host;}
+
+const baseUrl = getUrl.protocol+ "//" + host +"/";
+console.log(baseUrl)
+const axios = require('axios');
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+axios.defaults.withCredentials = false;
 
 const EmptyFunction=()=>{
   return(
@@ -62,7 +74,7 @@ const Registration=(props)=>{
   const [registration,setRegistration]=React.useState(false)
   const [username,setUsername]=React.useState("")
   const [password,setPassword]=React.useState("")
-  const [remember,setRemember]=React.useState(false)
+  const [remember,setRemember]=React.useState(true)
   const [agree,setAgree]=React.useState(false)
   const [name,setName]=React.useState("")
   const [cellphone,setCellphone]=React.useState("")
@@ -99,7 +111,7 @@ const Registration=(props)=>{
     setPassword(e.target.value)
   }
   const handleLogin=()=>{
-    props.userPack.handleLogin()
+    props.userPack.handleLogin(username,password,remember)
   }
   const setRegistering=()=>{
     setRegistration(true)
@@ -113,7 +125,7 @@ const Registration=(props)=>{
   return(
     <>
     <div className="login-container" style={{marginBottom:"62px"}}>
-	<form action="" className="form-login">
+	<div className="form-login">
 		<ul className="login-nav">
 			<li className={"login-nav__item "+logging}>
 				<a onClick={setLogging}>Sign In</a>
@@ -123,7 +135,7 @@ const Registration=(props)=>{
 			</li>
 		</ul>
 		<label htmlFor="login-input-user" className="login__label">
-			Email
+			Email, Username or Phonenumber
 		</label>
 		<input id="login-input-user" value={username} onChange={handleUsername} className="login__input" type="text" />
 		<label htmlFor="login-input-password" className="login__label">
@@ -155,7 +167,7 @@ const Registration=(props)=>{
     <button className="login__submit" onClick={handleLogin}>Entrar</button>
     </>
   }
-	</form>
+	</div>
 	<a href="#" className="login__forgot">Forgot Password?</a>
 </div>
     </>
@@ -197,7 +209,7 @@ class App extends Component {
     const width = w.innerWidth || documentElement.clientWidth || body.clientWidth;
     const height = w.innerHeight || documentElement.clientHeight || body.clientHeight;
     this.state={
-      logged:false,dimensions:{width:width, height:height, isMobile:false}
+      logged:false,dimensions:{width:width, height:height, isMobile:false},loading:false
     }
   }
   componentDidUpdate(){
@@ -209,36 +221,50 @@ class App extends Component {
   componentWillUnmount(){
     window.removeEventListener("resize", this.updateDimensions);
   }
-  handleLogin=()=>{
-    const newStatus=!this.state.logged
-    this.setState({logged:newStatus})
+  systemLogin=()=>{
+    
+  }
+  handleLogin=(username,password)=>{
+    console.log("vamo alla")
+    //const token = window.localStorage.getItem('token')
+    //axios.defaults.headers.get['Authorization']="JWT "+token
+    this.setState({loading:true})
+    axios.post(baseUrl + `newCustomer/`,{email:username,password:password}).then(res=>{
+      console.log("respuesta",res)
+      if(res.data.id){
+        console.log("el mejor")
+        this.setState({customer:res.data})
+      }
+      const newStatus=!this.state.logged
+      this.setState({logged:newStatus})
+      this.setState({loading:false})
+    }).catch(err=>console.log("error",err))
+
   }
   render() {
-    const userPack={dimensions:this.state.dimensions,
+    const userPack={dimensions:this.state.dimensions,customer:this.state.customer,
       logged:this.state.logged,handleLogin:this.handleLogin}
     return ( 
+      <>{this.state.loading?
+        <div className="row" style={{justifyContent:"center"}}>
+         <div className="lds-hourglass" style={{marginTop:"220px"}}></div>
+          
+        </div>
+        
+      :
       <>
       {this.state.logged?
-      <>
+        <>
         <NavBar dimensions={this.state.dimensions}/>
 
-        {/* 
-        <div className="row center">
-          <div>
-              <div className="myCircle2">
-                  <div className="myCircle">
-                    </div>
-                </div>
-
-          </div>
-
-
-        </div>
-        */}
+        <h1></h1>
         </>
-      :
-      <Registration userPack={userPack}/>
+        :
+        <Registration userPack={userPack}/>
+        }
+        </>
       }
+
 
       </>
      );

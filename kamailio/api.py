@@ -32,7 +32,7 @@ def new_customer(request):
 	email = request.data["email"]
 	password = request.data["password"]
 	newCustomer = Customer.objects.create(username=email,password=password,email=email)
-	return Response({"message" : "SUCCESS"})
+	return Response(CustomerSerializer(newCustomer,many=False).data)
 
 @api_view(['GET'])
 def update_balance(request):
