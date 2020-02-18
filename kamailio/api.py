@@ -10,13 +10,14 @@ from rest_framework.views import APIView
 from rest_framework.decorators import api_view
 from rest_framework import permissions
 from datetime import timedelta
+
 datetimeFormat = '%Y-%m-%d %H:%M:%S.%f'
 
-@api_view(['POST'])
-#@permission_classes([])
-def get_subscriber(request):
-    subscribers = Subscriber.objects.get(username=request.data["username"])
-    return Response(SubscriberSerializer(subscribers,many=False).data)
+# @api_view(['POST'])
+# #@permission_classes([])
+# def get_subscriber(request):
+#     subscribers = Subscriber.objects.get(username=request.data["username"])
+#     return Response(SubscriberSerializer(subscribers,many=False).data)
 
 
 @api_view(['GET'])
@@ -28,7 +29,7 @@ def update_balance(request):
 		newLogs = logs.filter(callid=logs[index].callid)
 		print(newLogs)
 		if len(newLogs)==2:
-			consumer = Subscriber.objects.get(username=newLogs[index].src_user)
+			consumer = Subscriber.objects.get(username=newLogs[index].src_user).customer
 			startDate=""
 			endDate=""
 
@@ -53,6 +54,17 @@ def update_balance(request):
 	return Response(AccSerializer(logs,many=True).data)
 
 @api_view(['POST'])
+def new_subscriber(request):
+	newSubscriber = Subscriber.objects.create(username="",password="")
+	if serializer.is_valid():
+		print("serializer")
+		print(serializer)
+		serializer.save()
+	else:
+		Response({"message" : "tienes un problema, contacte su Administrador de Softwares"})
+	return Response({"message" : "SUCCESS"})
+
+@api_view(['POST'])
 def ApiUsageOG(request):
 	newData ={"consumer":{"id":request.data['id']},"serviceProvided":request.data["service"]}
 	serializer = ApiUsageSerializer(data=newData)
@@ -75,12 +87,12 @@ def RecargaOG(request):
 	return Response({"message" : "SUCCESS"})
 
 class RecargaViewSet(viewsets.ModelViewSet):
-	queryset = Subscriber.objects.all()
+	queryset = Recarga.objects.all()
 	serializer_class = RecargaSerializer
 	pass
 
 class ApiUsageViewSet(viewsets.ModelViewSet):
-	queryset = Subscriber.objects.all()
+	queryset = ApiUsage.objects.all()
 	serializer_class = ApiUsageSerializer
 	pass
 
@@ -94,7 +106,7 @@ class ApiUsageViewSet(viewsets.ModelViewSet):
 # 		Response({"response" : "error", "message" : serializer.errors})
 # 	return Response({"response" : "success"})
 
-class SubscriberViewSet(viewsets.ModelViewSet):
-	queryset = Subscriber.objects.all()
-	serializer_class = SubscriberSerializer
+class CustomerViewSet(viewsets.ModelViewSet):
+	queryset = Customer.objects.all()
+	serializer_class = CustomerSerializer
 	pass

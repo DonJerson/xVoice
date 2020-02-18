@@ -1,14 +1,4 @@
 from django.db import models
-
-# Create your models here.
-# This is an auto-generated Django model module.
-# You'll have to do the following manually to clean this up:
-#   * Rearrange models' order
-#   * Make sure each model has one field with primary_key=True
-#   * Make sure each ForeignKey and OneToOneField has `on_delete` set to the desired behavior
-#   * Remove `` lines if you wish to allow Django to create, modify, and delete the table
-# Feel free to rename the models, but don't rename db_table values or field names.
-
 from django.contrib.auth.models import User, AbstractUser,AbstractBaseUser,UserManager,BaseUserManager
 from django.contrib.auth.models import UserManager
 from django.utils import timezone
@@ -17,18 +7,13 @@ import datetime
 SERVICES_CHOICES = [('GENVZ','GENVZ'),('CALL','CALL')]
 PAYMENT_CHOICES = [('CASH','CASH'),('BTC','BTC')]
 
-
-
-
 class AccCdrs(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     duration = models.FloatField()
 
     class Meta:
-        
         db_table = 'acc_cdrs'
-
 
 class ActiveWatchers(models.Model):
     presentity_uri = models.CharField(max_length=128)
@@ -768,30 +753,11 @@ class SpeedDial(models.Model):
         db_table = 'speed_dial'
         unique_together = (('username', 'domain', 'sd_domain', 'sd_username'),)
 
-
-class Subscriber(AbstractUser):
-    username = models.CharField(max_length=64,unique=True)
-    domain = models.CharField(max_length=64,unique=True)
-    ha1 = models.CharField(max_length=128)
-    ha1b = models.CharField(max_length=128)
-    email_address = models.CharField(max_length=128, blank=True, null=True)
-    email = models.CharField(max_length=128, blank=True, null=True)
-    rpid = models.CharField(max_length=128, blank=True, null=True)
+class Customer(AbstractUser):
     name = models.CharField(max_length=20,null=True,blank=True)
     balance = models.DecimalField(max_digits=6,decimal_places=3,null=True,blank=True,default=0)
     phoneNumber = models.CharField(max_length=10,null=True,blank=True)
-    verified = models.BooleanField(default=False,null=True,blank=True)
-    date_joined = models.DateTimeField(null=True,blank=True,auto_now_add=True)
     
-    # objects = UserManager()
-
-    # USERNAME_FIELD = 'username'
-    # EMAIL_FIELD = 'email_address'
-
-    class Meta:
-        db_table = 'subscriber'
-        unique_together = (('username', 'domain'),)
-
     def __str__(self):
         if self.name:
             return self.name
@@ -809,10 +775,33 @@ class Subscriber(AbstractUser):
     @property
     def usageHistory(self):
         return self.acc_set.all()
+    @property
+    def subscribers(self):
+        return self.subscriber_set.all()
     pass
 
+class Subscriber(models.Model):
+    username = models.CharField(max_length=64,unique=True)
+    password = models.CharField(max_length=64)
+    domain = models.CharField(max_length=64,unique=True)
+    ha1 = models.CharField(max_length=128, blank=True, null=True)
+    ha1b = models.CharField(max_length=128, blank=True, null=True)
+    email_address = models.CharField(max_length=128, blank=True, null=True)
+    rpid = models.CharField(max_length=128, blank=True, null=True)
+    customer = models.ForeignKey(Customer,on_delete=models.CASCADE,null=True,blank=True)
+
+    class Meta:
+        db_table = 'subscriber'
+        unique_together = (('username', 'domain'),)
+
+    def __str__(self):
+        if self.username:
+            return self.username
+        else:
+            return "No identificado"
+
 class Acc(models.Model):
-    consumer = models.ForeignKey(Subscriber,on_delete=models.CASCADE,null=True,blank=True)
+    consumer = models.ForeignKey(Customer,on_delete=models.CASCADE,null=True,blank=True)
     method = models.CharField(max_length=16)
     from_tag = models.CharField(max_length=64)
     to_tag = models.CharField(max_length=64)
@@ -831,13 +820,13 @@ class Acc(models.Model):
         db_table = 'acc'
 
 class ApiUsage(models.Model):
-	consumer = models.ForeignKey(Subscriber,on_delete=models.CASCADE)
+	consumer = models.ForeignKey(Customer,on_delete=models.CASCADE)
 	serviceProvided=models.CharField(max_length=10,choices=SERVICES_CHOICES)
 	def __str__(self):
 		return self.serviceProvided
 
 class Recarga(models.Model):
-	beneficiary = models.ForeignKey(Subscriber,on_delete=models.CASCADE)
+	beneficiary = models.ForeignKey(Customer,on_delete=models.CASCADE)
 	amount = models.DecimalField(max_digits=4,decimal_places=3)
 	validated = models.BooleanField(default=False)
 	methodOfPayment = models.CharField(max_length=10,choices=PAYMENT_CHOICES,default="CASH")

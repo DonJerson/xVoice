@@ -1,7 +1,7 @@
-from kamailio.serializers import SubscriberSerializer
+from kamailio.serializers import CustomerSerializer
 
 def custom_jwt_response_handler(token, user=None, request=None):
     return {
         'token' : token,
-        'user' : SubscriberSerializer(user, context={'request' : request}).data
+        'user' : CustomerSerializer(user, context={'request' : request}).data
     }

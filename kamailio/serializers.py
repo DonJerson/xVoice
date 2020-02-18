@@ -11,6 +11,13 @@ class AccSerializer(serializers.ModelSerializer):
         model=Acc
         fields='__all__'
 
+class CustomerReferenceSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
+
+    class Meta:
+        model=Customer
+        fields=('id',)
+
 class SubscriberReferenceSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
 
@@ -20,7 +27,7 @@ class SubscriberReferenceSerializer(serializers.ModelSerializer):
         
 class RecargaSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
-    beneficiary = SubscriberReferenceSerializer(read_only=False,many=False)
+    beneficiary = CustomerReferenceSerializer(read_only=False,many=False)
 
     def create(self, validated_data):
         beneficiary = validated_data.pop('beneficiary')
@@ -42,7 +49,7 @@ class RecargaSerializer(serializers.ModelSerializer):
 
 class ApiUsageSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
-    consumer = SubscriberReferenceSerializer(read_only=False,many=False)
+    consumer = CustomerReferenceSerializer(read_only=False,many=False)
 
     def create(self, validated_data):
 
@@ -67,11 +74,18 @@ class ApiUsageSerializer(serializers.ModelSerializer):
 
 class SubscriberSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
+    class Meta:
+        model=Subscriber
+        fields=('id','username',)
+
+class CustomerSerializer(serializers.ModelSerializer):
+    id = serializers.IntegerField(required=False)
     apiUsageHistory=ApiUsageSerializer(read_only=True,many=True)
     recargasHistory=RecargaSerializer(read_only=True,many=True)
     usergaHistory=AccSerializer(read_only=True,many=True)
+    subscribers=SubscriberSerializer(read_only=True,many=True)
     class Meta:
-        model=Subscriber
+        model=Customer
         fields='__all__'
 
 class CustomerWithTokenSerializer(serializers.ModelSerializer):
@@ -86,6 +100,6 @@ class CustomerWithTokenSerializer(serializers.ModelSerializer):
         return token
     
     class Meta:
-        model = Subscriber
+        model = Customer
         fields = ('token', 'username', 'password', 'first_name',
         'last_name')

@@ -23,14 +23,14 @@ from kamailio.api import *
 from rest_framework_jwt.views import obtain_jwt_token
 
 router = routers.SimpleRouter()
-router.register(r'subscriber', SubscriberViewSet, basename='subscriber')
+router.register(r'customer', CustomerViewSet, basename='customer')
 router.register(r'recarga', RecargaViewSet, basename='recarga')
 router.register(r'consumeApi', ApiUsageViewSet, basename='consumeApi')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('token-auth/', obtain_jwt_token),
-    path('getSub/', get_subscriber),
+    #path('getSub/', get_subscriber),
     path('updateBalance/', update_balance),
     #path('recarga/', recarga),
     path('api/',include(router.urls)),
