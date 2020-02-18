@@ -11,6 +11,7 @@ from rest_framework.decorators import api_view,permission_classes
 from rest_framework import permissions
 from datetime import timedelta
 import random
+import string
 
 datetimeFormat = '%Y-%m-%d %H:%M:%S.%f'
 
@@ -19,19 +20,34 @@ def phn():
     while '9' in n[3:6] or n[3:6]=='000' or n[6]==n[7]==n[8]==n[9]:
         n = str(random.randint(10**9, 10**10-1))
     return n[:3] + n[3:6] + n[6:]
+def randomString(stringLength=10):
 
-@api_view(['POST'])
+    """Generate a random string of fixed length """
+    letters = string.ascii_letters+string.digits+string.punctuation
+    return ''.join(random.choice(letters) for i in range(stringLength))
+	
+@api_view(['GET'])
 #@permission_classes([])
 def get_subscriber(request):
-    subscribers = Customer.objects.get(email=request.data["email"])
-    return Response(CustomerSerializer(subscribers,many=False).data)
+	#subscribers = Customer.objects.get(id=request.data["id"])
+	#return Response(CustomerSerializer(subscribers,many=False).data)
+	return Response(CustomerSerializer(request.user,many=False).data)
 
 @api_view(['POST'])
 @permission_classes([])
 def new_customer(request):
 	email = request.data["email"]
 	password = request.data["password"]
-	newCustomer = Customer.objects.create(username=email,password=password,email=email)
+	name = request.data["name"]
+	phoneNumber = request.data["phoneNumber"]
+	print(email)
+	print(password)
+	newCustomer = Customer.objects.create_user(username=email,password=password,email=email,name=name,phoneNumber=phoneNumber)
+	newCustomer.save()
+	username = phn()
+	password=randomString(10)
+	newSubscriber = Subscriber.objects.create(username=username,password=password,customer=newCustomer)
+	
 	return Response(CustomerSerializer(newCustomer,many=False).data)
 
 @api_view(['GET'])
@@ -71,7 +87,8 @@ def update_balance(request):
 def new_subscriber(request):
 	customer = Customer.objects.get(id=request.data['id'])
 	username = phn()
-	password=request.data["password"]
+	#password=request.data["password"]
+	password=randomString(10)
 	newSubscriber = Subscriber.objects.create(username=username,password=password,customer=customer)
 	return Response({"message" : "SUCCESS"})
 

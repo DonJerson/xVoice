@@ -778,7 +778,7 @@ class Customer(AbstractUser):
 class Subscriber(models.Model):
     username = models.CharField(max_length=64,unique=True)
     password = models.CharField(max_length=64)
-    domain = models.CharField(max_length=64,unique=True)
+    domain = models.CharField(max_length=64)
     ha1 = models.CharField(max_length=128, blank=True, null=True)
     ha1b = models.CharField(max_length=128, blank=True, null=True)
     email_address = models.CharField(max_length=128, blank=True, null=True)

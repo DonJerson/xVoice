@@ -72,8 +72,15 @@ const NavBar=(props)=>{
 }
 const Registration=(props)=>{
   const [registration,setRegistration]=React.useState(false)
-  const [username,setUsername]=React.useState("")
-  const [password,setPassword]=React.useState("")
+  let username = window.localStorage.getItem("username")
+  let password = window.localStorage.getItem("password")
+  if(username){
+    //pass
+  } else{
+    username = props.userPack.email
+    password = props.userPack.password
+  }
+
   const [remember,setRemember]=React.useState(true)
   const [agree,setAgree]=React.useState(false)
   const [name,setName]=React.useState("")
@@ -105,19 +112,30 @@ const Registration=(props)=>{
     setAgree(prev=>!prev)
   }
   const handleUsername=(e)=>{
-    setUsername(e.target.value)
+    props.userPack.handleUpdate("email",e.target.value)
   }
   const handlePassword=(e)=>{
-    setPassword(e.target.value)
+    props.userPack.handleUpdate("password",e.target.value)
   }
   const handleLogin=()=>{
     props.userPack.handleLogin(username,password,remember)
+  }
+  const handleRegister=()=>{
+    props.userPack.handleRegister(username,password,name,cellphone)
   }
   const setRegistering=()=>{
     setRegistration(true)
   }
   const setLogging=()=>{
     setRegistration(false)
+  }
+  const handleEnter=(e)=>{
+    console.log(e.key)
+    if(e.key==="Enter"){
+      props.userPack.handleLogin("","",remember)
+      console.log("work")
+    }
+
   }
   const settingUp = registration?"active":""
   const logging = !registration?"active":""
@@ -141,7 +159,7 @@ const Registration=(props)=>{
 		<label htmlFor="login-input-password" className="login__label">
 			Password
 		</label>
-		<input id="login-input-password" value={password} onChange={handlePassword} className="login__input" type="password" />
+		<input id="login-input-password" value={password} onKeyPress={handleEnter} onChange={handlePassword} className="login__input" type="password" />
     {registration?
     <>
     		<label htmlFor="login-input-user" className="login__label">
@@ -156,7 +174,7 @@ const Registration=(props)=>{
 			<input id="login-sign-up" type="checkbox" checked={agree} onChange={handleAgree} className="login__input--checkbox" />
 			Estoy de acuerdo con las condiciones
 		</label>
-		<button className="login__submit" onClick={handleLogin}>Registrarme</button>
+		<button className="login__submit" onClick={handleRegister}>Registrarme</button>
     </>
     :
     <>
@@ -199,6 +217,20 @@ class App extends Component {
     const newDimensions={width:width, height:height, isMobile:false}
     this.setState({dimensions:newDimensions})
   }
+  getUser=()=>{
+    const token = window.localStorage.getItem('token')
+    axios.defaults.headers.get['Authorization']="JWT "+token
+    axios.get(baseUrl + `getSub/`).then(res=>{
+      console.log(",tamo aqui")
+      this.setState({customer:res.data})
+      const newStatus=!this.state.logged
+      this.setState({logged:newStatus})
+      this.setState({loading:false})
+    }).catch(err=>{
+      console.log("error",err)
+      this.setState({loading:false})
+    })
+  }
   constructor(props){
     super(props)
     window.addEventListener("resize", this.updateDimensions);
@@ -208,28 +240,84 @@ class App extends Component {
     const body = d.getElementsByTagName('body')[0];
     const width = w.innerWidth || documentElement.clientWidth || body.clientWidth;
     const height = w.innerHeight || documentElement.clientHeight || body.clientHeight;
+    let loading = false
+    const token = window.localStorage.getItem("token")
+    if(token){
+      loading=true
+      this.getUser()
+    }
+    let myUsername = window.localStorage.getItem("username")
+    let myPassword = window.localStorage.getItem("password")
+    console.log("my shit",myUsername)
+    if(myUsername){
+      //pass
+    } else{
+      myUsername=""
+      myPassword=""
+    }
     this.state={
-      logged:false,dimensions:{width:width, height:height, isMobile:false},loading:false
+      logged:false,dimensions:{width:width, height:height, isMobile:false},loading:loading,
+      email:myUsername,password:myPassword
     }
   }
   componentDidUpdate(){
     window.addEventListener("resize", this.updateDimensions);
+
   };
   componentWillMount(){
+
     this.updateDimensions();
   }
   componentWillUnmount(){
     window.removeEventListener("resize", this.updateDimensions);
+
   }
-  systemLogin=()=>{
-    
+  handleUpdate=(type,val)=>{
+    window.localStorage.removeItem("username")
+    window.localStorage.removeItem("password")
+    switch(type){
+      case "email":
+          this.setState({email:val})
+        break
+        case "password":
+          this.setState({password:val})
+            break
+    }
   }
-  handleLogin=(username,password)=>{
+  handleLogin=(username,password,remember)=>{
     console.log("vamo alla")
     //const token = window.localStorage.getItem('token')
     //axios.defaults.headers.get['Authorization']="JWT "+token
     this.setState({loading:true})
-    axios.post(baseUrl + `newCustomer/`,{email:username,password:password}).then(res=>{
+    const email = this.state.email
+    const myPass = this.state.password
+    if(remember){
+      console.log("setting shit",email,myPass)
+      window.localStorage.setItem('username',email)
+      window.localStorage.setItem('password',myPass)
+    }
+    axios.post(baseUrl + `token-auth/`,{username:email,password:myPass}).then(res=>{
+      window.localStorage.setItem('token',res.data.token)
+      this.setState({customer:res.data.user})
+      const newStatus=!this.state.logged
+      this.setState({logged:newStatus})
+      this.setState({loading:false})
+    }).catch(err=>{
+      console.log("error",err)
+      console.log("done?",this.state.email)
+      this.setState({loading:false})
+    })
+
+  }
+  handleRegister=(username,password,name,phoneNumber)=>{
+    console.log("vamo alla")
+    //const token = window.localStorage.getItem('token')
+    //axios.defaults.headers.get['Authorization']="JWT "+token
+    this.setState({loading:true})
+    const myUsername = this.state.email
+    const myPass = this.state.password
+    console.log("my user",myUsername)
+    axios.post(baseUrl + `newCustomer/`,{email:myUsername,password:myPass,name,phoneNumber}).then(res=>{
       console.log("respuesta",res)
       if(res.data.id){
         console.log("el mejor")
@@ -238,12 +326,22 @@ class App extends Component {
       const newStatus=!this.state.logged
       this.setState({logged:newStatus})
       this.setState({loading:false})
-    }).catch(err=>console.log("error",err))
-
+      axios.post(baseUrl + `token-auth/`,{username:myUsername,password:myPass}).then(res=>{
+        window.localStorage.setItem('token',res.data.token)
+        console.log("setiao")
+      }).catch(err=>{
+        console.log("error",err)
+        console.log("done?",this.state.email)
+        this.setState({loading:false})
+      })
+    }).catch(err=>{
+      console.log("error",err)
+      this.setState({loading:false})
+    })
   }
   render() {
-    const userPack={dimensions:this.state.dimensions,customer:this.state.customer,
-      logged:this.state.logged,handleLogin:this.handleLogin}
+    const userPack={dimensions:this.state.dimensions,customer:this.state.customer,email:this.email,password:this.password,
+      logged:this.state.logged,handleLogin:this.handleLogin,handleRegister:this.handleRegister,handleUpdate:this.handleUpdate}
     return ( 
       <>{this.state.loading?
         <div className="row" style={{justifyContent:"center"}}>
@@ -256,8 +354,8 @@ class App extends Component {
       {this.state.logged?
         <>
         <NavBar dimensions={this.state.dimensions}/>
-
-        <h1></h1>
+        {console.log("name",this.state.customer)}
+        <h1 className="mainGrayTitle">Welcome {this.state.customer.name}</h1>
         </>
         :
         <Registration userPack={userPack}/>

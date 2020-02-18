@@ -381,6 +381,13 @@ input {
   width: 80px;
   height: 80px;
 }
+.mainGrayTitle{
+  color:rgb(125, 129, 142);
+  display:inline-block;
+  font-family:"Open Sans", sans-serif;
+  font-size:25px;
+  font-weight:400;
+}
 .lds-hourglass:after {
   content: " ";
   display: block;
