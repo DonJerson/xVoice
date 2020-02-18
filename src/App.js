@@ -9,11 +9,63 @@ if(getUrl.host.includes(":")){
 }else{host = getUrl.host;}
 
 const baseUrl = getUrl.protocol+ "//" + host +"/";
-console.log(baseUrl)
 const axios = require('axios');
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
 axios.defaults.withCredentials = false;
+
+const customerBase = {id: 1,
+apiUsageHistory: [],
+recargasHistory: [],
+usageHistory: Array(2),
+0: {id: 1,
+  method: "INVITE",
+  from_tag: "182c4d3c",
+  to_tag: "as20b73407",
+  callid: "cEkRV392kx6FSq3oqmdIZA..",
+  sip_code: "200",
+  sip_reason: "OK",
+  time: "2020-02-18T02:58:05Z",
+  src_user: "4776200196",
+  src_domain: "3.81.8.219",
+  src_ip: "201.229.162.40",
+  dst_ouser: "15612402968",
+  dst_user: "15612402968",
+  dst_domain: "64.2.142.93",
+  consumer: 1},
+1: {id: 2,
+  method: "BYE",
+  from_tag: "182c4d3c",
+  to_tag: "as20b73407",
+  callid: "cEkRV392kx6FSq3oqmdIZA..",
+  sip_code: "200",
+  sip_reason: "OK",
+  time: "2020-02-18T02:58:12Z",
+  src_user: "4776200196",
+  src_domain: "3.81.8.219",
+  src_ip: "201.229.162.40",
+  dst_ouser: "15612402968",
+  dst_user: "15612402968",
+  dst_domain: "66.241.97.51",
+  consumer: 1},
+length: 2,
+__proto__: Array(0),
+subscribers: [{id: 2, username: "4776200196", password: "Pri3to"}],
+password: "pbkdf2_sha256$180000$ssnEgRIWpT23$zXiLCGZD+tQDLSBkzSfuQog2+fKp5F6KvbGu4s92nnE=",
+last_login: "2020-02-18T02:43:12.790044Z",
+is_superuser: true,
+username: "prieto",
+first_name: "",
+last_name: "",
+email: "prieto@admin.com",
+is_staff: true,
+is_active: true,
+date_joined: "2020-02-18T02:28:36.782698Z",
+name: null,
+balance: "-0.001",
+phoneNumber: null,
+groups: [],
+user_permissions: []}
 
 const EmptyFunction=()=>{
   return(
@@ -47,7 +99,7 @@ const NavBar=(props)=>{
         
             {isMobile?
             <>
-              <div className={mobileOpen?"burguer change":"burguer"} onClick={toggleRegistration}>
+              <div className={mobileOpen?"burguer change":"burguer"} style={{position:"relative",left:"10px"}} onClick={toggleRegistration}>
         
                 <div className="bar1"></div>
                 <div className="bar2"></div>
@@ -96,7 +148,6 @@ const Registration=(props)=>{
     }
     try{
       const myInt = parseInt(received)
-      console.log(myInt)
       if(isNaN(myInt)){
         return
       }
@@ -130,10 +181,8 @@ const Registration=(props)=>{
     setRegistration(false)
   }
   const handleEnter=(e)=>{
-    console.log(e.key)
     if(e.key==="Enter"){
       props.userPack.handleLogin("","",remember)
-      console.log("work")
     }
 
   }
@@ -209,8 +258,8 @@ class App extends Component {
     if(height-this.state.dimensions.height<60 &&height-this.state.dimensions.height>0 || width-this.state.dimensions.width===0){
       return
     }
-    if (width < 960){
-      const newDimensions={width:width, height:height, isMobile:false}
+    if (width < 763){
+      const newDimensions={width:width, height:height, isMobile:true}
       this.setState({dimensions:newDimensions})
       return
     }
@@ -221,10 +270,8 @@ class App extends Component {
     const token = window.localStorage.getItem('token')
     axios.defaults.headers.get['Authorization']="JWT "+token
     axios.get(baseUrl + `getSub/`).then(res=>{
-      console.log(",tamo aqui")
       this.setState({customer:res.data})
-      const newStatus=!this.state.logged
-      this.setState({logged:newStatus})
+      this.setState({logged:true})
       this.setState({loading:false})
     }).catch(err=>{
       console.log("error",err)
@@ -248,7 +295,6 @@ class App extends Component {
     }
     let myUsername = window.localStorage.getItem("username")
     let myPassword = window.localStorage.getItem("password")
-    console.log("my shit",myUsername)
     if(myUsername){
       //pass
     } else{
@@ -256,8 +302,8 @@ class App extends Component {
       myPassword=""
     }
     this.state={
-      logged:false,dimensions:{width:width, height:height, isMobile:false},loading:loading,
-      email:myUsername,password:myPassword
+      logged:true,dimensions:{width:width, height:height, isMobile:false},loading:false,
+      email:myUsername,password:myPassword,customer:customerBase
     }
   }
   componentDidUpdate(){
@@ -285,14 +331,12 @@ class App extends Component {
     }
   }
   handleLogin=(username,password,remember)=>{
-    console.log("vamo alla")
     //const token = window.localStorage.getItem('token')
     //axios.defaults.headers.get['Authorization']="JWT "+token
     this.setState({loading:true})
     const email = this.state.email
     const myPass = this.state.password
     if(remember){
-      console.log("setting shit",email,myPass)
       window.localStorage.setItem('username',email)
       window.localStorage.setItem('password',myPass)
     }
@@ -304,23 +348,18 @@ class App extends Component {
       this.setState({loading:false})
     }).catch(err=>{
       console.log("error",err)
-      console.log("done?",this.state.email)
       this.setState({loading:false})
     })
 
   }
   handleRegister=(username,password,name,phoneNumber)=>{
-    console.log("vamo alla")
     //const token = window.localStorage.getItem('token')
     //axios.defaults.headers.get['Authorization']="JWT "+token
     this.setState({loading:true})
     const myUsername = this.state.email
     const myPass = this.state.password
-    console.log("my user",myUsername)
     axios.post(baseUrl + `newCustomer/`,{email:myUsername,password:myPass,name,phoneNumber}).then(res=>{
-      console.log("respuesta",res)
       if(res.data.id){
-        console.log("el mejor")
         this.setState({customer:res.data})
       }
       const newStatus=!this.state.logged
@@ -328,10 +367,8 @@ class App extends Component {
       this.setState({loading:false})
       axios.post(baseUrl + `token-auth/`,{username:myUsername,password:myPass}).then(res=>{
         window.localStorage.setItem('token',res.data.token)
-        console.log("setiao")
       }).catch(err=>{
         console.log("error",err)
-        console.log("done?",this.state.email)
         this.setState({loading:false})
       })
     }).catch(err=>{
@@ -340,6 +377,8 @@ class App extends Component {
     })
   }
   render() {
+    
+    let marginBody = this.state.dimensions.isMobile?"15px":"50px"
     const userPack={dimensions:this.state.dimensions,customer:this.state.customer,email:this.email,password:this.password,
       logged:this.state.logged,handleLogin:this.handleLogin,handleRegister:this.handleRegister,handleUpdate:this.handleUpdate}
     return ( 
@@ -354,8 +393,10 @@ class App extends Component {
       {this.state.logged?
         <>
         <NavBar dimensions={this.state.dimensions}/>
-        {console.log("name",this.state.customer)}
-        <h1 className="mainGrayTitle">Welcome {this.state.customer.name}</h1>
+        <div id="mainBody" style={{marginLeft:marginBody,marginRight:marginBody,marginTop:"18px"}}>
+            <h1 className="mainGrayTitle">Welcome {this.state.customer.name}</h1>
+
+        </div>
         </>
         :
         <Registration userPack={userPack}/>
