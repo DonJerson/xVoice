@@ -401,7 +401,18 @@ class App extends Component {
         <>
         <NavBar dimensions={this.state.dimensions}/>
         <div id="mainBody" style={{marginLeft:marginBody,marginRight:marginBody,marginTop:"18px"}}>
-            <h1 className="mainGrayTitle">Welcome {this.state.customer.name}</h1>
+            
+            <div classname="row">
+              <h1 className="mainGrayTitle">Welcome {this.state.customer.name}</h1>
+            </div>
+            <div classname="row">
+              <h1 className="mainGrayTitle">Mis dispositivos</h1>
+            </div>
+            {this.state.customer.subscribers.map((subscriber,index)=>(
+                          <div classname="row" style={{backgroundColor:"#5e5c5b"}}>
+                          <p style={{color:"white"}}>Username: {subscriber.username} Password: {subscriber.password} </p>
+                        </div>
+            ))}
 
         </div>
         </>
