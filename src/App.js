@@ -8,7 +8,7 @@ if(getUrl.host.includes(":")){
   host = getUrl.host.substring(0, getUrl.host.length - 5);
 }else{host = getUrl.host;}
 
-const baseUrl = getUrl.protocol+ "//" + host +"/";
+const baseUrl = getUrl.protocol+ "//" + host +":8181/";
 const axios = require('axios');
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -271,8 +271,8 @@ class App extends Component {
     axios.defaults.headers.get['Authorization']="JWT "+token
     axios.get(baseUrl + `getSub/`).then(res=>{
       this.setState({customer:res.data})
-      this.setState({logged:true})
       this.setState({loading:false})
+      this.setState({logged:true})
     }).catch(err=>{
       console.log("error",err)
       this.setState({loading:false})
