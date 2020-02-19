@@ -74,13 +74,17 @@ const EmptyFunction=()=>{
   )
 }
 
-const NavButtons=()=>{
+const NavButtons=(props)=>{
+  const logout=()=>{
+    props.userPack.handleLogout()
+  }
   return(
     <>
                   <li><a href="#">Home</a></li>
               <li><a href="#">About</a></li>
               <li><a href="#">Portfolio</a></li>
               <li><a href="#">Contact</a></li>
+              <li><a onClick={logout} href="#">Logout</a></li>
     </>
   )
 }
@@ -107,14 +111,14 @@ const NavBar=(props)=>{
               </div>
                 <ul className={mobileOpen?"main-nav":"main-nav closed"} id="navContent">
 
-                <NavButtons/>
+                <NavButtons userPack={props.userPack}/>
                 </ul>
               </>
             :
             <>
             <h1 className="logo"><a href="#">TELEXFREE</a></h1>
             <ul className="main-nav" id="navContent">
-          <NavButtons/>
+          <NavButtons userPack={props.userPack}/>
       </ul>
       </>
     }
@@ -383,11 +387,19 @@ class App extends Component {
       this.setState({loading:false})
     })
   }
+  handleLogout=()=>{
+    window.localStorage.removeItem("token")
+    window.localStorage.removeItem("userId")
+    window.localStorage.removeItem("username")
+    window.localStorage.removeItem("password")
+    this.setState({logged:false})
+  }
   render() {
     
     let marginBody = this.state.dimensions.isMobile?"15px":"50px"
     const userPack={dimensions:this.state.dimensions,customer:this.state.customer,email:this.email,password:this.password,
-      logged:this.state.logged,handleLogin:this.handleLogin,handleRegister:this.handleRegister,handleUpdate:this.handleUpdate}
+      logged:this.state.logged,handleLogin:this.handleLogin,handleRegister:this.handleRegister,
+      handleUpdate:this.handleUpdate,handleLogout:this.handleLogout}
     return ( 
       <>{this.state.loading?
         <div className="row" style={{justifyContent:"center"}}>
@@ -399,7 +411,7 @@ class App extends Component {
       <>
       {this.state.logged?
         <>
-        <NavBar dimensions={this.state.dimensions}/>
+        <NavBar dimensions={this.state.dimensions} userPack={userPack}/>
         <div id="mainBody" style={{marginLeft:marginBody,marginRight:marginBody,marginTop:"18px"}}>
             
             <div classname="row">
