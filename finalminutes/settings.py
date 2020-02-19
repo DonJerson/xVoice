@@ -8,7 +8,7 @@ SECRET_KEY = 'c06bxt!5&^yk8h&3pt!qeki69+_42v0j^fnydk1b*4wd6l@p7l'
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['xvoice.xyz']
 
 INSTALLED_APPS = [
     'kamailio',
