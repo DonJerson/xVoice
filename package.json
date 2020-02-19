@@ -12,6 +12,7 @@
     "react-scripts": "3.3.1"
   },
   "scripts": {
+    "serve":"PORT=80 serve -s build",
     "production":"react-scripts build && PORT=80 serve -s build",
     "maxima": "node server.js",
     "start": "react-scripts start",
