@@ -293,7 +293,7 @@ class App extends Component {
     const height = w.innerHeight || documentElement.clientHeight || body.clientHeight;
     let loading = false
     const token = window.localStorage.getItem("token")
-    let logged=false
+    let logged=true
     console.log(getUrl.host.substring(0,3))
     if(getUrl.host.substring(0,3)==="127"){
       logged=true
@@ -416,6 +416,16 @@ class App extends Component {
             
             <div classname="row">
               <h1 className="mainGrayTitle">Welcome {this.state.customer.name}</h1>
+            </div>
+            <div classname="row">
+              <div className="col-xs-4 caja" style={{backgroundColor:"red"}}>
+                <h1 className="mainWhiteTitle">Saldo Actual:</h1>
+                <h1 className="balance">US${this.state.customer.balance}</h1>
+              </div>
+              <div className="col-xs-8">
+                
+                </div>
+              
             </div>
             <div classname="row">
               <h1 className="mainGrayTitle">Mis dispositivos</h1>
