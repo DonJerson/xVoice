@@ -80,10 +80,6 @@ const NavButtons=(props)=>{
   }
   return(
     <>
-                  <li><a href="#">Home</a></li>
-              <li><a href="#">About</a></li>
-              <li><a href="#">Portfolio</a></li>
-              <li><a href="#">Contact</a></li>
               <li><a onClick={logout} href="#">Logout</a></li>
     </>
   )
@@ -116,7 +112,7 @@ const NavBar=(props)=>{
               </>
             :
             <>
-            <h1 className="logo"><a href="#">TELEXFREE</a></h1>
+            <h1 className="logo"><a href="#">XVOICE</a></h1>
             <ul className="main-nav" id="navContent">
           <NavButtons userPack={props.userPack}/>
       </ul>
@@ -395,7 +391,7 @@ class App extends Component {
     this.setState({logged:false})
   }
   render() {
-    
+    const isMobile=this.state.dimensions.width<768
     let marginBody = this.state.dimensions.isMobile?"15px":"50px"
     const userPack={dimensions:this.state.dimensions,customer:this.state.customer,email:this.email,password:this.password,
       logged:this.state.logged,handleLogin:this.handleLogin,handleRegister:this.handleRegister,
@@ -412,29 +408,98 @@ class App extends Component {
       {this.state.logged?
         <>
         <NavBar dimensions={this.state.dimensions} userPack={userPack}/>
-        <div id="mainBody" style={{marginLeft:marginBody,marginRight:marginBody,marginTop:"18px"}}>
+        <div id="mainBody" style={{marginLeft:marginBody,marginRight:marginBody,marginTop:"18px",marginBottom:"25px"}}>
             
-            <div classname="row">
-              <h1 className="mainGrayTitle">Welcome {this.state.customer.name}</h1>
+            <div className="row">
+              <h1>Welcome {this.state.customer.name}</h1>
             </div>
-            <div classname="row">
-              <div className="col-xs-4 caja" style={{backgroundColor:"red"}}>
-                <h1 className="mainWhiteTitle">Saldo Actual:</h1>
-                <h1 className="balance">US${this.state.customer.balance}</h1>
-              </div>
-              <div className="col-xs-8">
+            <div className="row">
+              <div className="col-xs-12 col-sm-4 caja" style={{maxHeight:"135px",paddingTop:"10px"}}>
                 
+                <div className="row center">
+                <h1 className="balance">${this.state.customer.balance}</h1>
+                </div>
+                <div className="row center">
+                <p className="infoText">Saldo Actual</p>
+                </div>
+                <div className="row center" style={{marginTop:"5px"}}>
+                  <a>Agregar saldo</a>
+                  <p> (escribir por WhatsApp 829 630 6782)</p>
+                </div>
+              </div>
+              <div className="col-xs-12 col-sm-7 caja" style={{marginLeft:isMobile?"0px":this.state.dimensions.width*0.065+"px",marginTop:!isMobile?"0px":"25px",paddingTop:"10px",paddingBottom:"10px"}}>
+              <div className="row center">
+                <h1 className="balance" style={{marginBottom:"5px"}}>Mis dispositivos</h1>
+                </div>
+                <div className="row center">
+                {/* <p className="infoText">Saldo Actual</p> */}
+                <table id="customers">
+                <tr>
+                <th>Usuario</th>
+                <th>Contraseña</th>
+                <th>IP</th>
+              </tr>
+                            <tr>           
+                <td>Magazzini Alimentari Riuniti</td>
+                <td>Giovanni Rovelli</td>
+                <td>Italy</td>
+              </tr>
+              <tr>
+                <td>North/South</td>
+                <td>Simon Crowther</td>
+                <td>UK</td>
+              </tr>
+              <tr>
+                <td>Paris spécialités</td>
+                <td>Marie Bertrand</td>
+                <td>France</td>
+              </tr>
+            </table>
+                </div>
                 </div>
               
             </div>
-            <div classname="row">
+            <div className="col-xs-12 caja" style={{marginTop:"25px"}}>
+                
+                <div className="row">
+                <h1 className="balance" style={{padding:"8px"}}>Historial de llamadas</h1>
+                </div>
+                <div className="row center">
+                {/* <p className="infoText">Saldo Actual</p> */}
+                <table id="customers">
+                <tr>
+                <th>Usuario</th>
+                <th>Destino</th>
+                <th>Fecha</th>
+                <th>Duración</th>
+                <th>Costo</th>
+              </tr>
+                            <tr>           
+                <td>Magazzini Alimentari Riuniti</td>
+                <td>Giovanni Rovelli</td>
+                <td>Italy</td>
+              </tr>
+              <tr>
+                <td>North/South</td>
+                <td>Simon Crowther</td>
+                <td>UK</td>
+              </tr>
+              <tr>
+                <td>Paris spécialités</td>
+                <td>Marie Bertrand</td>
+                <td>France</td>
+              </tr>
+            </table>
+                </div>
+              </div>
+            {/* <div classname="row">
               <h1 className="mainGrayTitle">Mis dispositivos</h1>
             </div>
             {this.state.customer.subscribers.map((subscriber,index)=>(
                           <div classname="row" style={{backgroundColor:"#5e5c5b"}}>
                           <p style={{color:"white"}}>Username: {subscriber.username} Password: {subscriber.password} </p>
                         </div>
-            ))}
+            ))} */}
 
         </div>
         </>
