@@ -108,7 +108,7 @@ if True:
         'NAME': 'kamailio',
         'USER': 'root',
         'PASSWORD': 'Pri3to.Server',
-        'HOST': '18.222.200.101',
+        'HOST': '3.135.1.254',
         'PORT': '3306',
     }
 }
