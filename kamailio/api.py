@@ -33,6 +33,17 @@ def get_subscriber(request):
 	#return Response(CustomerSerializer(subscribers,many=False).data)
 	return Response(CustomerSerializer(request.user,many=False).data)
 
+@api_view(['GET'])
+#@permission_classes([])
+def add_device(request):
+	username = phn()
+	password=randomString(10)
+	Subscriber.objects.create(user=request.user,username=username,password=password)
+	#subscribers = Customer.objects.get(id=request.data["id"])
+	#return Response(CustomerSerializer(subscribers,many=False).data)
+	return Response(CustomerSerializer(request.user,many=False).data)
+
+
 @api_view(['POST'])
 @permission_classes([])
 def new_customer(request):

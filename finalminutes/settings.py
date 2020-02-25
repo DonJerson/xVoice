@@ -101,6 +101,19 @@ USE_S3 = os.getenv('USE_S3') == 'TRUE'
 
 if True:
     # aws settings
+    
+    DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'kamailio',
+        'USER': 'root',
+        'PASSWORD': 'Pri3to.Server',
+        'HOST': '18.222.200.101',
+        'PORT': '3306',
+    }
+}
+
+else:
     AWS_ACCESS_KEY_ID = 'AKIAJ5AJT5MYJXNDL7XQ'
     AWS_SECRET_ACCESS_KEY = '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'
     AWS_STORAGE_BUCKET_NAME = 'carenrentacar'
@@ -113,23 +126,11 @@ if True:
     STATICFILES_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
     DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'kamailio',
-        'USER': 'root',
-        'PASSWORD': 'Pri3to.Server',
-        'HOST': '3.81.8.219',
-        'PORT': '3306',
-    }
-}
-
-else:
-    STATIC_URL = '/static/'
-    STATIC_ROOT = BASE_DIR + r'\static'
-    DATABASES = {
-    'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),}}
-
+        
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR + r'\static'
 EMAIL_USE_TLS = True
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'youremail@gmail.com'

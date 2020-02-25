@@ -836,7 +836,7 @@ class Subscriber(models.Model):
             return "No identificado"
 
 class Acc(models.Model):
-    consumer = models.ForeignKey(Customer,on_delete=models.CASCADE,null=True,blank=True)
+    consumer = models.ForeignKey(Customer,on_delete=models.CASCADE,null=True)
     method = models.CharField(max_length=16)
     from_tag = models.CharField(max_length=64)
     to_tag = models.CharField(max_length=64)
@@ -851,7 +851,7 @@ class Acc(models.Model):
     dst_user =models.CharField(max_length=64)
     dst_domain =models.CharField(max_length=128)
     class Meta:
-        
+        managed=False
         db_table = 'acc'
 
 class ApiUsage(models.Model):

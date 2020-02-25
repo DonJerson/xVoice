@@ -80,7 +80,7 @@ const NavButtons=(props)=>{
   }
   return(
     <>
-              <li><a onClick={logout} href="#">Logout</a></li>
+              <li><a className="navTitle" onClick={logout} href="#">Logout</a></li>
     </>
   )
 }
@@ -92,7 +92,7 @@ const NavBar=(props)=>{
     console.log(mobileOpen)
   }
 
-  const isMobile=props.dimensions.width<769
+  const isMobile=props.dimensions.width<768
   return(
     <>
         <header className="header">
@@ -112,7 +112,7 @@ const NavBar=(props)=>{
               </>
             :
             <>
-            <h1 className="logo"><a href="#">XVOICE</a></h1>
+            <h1 className="logo"><a className="navTitle" href="#">XVOICE</a></h1>
             <ul className="main-nav" id="navContent">
           <NavButtons userPack={props.userPack}/>
       </ul>
@@ -314,12 +314,12 @@ class App extends Component {
     }
   }
   componentDidUpdate(){
-    window.addEventListener("resize", this.updateDimensions);
+    this.updateDimensions();
+    
 
   };
   componentWillMount(){
-
-    this.updateDimensions();
+    window.addEventListener("resize", this.updateDimensions);
   }
   componentWillUnmount(){
     window.removeEventListener("resize", this.updateDimensions);
@@ -358,6 +358,11 @@ class App extends Component {
       this.setState({loading:false})
     })
 
+  }
+  addDevice=()=>{
+    axios.get(baseUrl+"addDevice").then(resp=>{
+      this.setState({customer:resp.data})
+    })
   }
   handleRegister=(username,password,name,phoneNumber)=>{
     //const token = window.localStorage.getItem('token')
@@ -411,10 +416,10 @@ class App extends Component {
         <div id="mainBody" style={{marginLeft:marginBody,marginRight:marginBody,marginTop:"18px",marginBottom:"25px"}}>
             
             <div className="row">
-              <h1>Welcome {this.state.customer.name}</h1>
+              <h1 className="mainTitle">Welcome {this.state.customer.name}</h1>
             </div>
             <div className="row">
-              <div className="col-xs-12 col-sm-4 caja" style={{maxHeight:"135px",paddingTop:"10px"}}>
+              <div className="col-xs-12 col-sm-4 caja" style={{maxHeight:"140px",paddingTop:"10px"}}>
                 
                 <div className="row center">
                 <h1 className="balance">${this.state.customer.balance}</h1>
@@ -423,14 +428,16 @@ class App extends Component {
                 <p className="infoText">Saldo Actual</p>
                 </div>
                 <div className="row center" style={{marginTop:"5px"}}>
-                  <a>Agregar saldo</a>
-                  <p> (escribir por WhatsApp 829 630 6782)</p>
+                  <a>Agregar saldo </a>
+                  </div>
+                  <div className="row center" style={{marginTop:"5px"}}>
+                  <p> (WhatsApp 829 630 6782)</p>
                 </div>
               </div>
               <div className="col-xs-12 col-sm-7 caja" style={{marginLeft:isMobile?"0px":this.state.dimensions.width*0.065+"px",marginTop:!isMobile?"0px":"25px",paddingTop:"10px",paddingBottom:"10px"}}>
               <div className="row center">
                 <div className="col-xs-auto">
-                <h1 className="balance" style={{marginBottom:"5px"}}>Mis dispositivos</h1><button style={{marginLeft:"35px",width:"100px",position:"relative",bottom:"6px"}}class="pure-material-button-contained">Agregar</button>
+                <h1 className="secondTitle" style={{marginBottom:"5px"}}>Mis dispositivos</h1><button onClick={this.addDevice} style={{marginLeft:"35px",width:"100px",position:"relative",bottom:"6px"}}class="pure-material-button-contained">Agregar</button>
                 </div>
                 </div>
                 <div className="row center">
@@ -457,12 +464,12 @@ class App extends Component {
             </div>
             <div className="col-xs-12 caja" style={{marginTop:"25px"}}>
                 
-                <div className="row">
-                <h1 className="balance" style={{padding:"8px"}}>Historial de llamadas</h1>
+                <div className="row" >
+                <h1 className="secondTitle" style={{padding:"8px"}}>Historial de llamadas</h1>
                 </div>
                 <div className="row center">
                 {/* <p className="infoText">Saldo Actual</p> */}
-                <table id="customers">
+                <table id="customers" style={{overflowX:"auto !important"}}>
                 <tr>
                 <th>Usuario</th>
                 <th>Destino</th>
