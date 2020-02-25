@@ -289,7 +289,7 @@ class App extends Component {
     const height = w.innerHeight || documentElement.clientHeight || body.clientHeight;
     let loading = false
     const token = window.localStorage.getItem("token")
-    let logged=true
+    let logged=false
     console.log(getUrl.host.substring(0,3))
     if(getUrl.host.substring(0,3)==="127"){
       logged=true
