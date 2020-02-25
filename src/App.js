@@ -439,21 +439,15 @@ class App extends Component {
                 <th>Contraseña</th>
                 <th>IP</th>
               </tr>
-                            <tr>           
-                <td>Magazzini Alimentari Riuniti</td>
-                <td>Giovanni Rovelli</td>
-                <td>Italy</td>
-              </tr>
-              <tr>
-                <td>North/South</td>
-                <td>Simon Crowther</td>
-                <td>UK</td>
-              </tr>
-              <tr>
-                <td>Paris spécialités</td>
-                <td>Marie Bertrand</td>
-                <td>France</td>
-              </tr>
+              {this.state.customer.subscribers.map((subscriber,index)=>(
+                                            <tr>           
+                                            <td>{subscriber.username}</td>
+                                            <td>{subscriber.password}</td>
+                                            <td>-</td>
+                                          </tr>
+            ))} 
+
+       
             </table>
                 </div>
                 </div>
