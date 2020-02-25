@@ -429,7 +429,9 @@ class App extends Component {
               </div>
               <div className="col-xs-12 col-sm-7 caja" style={{marginLeft:isMobile?"0px":this.state.dimensions.width*0.065+"px",marginTop:!isMobile?"0px":"25px",paddingTop:"10px",paddingBottom:"10px"}}>
               <div className="row center">
-                <h1 className="balance" style={{marginBottom:"5px"}}>Mis dispositivos</h1>
+                <div className="col-xs-auto">
+                <h1 className="balance" style={{marginBottom:"5px"}}>Mis dispositivos</h1><button style={{marginLeft:"35px",width:"100px",position:"relative",bottom:"6px"}}class="pure-material-button-contained">Agregar</button>
+                </div>
                 </div>
                 <div className="row center">
                 {/* <p className="infoText">Saldo Actual</p> */}
