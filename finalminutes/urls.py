@@ -20,6 +20,8 @@ urlpatterns = [
     path('getSub/', get_subscriber),
     path('updateBalance/', update_balance),
     path('newSubscriber/', new_subscriber),
+    path('addDevice/', add_device),
+    path('deleteDevice/', delete_device),
     path('newCustomer/', new_customer),
     path('api/',include(router.urls)),
     path('consumeApiOG/', ApiUsageOG),
