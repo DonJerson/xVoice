@@ -37,6 +37,7 @@
   },
   "proxy": "http://localhost",
   "devDependencies": {
-    "axios": "^0.19.2"
+    "axios": "^0.19.2",
+    "dateformat": "^3.0.3"
   }
 }

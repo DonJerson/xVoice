@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+var dateFormat = require('dateformat');
 
 const getUrl = window.location;
 let host
@@ -84,6 +85,42 @@ const NavButtons=(props)=>{
     </>
   )
 }
+const TableLineUser=(props)=>{
+  return(
+    <>
+    <tr>           
+      <td>{props.username}</td>
+      <td>{props.password}</td>
+      <td>-</td>
+      </tr>
+    </>
+  )
+}
+const TableLineUsage=(props)=>{
+  return(
+    <>
+    <tr>           
+      <td>{props.line.username}</td>
+      <td>{props.line.destination}</td>
+      <td>{props.line.date}</td>
+      <td>{props.line.duracion}</td>
+      <td>{props.line.costo}</td>
+      </tr>
+    </>
+  )
+}
+const TableLineRecarga=(props)=>{
+  return(
+    <>
+    <tr>           
+      <td>{props.username}</td>
+      <td>{props.password}</td>
+      <td>-</td>
+      </tr>
+    </>
+  )
+}
+
 const NavBar=(props)=>{
   const [mobileOpen, setMobileOpen]=React.useState(false);
   const toggleRegistration=(e)=>{
@@ -294,7 +331,7 @@ class App extends Component {
     if(getUrl.host.substring(0,3)==="127"){
       logged=true
     }
-    if(token && !logged){
+    if(token){
       loading=true
       this.getUser()
       
@@ -310,8 +347,12 @@ class App extends Component {
 
     this.state={
       logged:logged,dimensions:{width:width, height:height, isMobile:false},loading:loading,
-      email:myUsername,password:myPassword,customer:customerBase
+      email:myUsername,password:myPassword,customer:customerBase,loadingComponent:false,
     }
+  }
+  switchLoadingComponent=()=>{
+    const newVal = !this.state.loadingComponent
+    this.setState({loadingComponent:newVal})
   }
   componentDidUpdate(){
     this.updateDimensions();
@@ -360,8 +401,24 @@ class App extends Component {
 
   }
   addDevice=()=>{
-    axios.get(baseUrl+"addDevice").then(resp=>{
+    if(this.state.customer.subscribers.length>4){
+      return
+    }
+    const token = window.localStorage.getItem('token')
+    axios.defaults.headers.get['Authorization']="JWT "+token
+    this.setState({loadingComponent:true})
+    axios.get(baseUrl+"addDevice/").then(resp=>{
       this.setState({customer:resp.data})
+      this.setState({loadingComponent:false})
+    })
+  }
+  deleteDevice=(id)=>{
+    const token = window.localStorage.getItem('token')
+    axios.defaults.headers.get['Authorization']="JWT "+token
+    this.setState({loadingComponent:true})
+    axios.post(baseUrl+"addDevice",{id}).then(resp=>{
+      this.setState({customer:resp.data})
+      this.setState({loadingComponent:false})
     })
   }
   handleRegister=(username,password,name,phoneNumber)=>{
@@ -396,11 +453,27 @@ class App extends Component {
     this.setState({logged:false})
   }
   render() {
+    let history = []
+    this.state.customer.usageHistory.forEach(startLog => {
+      if(startLog.method==="INVITE"){
+        let endLog = this.state.customer.usageHistory.filter(c=>c.callid===startLog.callid && c.method==="BYE")[0]
+        const startTime = new Date(startLog.time)
+        const endTime = new Date(endLog.time)
+        //const duracion=
+        const duracion = (endTime.getTime() -startTime.getTime())/1000
+        const rate=0.010
+        const line={username:startLog.src_user,destination:startLog.dst_user,date:dateFormat(startTime, "mm/dd/yyyy, h:MM:ss TT"),duracion,costo:duracion*rate}
+        history.push(line)
+      }
+      
+      
+    });
     const isMobile=this.state.dimensions.width<768
     let marginBody = this.state.dimensions.isMobile?"15px":"50px"
     const userPack={dimensions:this.state.dimensions,customer:this.state.customer,email:this.email,password:this.password,
       logged:this.state.logged,handleLogin:this.handleLogin,handleRegister:this.handleRegister,
-      handleUpdate:this.handleUpdate,handleLogout:this.handleLogout}
+      handleUpdate:this.handleUpdate,handleLogout:this.handleLogout,addDevice:this.addDevice,deleteDevice:this.deleteDevice
+    }
     return ( 
       <>{this.state.loading?
         <div className="row" style={{justifyContent:"center"}}>
@@ -437,25 +510,40 @@ class App extends Component {
               <div className="col-xs-12 col-sm-7 caja" style={{marginLeft:isMobile?"0px":this.state.dimensions.width*0.065+"px",marginTop:!isMobile?"0px":"25px",paddingTop:"10px",paddingBottom:"10px"}}>
               <div className="row center">
                 <div className="col-xs-auto">
-                <h1 className="secondTitle" style={{marginBottom:"5px"}}>Mis dispositivos</h1><button onClick={this.addDevice} style={{marginLeft:"35px",width:"100px",position:"relative",bottom:"6px"}}class="pure-material-button-contained">Agregar</button>
+                <h1 className="secondTitle" style={{marginBottom:"5px"}}>Mis dispositivos</h1><button onClick={this.addDevice} style={{marginLeft:"35px",width:"100px",position:"relative",bottom:"6px"}}className="pure-material-button-contained">Agregar</button>
                 </div>
                 </div>
                 <div className="row center">
                 {/* <p className="infoText">Saldo Actual</p> */}
                 <table id="customers">
+                <thead>
                 <tr>
                 <th>Usuario</th>
                 <th>Contraseña</th>
                 <th>IP</th>
               </tr>
-              {this.state.customer.subscribers.map((subscriber,index)=>(
-                                            <tr>           
-                                            <td>{subscriber.username}</td>
-                                            <td>{subscriber.password}</td>
-                                            <td>-</td>
-                                          </tr>
+              </thead>
+              
+              <tbody>
+              {this.state.loadingComponent?
+              
+                        <div className="row" style={{justifyContent:"center"}}>
+                          <div className="col-xs-auto">
+                            <div className="lds-hourglass" style={{marginLeft:"100%"}}></div>
+                          </div>
+                        
+                         
+                       </div>
+                :
+                <>
+                {this.state.customer.subscribers.map((subscriber,index)=>(
+                  <TableLineUser key={subscriber.id} username={subscriber.username} password={subscriber.password}/>
             ))} 
+            </>
+                }
 
+
+              </tbody>
        
             </table>
                 </div>
@@ -470,28 +558,22 @@ class App extends Component {
                 <div className="row center">
                 {/* <p className="infoText">Saldo Actual</p> */}
                 <table id="customers" style={{overflowX:"auto !important"}}>
+                <thead>
                 <tr>
                 <th>Usuario</th>
                 <th>Destino</th>
                 <th>Fecha</th>
                 <th>Duración</th>
                 <th>Costo</th>
+                
               </tr>
-                            <tr>           
-                <td>Magazzini Alimentari Riuniti</td>
-                <td>Giovanni Rovelli</td>
-                <td>Italy</td>
-              </tr>
-              <tr>
-                <td>North/South</td>
-                <td>Simon Crowther</td>
-                <td>UK</td>
-              </tr>
-              <tr>
-                <td>Paris spécialités</td>
-                <td>Marie Bertrand</td>
-                <td>France</td>
-              </tr>
+              </thead>
+              <tbody>
+              {history.map((log,index)=>(
+                  <TableLineUsage line={log} key={index}/>
+            ))} 
+
+              </tbody>
             </table>
                 </div>
               </div>

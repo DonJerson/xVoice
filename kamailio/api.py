@@ -37,7 +37,7 @@ def get_subscriber(request):
 def add_device(request):
 	username = phn()
 	password=randomString(10)
-	Subscriber.objects.create(user=request.user,username=username,password=password)
+	Subscriber.objects.create(customer=request.user,username=username,password=password)
 	return Response(CustomerSerializer(request.user,many=False).data)
 
 @api_view(['POST'])
@@ -66,6 +66,7 @@ def new_customer(request):
 	return Response(CustomerSerializer(newCustomer,many=False).data)
 
 @api_view(['GET'])
+@permission_classes([])
 def update_balance(request):
 	logs = Acc.objects.filter(consumer__isnull=True)
 	#logs = Acc.objects.all()
