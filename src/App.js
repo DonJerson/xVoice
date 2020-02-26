@@ -461,8 +461,8 @@ class App extends Component {
         const endTime = new Date(endLog.time)
         //const duracion=
         const duracion = (endTime.getTime() -startTime.getTime())/1000
-        const rate=0.010
-        const line={username:startLog.src_user,destination:startLog.dst_user,date:dateFormat(startTime, "mm/dd/yyyy, h:MM:ss TT"),duracion,costo:duracion*rate}
+        const rate=0.010/60
+        const line={username:startLog.src_user,destination:startLog.dst_user,date:dateFormat(startTime, "mm/dd/yyyy, h:MM:ss TT"),duracion:duracion,costo:duracion*rate}
         history.push(line)
       }
       
@@ -563,7 +563,7 @@ class App extends Component {
                 <th>Usuario</th>
                 <th>Destino</th>
                 <th>Fecha</th>
-                <th>Duración</th>
+                <th>Duración (segundos)</th>
                 <th>Costo</th>
                 
               </tr>
