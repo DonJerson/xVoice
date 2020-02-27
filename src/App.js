@@ -550,7 +550,7 @@ class App extends Component {
                 </div>
               
             </div>
-            <div className="col-xs-12 caja" style={{marginTop:"25px"}}>
+            <div className="col-xs-12 caja" style={{marginTop:"25px",overflowX:"visible"}}>
                 
                 <div className="row" >
                 <h1 className="secondTitle" style={{padding:"8px"}}>Historial de llamadas</h1>

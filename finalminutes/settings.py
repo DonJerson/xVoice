@@ -5,7 +5,7 @@ import os
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 SECRET_KEY = 'c06bxt!5&^yk8h&3pt!qeki69+_42v0j^fnydk1b*4wd6l@p7l'
-
+    
 DEBUG = True
 
 ALLOWED_HOSTS = ['xvoice.xyz','127.0.0.1','www.xvoice.xyz']
