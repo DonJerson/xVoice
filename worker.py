@@ -1,7 +1,5 @@
 from kamailio.models import Acc,Subscriber
 import time
-import django
-django.setup()
 
 while True:
 
