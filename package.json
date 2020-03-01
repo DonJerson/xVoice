@@ -37,7 +37,9 @@
   },
   "proxy": "http://localhost",
   "devDependencies": {
+    "@moebius/http-graceful-shutdown": "^1.1.0",
     "axios": "^0.19.2",
-    "dateformat": "^3.0.3"
+    "dateformat": "^3.0.3",
+    "mz": "^2.7.0"
   }
 }
