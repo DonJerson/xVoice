@@ -107,7 +107,7 @@ if r"C:\Users" in BASE_DIR:
 else:
     switch=True
 
-SECURE_SSL_REDIRECT=switch
+SECURE_SSL_REDIRECT=False
 
 if switch:
     # aws settings
