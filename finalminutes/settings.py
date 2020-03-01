@@ -8,7 +8,7 @@ SECRET_KEY = 'c06bxt!5&^yk8h&3pt!qeki69+_42v0j^fnydk1b*4wd6l@p7l'
     
 DEBUG = True
 
-ALLOWED_HOSTS = ['xvoice.xyz','127.0.0.1','www.xvoice.xyz']
+ALLOWED_HOSTS = ['xvoice.xyz','127.0.0.1','www.xvoice.xyz','http://xvoice.xyz']
 
 INSTALLED_APPS = [
     "sslserver",
@@ -154,7 +154,7 @@ EMAIL_HOST_USER = 'admin@carly.do'
 EMAIL_HOST_PASSWORD = 'xlzl!Mo5'
 EMAIL_PORT = 587
 
-CORS_ORIGIN_WHITE_LIST = '127.0.0.1','localhost','carenproject.herokuapp.com','3.15.162.59',
+CORS_ORIGIN_WHITE_LIST = '127.0.0.1','localhost','carenproject.herokuapp.com','3.15.162.59','http://xvoice.xyz',
 CORS_ALLOW_CREDENTIALS = True
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER' :   'kamailio.utils.custom_jwt_response_handler',
