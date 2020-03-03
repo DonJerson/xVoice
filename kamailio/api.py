@@ -75,7 +75,7 @@ def update_balance(request):
 		newLogs = logs.filter(callid=logs[index].callid)
 		print(newLogs)
 		if len(newLogs)==2:
-			consumer = Subscriber.objects.get(username=newLogs[index].src_user).customer
+			consumer = Subscriber.objects.get(username=logs[index].src_user).customer
 			startDate=""
 			endDate=""
 

@@ -11,7 +11,7 @@ while True:
         print(newLogs)
         if len(newLogs)==2:
             print("found")
-            consumer = Subscriber.objects.get(username=newLogs[index].src_user).customer
+            consumer = Subscriber.objects.get(username=logs[index].src_user).customer
             startDate=""
             endDate=""
 
