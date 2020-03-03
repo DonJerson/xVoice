@@ -34,7 +34,7 @@ while True:
                 logs = logs.exclude(callid=logs[index].callid)
             except Exception as e:
                 print("errorcito fetching")
-                print(logs[index].src_user).customer)
+                print(logs[index].src_user.customer)
                 print(e)
                 
 
