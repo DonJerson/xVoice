@@ -4,6 +4,8 @@ import time
 while True:
 
     logs = Acc.objects.filter(consumer__isnull=True)
+    print("len")
+    print(len(logs))
     #logs = Acc.objects.all()
     index = 0
     while index < len(logs):
