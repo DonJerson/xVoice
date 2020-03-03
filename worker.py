@@ -11,7 +11,11 @@ while True:
         print(newLogs)
         if len(newLogs)==2:
             print("found")
-            consumer = Subscriber.objects.get(username=logs[index].src_user).customer
+            try:
+                consumer = Subscriber.objects.get(username=logs[index].src_user).customer
+            except Exception as e:
+                print("errorcito")
+                print(e)
             startDate=""
             endDate=""
 
