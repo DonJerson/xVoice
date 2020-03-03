@@ -35,6 +35,7 @@ while True:
             except Exception as e:
                 print("errorcito fetching")
                 print(logs[index].src_user)
+                print(logs[index].id)
                 print(e)
                 
 
