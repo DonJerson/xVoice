@@ -23,7 +23,7 @@ def phn():
 def randomString(stringLength=10):
 
     """Generate a random string of fixed length """
-    letters = string.ascii_letters+string.digits+string.punctuation
+    letters = string.ascii_letters+string.digits+string.punctuation[0]+string.punctuation[2:6]+string.punctuation[-1]
     return ''.join(random.choice(letters) for i in range(stringLength))
 	
 @api_view(['GET'])

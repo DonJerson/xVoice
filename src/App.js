@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+
 var dateFormat = require('dateformat');
 
 const getUrl = window.location;
@@ -504,7 +505,7 @@ class App extends Component {
                   <a>Agregar saldo </a>
                   </div>
                   <div className="row center" style={{marginTop:"5px"}}>
-                  <p> (WhatsApp 829 630 6782)</p>
+                  <p> (ICQ 742481225)</p>
                 </div>
               </div>
               <div className="col-xs-12 col-sm-7 caja" style={{marginLeft:isMobile?"0px":this.state.dimensions.width*0.065+"px",marginTop:!isMobile?"0px":"25px",paddingTop:"10px",paddingBottom:"10px"}}>
