@@ -25,15 +25,15 @@ async function start(){
     verbose: true
   }))
   
-  // async function getCerts(){
-  //   const certdir = (await fs.readdir("/etc/letsencrypt/live"))[1];
-  //   return {
-  //     key: await fs.readFile(`/etc/letsencrypt/live/${certdir}/privkey.pem`),
-  //     cert: await fs.readFile(`/etc/letsencrypt/live/${certdir}/fullchain.pem`)
-  //   }
-  // }
+  async function getCerts(){
+    //const certdir = (await fs.readdir("/etc/letsencrypt/live"))[1];
+    return {
+      key: await fs.readFile(`/etc/letsencrypt/live/xvoice.xyz/privkey.pem`),
+      cert: await fs.readFile(`/etc/letsencrypt/live/xvoice.xyz/fullchain.pem`)
+    }
+  }
   
-  // const {key, cert} = await getCerts()
+  const {key, cert} = await getCerts()
   
   // the __dirname is the current directory from where the script is running
   app.use(express.static(path.join(__dirname, './build'), { maxAge: 30 * 60 * 60 * 24 * 1000 }));
@@ -44,12 +44,12 @@ async function start(){
   
 const httpApp = express();
 httpApp.get('*', function(req, res) {  
-  //res.redirect('https://' + req.headers.host + req.url);
+  res.redirect('https://' + req.headers.host + req.url);
   res.sendfile(path.resolve(__dirname, './build/index.html'));
   console.log(req.headers.host + req.url,'redirecting')
 })
 const httpServer = http.createServer(httpApp).listen(80);
-//https.createServer({key, cert}, app).listen(443)
+https.createServer({key, cert}, app).listen(443)
 }
 
 start()

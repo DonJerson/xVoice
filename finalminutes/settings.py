@@ -107,7 +107,7 @@ if r"C:\Users" in BASE_DIR:
 else:
     switch=True
 
-SECURE_SSL_REDIRECT=False
+SECURE_SSL_REDIRECT=switch
 
 if switch:
     # aws settings
@@ -154,7 +154,7 @@ EMAIL_HOST_USER = 'admin@carly.do'
 EMAIL_HOST_PASSWORD = 'xlzl!Mo5'
 EMAIL_PORT = 587
 
-CORS_ORIGIN_WHITE_LIST = '127.0.0.1','localhost','carenproject.herokuapp.com','3.15.162.59','http://xvoice.xyz',
+CORS_ORIGIN_WHITE_LIST = '127.0.0.1','localhost','carenproject.herokuapp.com','3.15.162.59','http://xvoice.xyz','www.xvoice.xyz',
 CORS_ALLOW_CREDENTIALS = True
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER' :   'kamailio.utils.custom_jwt_response_handler',
