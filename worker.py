@@ -27,8 +27,9 @@ class Worker():
     def recordData(self):
         try:
             newLog = self.fetchLog()
-        except:
+        except Exception as e:
             print("no hay aparentemente")
+            print(e)
             return
         try:
             logEnd = self.fetchEndLog()
