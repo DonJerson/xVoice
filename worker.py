@@ -15,7 +15,7 @@ class Worker():
     def fetchLog(self):
         mainLock.acquire()
         newLog = self.logStart[0]
-        self.logStart=[1:]
+        self.logStart= self.logStart[1:]
         mainLock.release()
         return newLog
 
