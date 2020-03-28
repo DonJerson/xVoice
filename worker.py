@@ -24,9 +24,16 @@ class Worker():
         return newLog
 
     def fetchEndLog(self,id):
-        logEnd = self.logEnd.get(callid=id)
-        self.logEnd = self.logEnd.exclude(callid=logEnd.callid)
-        return logEnd
+        try:
+            logEnd = self.logEnd.get(callid=id)
+            self.logEnd = self.logEnd.exclude(callid=logEnd.callid)
+            return logEnd
+        except Exception as e:
+            print("error fetching end")
+            print(e)
+            return
+
+
 
     def recordData(self):
         try:
