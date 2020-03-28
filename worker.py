@@ -30,18 +30,18 @@ class Worker():
         logEnd = self.logEnd.get(callid=myId)
         self.logEnd.exclude(callid=myId)
         return logEnd
-    def newBalance(self,username,cost):
+    def newBalance(self,username,cost,start,end):
         self.mainLock.acquire()
         consumer = Subscriber.objects.get(username).customer
         print("found")
-        startDate=newLog.time
-        endDate=logEnd.time
-        newLog.consumer=consumer
-        newLog.save()
-        logEnd.consumer=consumer
-        logEnd.save()
+
+
         consumer.balance=float(consumer.balance)-cost
         consumer.save()
+        start.consumer=consumer
+        start.save()
+        end.consumer=consumer
+        end.save()
         self.mainLock.release()
         return
     def recordData(self):
@@ -54,12 +54,13 @@ class Worker():
         try:
             logEnd = self.fetchEndLog(newLog.callid)
             time.sleep(1)
-
+            startDate=newLog.time
+            endDate=logEnd.time
             diff = (endDate-startDate).seconds/60
             destination = newLog.dst_user
             rate=0.010
             try:
-                self.newBalance(newLog.src_user,rate*diff)
+                self.newBalance(newLog.src_user,rate*diff,startDate,endDate)
             except Exception as e:
                 print("errorcito sumando")
                 
