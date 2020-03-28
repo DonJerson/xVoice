@@ -38,12 +38,9 @@ class Worker():
 
         consumer.balance=float(consumer.balance)-cost
         consumer.save()
-        start.consumer=consumer
-        start.save()
-        end.consumer=consumer
-        end.save()
+
         self.mainLock.release()
-        return
+        return consumer
     def recordData(self):
         try:
             newLog = self.fetchLog()
@@ -60,7 +57,11 @@ class Worker():
             destination = newLog.dst_user
             rate=0.010
             try:
-                self.newBalance(newLog.src_user,rate*diff,startDate,endDate)
+                consumer = self.newBalance(newLog.src_user,rate*diff)
+                startDate.consumer=consumer
+                startDate.save()
+                endDate.consumer=consumer
+                endDate.save()
             except Exception as e:
                 print("errorcito sumando")
                 
