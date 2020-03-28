@@ -9,10 +9,11 @@ class Worker():
         self.logStart = Acc.objects.filter(consumer__isnull=True,method="INVITE")
         print("len")
         print(len(self.logStart))
-        self.logEnd = Acc.objects.filter(consumer__isnull=True,method="BYE")
+        self.logEnd = Acc.objects.filter(method="BYE")
         print(len(self.logEnd))
         time.sleep(25)
         self.initAll()
+        
         return
 
     def fetchLog(self):
