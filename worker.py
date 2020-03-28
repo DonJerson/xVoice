@@ -56,6 +56,7 @@ class Worker():
         except Exception as e:
             print("errorcito fetching")
             print(e)
+            print(newLog.id)
                 
         return
 
