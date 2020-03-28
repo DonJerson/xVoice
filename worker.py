@@ -10,6 +10,8 @@ class Worker():
         print("len")
         print(len(self.logStart))
         self.logEnd = Acc.objects.filter(consumer__isnull=True,method="BYE")
+        print(len(self.logEnd))
+        time.sleep(25)
         self.initAll()
         return
 
