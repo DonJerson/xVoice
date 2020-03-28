@@ -24,13 +24,10 @@ class Worker():
         return newLog
 
     def fetchEndLog(self,myId):
-        try:
-            logEnd = Acc.objects.get(callid=myId,method="BYE")
-            return logEnd
-        except Exception as e:
-            print("error fetching end")
-            print(e)
-            return
+        print("my Id")
+        print(myId)
+        logEnd = Acc.objects.get(callid=myId,method="BYE")
+        return logEnd
 
 
     def recordData(self):
