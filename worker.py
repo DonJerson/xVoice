@@ -32,7 +32,7 @@ class Worker():
         return logEnd
     def newBalance(self,username,cost):
         self.mainLock.acquire()
-        consumer = Subscriber.objects.get(username).customer
+        consumer = Subscriber.objects.get(username=username).customer
         print("found")
 
 
