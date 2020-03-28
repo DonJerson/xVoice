@@ -49,11 +49,13 @@ class Worker():
             try:
                 consumer.balance=float(consumer.balance)-rate*diff
             except Exception as e:
+                print("errorcito sumando")
                 consumer.balance=-rate*diff
+                print(e)
             consumer.save()
-        except:
+        except Exception as e:
             print("errorcito fetching")
-            print("newLog")
+            print(e)
                 
         return
 
