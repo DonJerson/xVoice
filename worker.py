@@ -59,7 +59,7 @@ class Worker():
             destination = newLog.dst_user
             rate=0.010
             try:
-                self.newBalance(username=newLog.src_user,rate*diff)
+                self.newBalance(newLog.src_user,rate*diff)
             except Exception as e:
                 print("errorcito sumando")
                 
