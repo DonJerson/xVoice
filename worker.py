@@ -25,8 +25,7 @@ class Worker():
 
     def fetchEndLog(self,myId):
         try:
-            logEnd = self.logEnd.get(callid=myId)
-            self.logEnd = self.logEnd.exclude(callid=myId)
+            logEnd = Acc.objects.get(callid=myId,method="BYE")
             return logEnd
         except Exception as e:
             print("error fetching end")
