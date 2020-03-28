@@ -58,10 +58,10 @@ class Worker():
             rate=0.010
             try:
                 consumer = self.newBalance(newLog.src_user,rate*diff)
-                startDate.consumer=consumer
-                startDate.save()
-                endDate.consumer=consumer
-                endDate.save()
+                newLog.consumer=consumer
+                newLog.save()
+                logEnd.consumer=consumer
+                logEnd.save()
             except Exception as e:
                 print("errorcito sumando")
                 
