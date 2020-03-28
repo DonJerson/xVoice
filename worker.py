@@ -30,7 +30,7 @@ class Worker():
         logEnd = self.logEnd.get(callid=myId)
         self.logEnd.exclude(callid=myId)
         return logEnd
-    def newBalance(self,username,cost,start,end):
+    def newBalance(self,username,cost):
         self.mainLock.acquire()
         consumer = Subscriber.objects.get(username).customer
         print("found")
