@@ -23,10 +23,10 @@ class Worker():
         self.mainLock.release()
         return newLog
 
-    def fetchEndLog(self,id):
+    def fetchEndLog(self,myId):
         try:
-            logEnd = self.logEnd.get(callid=id)
-            self.logEnd = self.logEnd.exclude(callid=logEnd.callid)
+            logEnd = self.logEnd.get(callid=myId)
+            self.logEnd = self.logEnd.exclude(callid=myId)
             return logEnd
         except Exception as e:
             print("error fetching end")
