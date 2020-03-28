@@ -13,10 +13,10 @@ class Worker():
         return
 
     def fetchLog(self):
-        mainLock.acquire()
+        self.mainLock.acquire()
         newLog = self.logStart[0]
         self.logStart= self.logStart[1:]
-        mainLock.release()
+        self.mainLock.release()
         return newLog
 
     def fetchEndLog(self,id):
