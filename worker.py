@@ -74,7 +74,7 @@ class Worker():
 
     def initAll(self):
         while(True):
-            if len(self.logStart)
+            #if len(self.logStart):
             for y in range(20):
                 threads = []
                 t = threading.Thread(target=self.recordData)
