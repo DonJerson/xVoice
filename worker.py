@@ -25,7 +25,11 @@ class Worker():
         return logEnd
 
     def recordData(self):
-        newLog = self.fetchLog()
+        try:
+            newLog = self.fetchLog()
+        except:
+            print("no hay aparentemente")
+            return
         try:
             logEnd = self.fetchEndLog()
             time.sleep(1)
@@ -50,10 +54,10 @@ class Worker():
             print("errorcito fetching")
             print("newLog")
                 
-    return
+        return
 
     def initAll(self):
-        while len(self.startLog)>0:
+        while(True):
             for y in range(100):
                 threads = []
                 t = threading.Thread(target=self.recordData)
@@ -64,6 +68,6 @@ class Worker():
                 t.join()
                 pass
  
-            time.sleep(5)
+        return
 
 worker = Worker()
