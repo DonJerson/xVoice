@@ -51,7 +51,7 @@ class Worker():
             logEnd.consumer=consumer
             logEnd.save()
             diff = (endDate-startDate).seconds/60
-            destination = logs[index].dst_user
+            destination = newLog.dst_user
             if destination[0]=="1":
                 rate=0.010
             try:
