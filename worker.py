@@ -11,9 +11,9 @@ class Worker():
         print(len(self.logStart))
         self.logEnd = Acc.objects.filter(method="BYE")
         print(len(self.logEnd))
-        time.sleep(25)
+        #time.sleep(25)
         self.initAll()
-        
+
         return
 
     def fetchLog(self):
