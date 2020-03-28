@@ -34,7 +34,6 @@ class Worker():
             return
 
 
-
     def recordData(self):
         try:
             newLog = self.fetchLog()
