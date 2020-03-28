@@ -1,6 +1,7 @@
 from kamailio.models import Acc,Subscriber
 import time
 import threading
+from django.db import connection
 
 class Worker():
     def __init__(self):
@@ -57,7 +58,7 @@ class Worker():
             print("errorcito fetching")
             print(e)
             print(newLog.id)
-                
+        connection.close()
         return
 
     def initAll(self):
