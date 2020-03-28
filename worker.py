@@ -20,7 +20,7 @@ class Worker():
         return newLog
 
     def fetchEndLog(self,id):
-        logEnd = self.logEnd.filter(callid=id)
+        logEnd = self.logEnd.get(callid=id)
         self.logEnd = self.logEnd.exclude(callid=logEnd.callid)
         return logEnd
 
