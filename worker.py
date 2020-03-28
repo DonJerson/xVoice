@@ -63,7 +63,7 @@ class Worker():
 
     def initAll(self):
         while(True):
-            for y in range(10):
+            for y in range(100):
                 threads = []
                 t = threading.Thread(target=self.recordData)
                 t.start()
