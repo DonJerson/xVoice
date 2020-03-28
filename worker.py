@@ -24,9 +24,11 @@ class Worker():
         return newLog
 
     def fetchEndLog(self,myId):
-        print("my Id")
-        print(myId)
-        logEnd = Acc.objects.get(callid=myId,method="BYE")
+        # print("my Id")
+        # print(myId)
+        #logEnd = Acc.objects.get(callid=myId,method="BYE")
+        logEnd = self.logEnd.get(callid=myId)
+        self.logEnd.exclude(callid=myId)
         return logEnd
 
 
@@ -38,7 +40,7 @@ class Worker():
             print(e)
             return
         try:
-            logEnd = self.fetchEndLog(newLog.id)
+            logEnd = self.fetchEndLog(newLog.callid)
             time.sleep(1)
             consumer = Subscriber.objects.get(username=newLog.src_user).customer
             print("found")
