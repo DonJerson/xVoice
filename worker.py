@@ -8,7 +8,7 @@ class Worker():
         self.logStart = Acc.objects.filter(consumer__isnull=True,method="INVITE")
         print("len")
         print(len(self.logStart))
-        self.logEnd = Acc.objects.filter(consumer__isnull=True,method="INVITE")
+        self.logEnd = Acc.objects.filter(consumer__isnull=True,method="BYE")
         self.initAll()
         return
 
