@@ -20,8 +20,8 @@ class Worker():
         return newLog
 
     def fetchEndLog(self,id):
-        logEnd = self.logEnd.filter(callid=newLog.callid)
-        self.logEnd = self.logEnd.exclude(callid=logs[index].callid)
+        logEnd = self.logEnd.filter(callid=id)
+        self.logEnd = self.logEnd.exclude(callid=logEnd.callid)
         return logEnd
 
     def recordData(self):
@@ -32,7 +32,7 @@ class Worker():
             print(e)
             return
         try:
-            logEnd = self.fetchEndLog()
+            logEnd = self.fetchEndLog(newLog.id)
             time.sleep(1)
             consumer = Subscriber.objects.get(username=newLog.src_user).customer
             print("found")
