@@ -30,8 +30,20 @@ class Worker():
         logEnd = self.logEnd.get(callid=myId)
         self.logEnd.exclude(callid=myId)
         return logEnd
-
-
+    def newBalance(self,username,cost):
+        self.mainLock.acquire()
+        consumer = Subscriber.objects.get(username).customer
+        print("found")
+        startDate=newLog.time
+        endDate=logEnd.time
+        newLog.consumer=consumer
+        newLog.save()
+        logEnd.consumer=consumer
+        logEnd.save()
+        consumer.balance=float(consumer.balance)-cost
+        consumer.save()
+        self.mainLock.release()
+        return
     def recordData(self):
         try:
             newLog = self.fetchLog()
@@ -42,25 +54,17 @@ class Worker():
         try:
             logEnd = self.fetchEndLog(newLog.callid)
             time.sleep(1)
-            consumer = Subscriber.objects.get(username=newLog.src_user).customer
-            print("found")
-            startDate=newLog.time
-            endDate=logEnd.time
-            newLog.consumer=consumer
-            newLog.save()
-            logEnd.consumer=consumer
-            logEnd.save()
+
             diff = (endDate-startDate).seconds/60
             destination = newLog.dst_user
-            if destination[0]=="1":
-                rate=0.010
+            rate=0.010
             try:
-                consumer.balance=float(consumer.balance)-rate*diff
+                self.newBalance(username=newLog.src_user,rate*diff)
             except Exception as e:
                 print("errorcito sumando")
-                consumer.balance=-rate*diff
+                
                 print(e)
-            consumer.save()
+
         except Exception as e:
             print("errorcito fetching")
             print(e)
@@ -70,6 +74,7 @@ class Worker():
 
     def initAll(self):
         while(True):
+            if len(self.logStart)
             for y in range(20):
                 threads = []
                 t = threading.Thread(target=self.recordData)
