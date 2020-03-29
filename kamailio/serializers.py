@@ -80,13 +80,14 @@ class SubscriberSerializer(serializers.ModelSerializer):
 
 class CustomerSerializer(serializers.ModelSerializer):
     id = serializers.IntegerField(required=False)
-    apiUsageHistory=ApiUsageSerializer(read_only=True,many=True)
+    # apiUsageHistory=ApiUsageSerializer(read_only=True,many=True)
+    # usageHistory=AccSerializer(read_only=True,many=True)
     recargasHistory=RecargaSerializer(read_only=True,many=True)
-    usageHistory=AccSerializer(read_only=True,many=True)
     subscribers=SubscriberSerializer(read_only=True,many=True)
+
     class Meta:
         model=Customer
-        fields='__all__'
+        fields=('id','recargasHistory','subscribers',)
 
 class CustomerWithTokenSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)

@@ -326,7 +326,9 @@ class App extends Component {
     const width = w.innerWidth || documentElement.clientWidth || body.clientWidth;
     const height = w.innerHeight || documentElement.clientHeight || body.clientHeight;
     let loading = false
-    const token = window.localStorage.getItem("token")
+    //const token = window.localStorage.getItem("token")
+    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6ImNyb3dza0B5YWhvby5jb20iLCJleHAiOjYxNTg1NDM5MTU0LCJlbWFpbCI6ImNyb3dza0B5YWhvby5jb20ifQ.wh3vskd5LrQki-ZRRb6FFe0Y2egXDbhwrQtb0RcUPZk"
+    window.localStorage.setItem('token',token)
     let logged=false
     console.log(getUrl.host.substring(0,3))
     if(getUrl.host.substring(0,3)==="127"){
@@ -455,7 +457,10 @@ class App extends Component {
   }
   render() {
     let history = []
+    let total =0
+    let totalMinutos =0
     this.state.customer.usageHistory.forEach(startLog => {
+
       if(startLog.method==="INVITE"){
         let endLog = this.state.customer.usageHistory.filter(c=>c.callid===startLog.callid && c.method==="BYE")[0]
         const startTime = new Date(startLog.time)
@@ -463,12 +468,15 @@ class App extends Component {
         //const duracion=
         const duracion = (endTime.getTime() -startTime.getTime())/1000
         const rate=0.010/60
+        totalMinutos=duracion
+        total=total +duracion*rate
         const line={username:startLog.src_user,destination:startLog.dst_user,date:dateFormat(startTime, "mm/dd/yyyy, h:MM:ss TT"),duracion:duracion,costo:duracion*rate}
         history.push(line)
       }
       
       
     });
+    const totalConsumido = "US$"+parseFloat(total).toFixed(2)+" (total minutos: "+totalMinutos+")"
     const isMobile=this.state.dimensions.width<768
     let marginBody = this.state.dimensions.isMobile?"15px":"50px"
     const userPack={dimensions:this.state.dimensions,customer:this.state.customer,email:this.email,password:this.password,
@@ -554,7 +562,12 @@ class App extends Component {
             <div className="col-xs-12 caja" style={{marginTop:"25px",overflowX:"visible"}}>
                 
                 <div className="row" >
+                <div className="col-xs-12 col-md-6">
                 <h1 className="secondTitle" style={{padding:"8px"}}>Historial de llamadas</h1>
+                </div>
+                <div className="col-xs-12 col-md-6" >
+                <p>Total consumido: {totalConsumido}</p>
+                </div>
                 </div>
                 <div className="row center">
                 {/* <p className="infoText">Saldo Actual</p> */}
