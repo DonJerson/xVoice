@@ -808,9 +808,10 @@ class Customer(AbstractUser):
     @property
     def apiUsageHistory(self):
         return self.apiusage_set.all()
-    @property
+
     def usageHistory(self):
-        return self.acc_set.all()
+        return self.acc_set.filter(method="INVITE")
+
     @property
     def subscribers(self):
         return self.subscriber_set.all()

@@ -304,9 +304,40 @@ class App extends Component {
     const newDimensions={width:width, height:height, isMobile:false}
     this.setState({dimensions:newDimensions})
   }
+  fetchHistory=()=>{
+    let history = []
+    const token = window.localStorage.getItem('token')
+    axios.defaults.headers.post['Authorization']="JWT "+token
+    axios.post(baseUrl + `getHistory/`,{"amount":50}).then(res=>{
+      const history = res.data.history
+      const totalCalls = res.data.totalCalls
+      //console.log("respuesta",res.data)
+      history.forEach(startLog => {
+        if(startLog.method==="INVITE"){
+          let endLog = history.filter(c=>c.callid===startLog.callid && c.method==="BYE")[0]
+          const startTime = new Date(startLog.time)
+          const endTime = new Date(endLog.time)
+          //const duracion=
+          const duracion = (endTime.getTime() -startTime.getTime())/1000
+          const rate=0.010/60
+          // totalMinutos=duracion
+          // total=total +duracion*rate
+          const line={username:startLog.src_user,destination:startLog.dst_user,date:dateFormat(startTime, "mm/dd/yyyy, h:MM:ss TT"),duracion:duracion,costo:duracion*rate}
+          history.push(line)
+        }
+      })
+      this.setState({history,totalCalls})
+      
+    }).catch(err=>{
+      console.log("error",err)
+      this.setState({loading:false})
+    })
+      
+  }
   getUser=()=>{
     const token = window.localStorage.getItem('token')
     axios.defaults.headers.get['Authorization']="JWT "+token
+    this.fetchHistory()
     axios.get(baseUrl + `getSub/`).then(res=>{
       this.setState({customer:res.data})
       this.setState({loading:false})
@@ -349,6 +380,7 @@ class App extends Component {
     }
 
     this.state={
+      history:[],totalCalls:0,
       logged:logged,dimensions:{width:width, height:height, isMobile:false},loading:loading,
       email:myUsername,password:myPassword,customer:customerBase,loadingComponent:false,
     }
@@ -459,24 +491,8 @@ class App extends Component {
     let history = []
     let total =0
     let totalMinutos =0
-    this.state.customer.usageHistory.forEach(startLog => {
 
-      if(startLog.method==="INVITE"){
-        let endLog = this.state.customer.usageHistory.filter(c=>c.callid===startLog.callid && c.method==="BYE")[0]
-        const startTime = new Date(startLog.time)
-        const endTime = new Date(endLog.time)
-        //const duracion=
-        const duracion = (endTime.getTime() -startTime.getTime())/1000
-        const rate=0.010/60
-        totalMinutos=duracion
-        total=total +duracion*rate
-        const line={username:startLog.src_user,destination:startLog.dst_user,date:dateFormat(startTime, "mm/dd/yyyy, h:MM:ss TT"),duracion:duracion,costo:duracion*rate}
-        history.push(line)
-      }
-      
-      
-    });
-    const totalConsumido = "US$"+parseFloat(total).toFixed(2)+" (total minutos: "+totalMinutos+")"
+    //const totalConsumido = "US$"+parseFloat(total).toFixed(2)+" (total minutos: "+totalMinutos+")"
     const isMobile=this.state.dimensions.width<768
     let marginBody = this.state.dimensions.isMobile?"15px":"50px"
     const userPack={dimensions:this.state.dimensions,customer:this.state.customer,email:this.email,password:this.password,
@@ -566,7 +582,7 @@ class App extends Component {
                 <h1 className="secondTitle" style={{padding:"8px"}}>Historial de llamadas</h1>
                 </div>
                 <div className="col-xs-12 col-md-6" >
-                <p>Total consumido: {totalConsumido}</p>
+                {/* <p>Total consumido: {totalConsumido}</p> */}
                 </div>
                 </div>
                 <div className="row center">
@@ -583,7 +599,7 @@ class App extends Component {
               </tr>
               </thead>
               <tbody>
-              {history.map((log,index)=>(
+              {this.state.history.map((log,index)=>(
                   <TableLineUsage line={log} key={index}/>
             ))} 
 

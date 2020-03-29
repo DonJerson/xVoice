@@ -26,4 +26,5 @@ urlpatterns = [
     path('api/',include(router.urls)),
     path('consumeApiOG/', ApiUsageOG),
     path('recargaOG/', RecargaOG),
+    path('getHistory/', get_history),
 ]

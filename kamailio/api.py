@@ -49,6 +49,22 @@ def delete_device(request):
 	return Response(CustomerSerializer(request.user,many=False).data)
 
 @api_view(['POST'])
+def get_history(request):
+	amount = request.data['amount']
+
+	usageHistory = request.user.usageHistory()
+	totalCalls = len(usageHistory)
+	usageHistory=usageHistory[:amount]
+	
+	print(totalCalls)
+	byes = Acc.objects.filter(method="BYE",consumer=request.user.id)
+	print("amount")
+	for usage in usageHistory:
+		usageHistory=usageHistory.union(byes.filter(callid=usage.callid))
+		pass
+	return Response({"history":AccSerializer(usageHistory,many=True).data,"totalCalls":totalCalls})
+
+@api_view(['POST'])
 @permission_classes([])
 def new_customer(request):
 	email = request.data["email"]

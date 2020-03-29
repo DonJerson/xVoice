@@ -87,7 +87,7 @@ class CustomerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=Customer
-        fields=('id','recargasHistory','subscribers',)
+        fields=('id','recargasHistory','subscribers','balance')
 
 class CustomerWithTokenSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
