@@ -41,6 +41,42 @@ class Worker():
 
         self.mainLock.release()
         return consumer
+    def recordDataReverse(self):
+        try:
+            self.mainLock.acquire()
+            newLog = self.logEnd[0]
+            self.logEnd= self.logEnd[1:]
+            self.mainLock.release()
+        except Exception as e:
+            print("no hay aparentemente")
+            print(e)
+            return
+        try:
+            logStart = self.objects.get(callid=myId,method="INVITE")
+            time.sleep(1)
+            startDate=logStart.time
+            endDate=newLog.time
+            diff = (endDate-startDate).seconds/60
+            destination = newLog.dst_user
+            rate=0.010
+            try:
+                consumer = self.newBalance(newLog.src_user,rate*diff)
+                newLog.consumer=consumer
+                newLog.save()
+                logStart.consumer=consumer
+                logStart.save()
+            except Exception as e:
+                print("errorcito sumando")
+                
+                print(e)
+
+        except Exception as e:
+            print("errorcito fetching")
+            print(e)
+            print(newLog.id)
+        connection.close()
+        return
+
     def recordData(self):
         try:
             newLog = self.fetchLog()
@@ -76,17 +112,27 @@ class Worker():
 
     def initAll(self):
         while(True):
-            #if len(self.logStart):
-            for y in range(20):
-                threads = []
-                t = threading.Thread(target=self.recordData)
-                t.start()
-                threads.append(t)
-                
-            for thread in threads:
-                t.join()
-                pass
- 
+            if len(self.logStart>0):
+                for y in range(20):
+                    threads = []
+                    t = threading.Thread(target=self.recordData)
+                    t.start()
+                    threads.append(t)
+                    
+                for thread in threads:
+                    t.join()
+                    pass
+            else:
+                self.logEnd = Acc.objects.filter(consumer__isnull=True,method="BYE")
+                for y in range(20):
+                    threads = []
+                    t = threading.Thread(target=self.recordDataReverse)
+                    t.start()
+                    threads.append(t)
+                    
+                for thread in threads:
+                    t.join()
+                    pass 
         return
 
 worker = Worker()
