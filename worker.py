@@ -94,7 +94,7 @@ class Worker():
             rate=0.010
             try:
                 consumer = self.newBalance(newLog.src_user,rate*diff)
-                newCall = Objects.create(startDate=startDate,endDate=startDate,callid=logEnd.callid,consumer=consumer)
+                newCall = ApiUsage.objects.create(startDate=startDate,endDate=startDate,callid=logEnd.callid,consumer=consumer)
                 
                 newLog.consumer=consumer
                 newLog.save()
