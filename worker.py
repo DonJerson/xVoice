@@ -32,15 +32,19 @@ class Worker():
         return logEnd
     def newBalance(self,username,cost):
         self.mainLock.acquire()
-        consumer = Subscriber.objects.get(username=username).customer
-        print("found")
+        try:
+            consumer = Subscriber.objects.get(username=username).customer
+            print("found")
 
 
-        consumer.balance=float(consumer.balance)-cost
-        consumer.save()
-
-        self.mainLock.release()
-        return consumer
+            consumer.balance=float(consumer.balance)-cost
+            consumer.save()
+            self.mainLock.release()
+            return consumer
+        except:
+            print("not found subscriber")
+            self.mainLock.release()
+            return consumer
     def recordDataReverse(self):
         try:
             self.mainLock.acquire()
