@@ -386,8 +386,8 @@ class App extends Component {
       mobile=false
     }
     let loading = false
-    //const token = window.localStorage.getItem("token")
-    const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6ImNyb3dza0B5YWhvby5jb20iLCJleHAiOjYxNTg1NDM5MTU0LCJlbWFpbCI6ImNyb3dza0B5YWhvby5jb20ifQ.wh3vskd5LrQki-ZRRb6FFe0Y2egXDbhwrQtb0RcUPZk"
+    const token = window.localStorage.getItem("token")
+    //const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6ImNyb3dza0B5YWhvby5jb20iLCJleHAiOjYxNTg1NDM5MTU0LCJlbWFpbCI6ImNyb3dza0B5YWhvby5jb20ifQ.wh3vskd5LrQki-ZRRb6FFe0Y2egXDbhwrQtb0RcUPZk"
     window.localStorage.setItem('token',token)
     let logged=false
     //console.log(getUrl.host.substring(0,3))
@@ -479,8 +479,8 @@ class App extends Component {
     }
   }
   handleLogin=(username,password,remember)=>{
-    //const token = window.localStorage.getItem('token')
-    //axios.defaults.headers.get['Authorization']="JWT "+token
+    const token = window.localStorage.getItem('token')
+    axios.defaults.headers.get['Authorization']="JWT "+token
     this.setState({loading:true})
     const email = this.state.email
     const myPass = this.state.password
@@ -522,8 +522,8 @@ class App extends Component {
     })
   }
   handleRegister=(username,password,name,phoneNumber)=>{
-    //const token = window.localStorage.getItem('token')
-    //axios.defaults.headers.get['Authorization']="JWT "+token
+    const token = window.localStorage.getItem('token')
+    axios.defaults.headers.get['Authorization']="JWT "+token
     this.setState({loading:true})
     const myUsername = this.state.email
     const myPass = this.state.password
