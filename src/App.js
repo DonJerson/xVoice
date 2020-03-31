@@ -553,9 +553,6 @@ class App extends Component {
     this.setState({logged:false})
   }
   render() {
-    let history = []
-    let total =0
-    let totalMinutos =0
 
     //const totalConsumido = "US$"+parseFloat(total).toFixed(2)+" (total minutos: "+totalMinutos+")"
     const isMobile=this.state.dimensions.width<768
