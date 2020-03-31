@@ -837,8 +837,30 @@ class Subscriber(models.Model):
         else:
             return "No identificado"
 
+class ApiUsage(models.Model):
+    consumer = models.ForeignKey(Customer,on_delete=models.CASCADE,null=True,blank=True,default=None)
+    serviceProvided=models.CharField(max_length=10,choices=SERVICES_CHOICES,null=True,blank=True,default=None)
+    method = models.CharField(max_length=16,null=True,blank=True,default=None)
+    from_tag = models.CharField(max_length=64,null=True,blank=True,default=None)
+    to_tag = models.CharField(max_length=64,null=True,blank=True,default=None)
+    callid = models.CharField(max_length=255,null=True,blank=True,default=None)
+    sip_code = models.CharField(max_length=3,null=True,blank=True,default=None)
+    sip_reason = models.CharField(max_length=128,null=True,blank=True,default=None)
+    startTime = models.DateTimeField(null=True,blank=True,default=None)
+    endTime = models.DateTimeField(null=True,blank=True,default=None)
+    duration= models.IntegerField(null=True,blank=True,default=None)
+    src_user=models.CharField(max_length=64,null=True,blank=True,default=None)
+    src_domain=models.CharField(max_length=128,null=True,blank=True,default=None)
+    src_ip =models.CharField(max_length=64,null=True,blank=True,default=None)
+    dst_ouser=models.CharField(max_length=64,null=True,blank=True,default=None)
+    dst_user =models.CharField(max_length=64,null=True,blank=True,default=None)
+    dst_domain =models.CharField(max_length=128,null=True,blank=True,default=None)
+    def __str__(self):
+        return self.serviceProvided
+        
 class Acc(models.Model):
-    consumer = models.ForeignKey(Customer,on_delete=models.CASCADE,null=True)
+    consumer = models.ForeignKey(Customer,on_delete=models.CASCADE,null=True,blank=True)
+    call = models.ForeignKey(ApiUsage,on_delete=models.CASCADE,null=True,blank=True,default=None)
     method = models.CharField(max_length=16)
     from_tag = models.CharField(max_length=64)
     to_tag = models.CharField(max_length=64)
@@ -853,14 +875,10 @@ class Acc(models.Model):
     dst_user =models.CharField(max_length=64)
     dst_domain =models.CharField(max_length=128)
     class Meta:
-        managed=True
+        managed=False
         db_table = 'acc'
 
-class ApiUsage(models.Model):
-	consumer = models.ForeignKey(Customer,on_delete=models.CASCADE)
-	serviceProvided=models.CharField(max_length=10,choices=SERVICES_CHOICES)
-	def __str__(self):
-		return self.serviceProvided
+
 
 class Recarga(models.Model):
 	beneficiary = models.ForeignKey(Customer,on_delete=models.CASCADE)
