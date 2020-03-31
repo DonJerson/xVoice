@@ -1,4 +1,4 @@
-from kamailio.models import Acc,Subscriber
+from kamailio.models import Acc,Subscriber,ApiUsage
 import time
 import threading
 from django.db import connection
