@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import { transform } from '@babel/core';
 
 var dateFormat = require('dateformat');
 
@@ -92,8 +93,15 @@ const TableLineUser=(props)=>{
     <tr>           
       <td>{props.username}</td>
       <td>{props.password}</td>
-      <td>-</td>
+      <td>-<a href="" style={{width:"30px",height:"50px"}}><img style={{width:"30px",height:"30px"}}src="svg/delete.svg" alt="Kiwi standing on oval" className="deleteIcon"/></a></td>
       </tr>
+    </>
+  )
+}
+const UserLine=(props)=>{
+  return(
+    <>
+    <a href="#">{props.username}</a>
     </>
   )
 }
@@ -110,18 +118,73 @@ const TableLineUsage=(props)=>{
     </>
   )
 }
-const TableLineRecarga=(props)=>{
+const FullDialog=(props)=>{
   return(
-    <>
-    <tr>           
-      <td>{props.username}</td>
-      <td>{props.password}</td>
-      <td>-</td>
-      </tr>
+    <><div id="overlay">
+      <div id="text">Overlay Text</div></div>
     </>
   )
 }
 
+const Calendar=(props)=>{
+  return(
+    <>
+<div className="calendar">
+  <div>
+    <h2>18, Sunday</h2>
+    <div className="row center-xs">
+      <div className="col-xs-auto">
+      <h3>November</h3>
+      </div>
+    </div>
+    
+  </div>
+  <div className="calendar__date">
+    <div className="calendar__day">M</div>
+    <div className="calendar__day">T</div>
+    <div className="calendar__day">W</div>
+    <div className="calendar__day">T</div>
+    <div className="calendar__day">F</div>
+    <div className="calendar__day">S</div>
+    <div className="calendar__day">S</div>
+    <div className="calendar__number"></div>
+    <div className="calendar__number"></div>
+    <div className="calendar__number"></div>
+    <div className="calendar__number">1</div>
+    <div className="calendar__number">2</div>
+    <div className="calendar__number">3</div>
+    <div className="calendar__number">4</div>
+    <div className="calendar__number">5</div>
+    <div className="calendar__number">6</div>
+    <div className="calendar__number">7</div>
+    <div className="calendar__number">8</div>
+    <div className="calendar__number">9</div>
+    <div className="calendar__number">10</div>
+    <div className="calendar__number">11</div>
+    <div className="calendar__number">12</div>
+    <div className="calendar__number">13</div>
+    <div className="calendar__number">14</div>
+    <div className="calendar__number">15</div>
+    <div className="calendar__number">16</div>
+    <div className="calendar__number">17</div>
+    <div className="calendar__number calendar__number--current">18</div>
+    <div className="calendar__number">19</div>
+    <div className="calendar__number">20</div>
+    <div className="calendar__number">21</div>
+    <div className="calendar__number">22</div>
+    <div className="calendar__number">23</div>
+    <div className="calendar__number">24</div>
+    <div className="calendar__number">25</div>
+    <div className="calendar__number">26</div>
+    <div className="calendar__number">27</div>
+    <div className="calendar__number">28</div>
+    <div className="calendar__number">29</div>
+    <div className="calendar__number">30</div>
+  </div>
+</div>
+</>
+  )
+}
 const NavBar=(props)=>{
   const [mobileOpen, setMobileOpen]=React.useState(false);
   const toggleRegistration=(e)=>{
@@ -132,7 +195,7 @@ const NavBar=(props)=>{
 
   const isMobile=props.dimensions.width<768
   return(
-    <>
+    <><FullDialog/>
         <header className="header">
         
             {isMobile?
@@ -511,7 +574,7 @@ class App extends Component {
       {this.state.logged?
         <>
         <NavBar dimensions={this.state.dimensions} userPack={userPack}/>
-        <div id="mainBody" style={{marginLeft:marginBody,marginRight:marginBody,marginTop:"18px",marginBottom:"25px"}}>
+        <div id="mainBody" style={{marginLeft:marginBody,marginRight:marginBody,marginTop:"18px",marginBottom:"200px"}}>
             
             <div className="row">
               <h1 className="mainTitle">Welcome {this.state.customer.name}</h1>
@@ -575,9 +638,33 @@ class App extends Component {
                 </div>
               
             </div>
-            <div className="col-xs-12 caja" style={{marginTop:"25px",overflowX:"visible"}}>
+            <div className="row" style={{marginTop:"30px"}}>
+            <div className="col-xs-8 col-md-8">
+            <div class="dropdown">
+              <button class="dropbtn">Usuarios</button>
+              <div class="dropdown-content" >
+              {this.state.customer.subscribers.map((subscriber,index)=>(
+                  <UserLine key={subscriber.id} username={subscriber.username} password={subscriber.password}/>
+            ))} 
+              </div>
+            </div>
+            <div class="dropdown" style={{marginLeft:"15px"}}>
+              <button class="dropbtn">Fecha inicio</button>
+              <div class="dropdown-content" >
+                <Calendar/>
+              </div>
+            </div>
+            <div class="dropdown" style={{marginLeft:"15px"}}>
+              <button class="dropbtn">Fecha final</button>
+              <div class="dropdown-content" >
+              <Calendar/>
+              </div>
+            </div>
+            </div>
+            </div>
+            <div className="col-xs-12 caja" style={{marginTop:"25px",marginBottom:"80px",overflowX:"visible"}}>
                 
-                <div className="row" >
+                <div className="row">
                 <div className="col-xs-12 col-md-6">
                 <h1 className="secondTitle" style={{padding:"8px"}}>Historial de llamadas</h1>
                 </div>
