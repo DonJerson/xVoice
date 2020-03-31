@@ -69,6 +69,8 @@ class Worker():
                 print("errorcito sumando")
                 
                 print(e)
+                connection.close()
+                return
 
         except Exception as e:
             print("errorcito fetching")
