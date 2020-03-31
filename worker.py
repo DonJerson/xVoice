@@ -120,7 +120,8 @@ class Worker():
             print(newLog.id)
             connection.close()
             return
-
+        connection.close()
+        return
     def initAll(self):
         while(True):
             if len(self.logStart)>0:
