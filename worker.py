@@ -110,13 +110,16 @@ class Worker():
                 print("errorcito sumando")
                 
                 print(e)
+                connection.close()
+                return
+
 
         except Exception as e:
             print("errorcito fetching")
             print(e)
             print(newLog.id)
-        connection.close()
-        return
+            connection.close()
+            return
 
     def initAll(self):
         while(True):
