@@ -6,7 +6,7 @@ from django.db import connection
 class Worker():
     def __init__(self):
         self.mainLock = threading.Lock()
-        self.logStart = Acc.objects.filter(consumer__isnull=True,method="INVITE")
+        self.logStart = Acc.objects.filter(call__isnull=True,method="INVITE")
         print("len")
         print(len(self.logStart))
         self.logEnd = Acc.objects.filter(method="BYE")
@@ -94,6 +94,8 @@ class Worker():
             rate=0.010
             try:
                 consumer = self.newBalance(newLog.src_user,rate*diff)
+                newCall = Objects.create(startDate=startDate,endDate=startDate,callid=logEnd.callid,consumer=consumer)
+                
                 newLog.consumer=consumer
                 newLog.save()
                 logEnd.consumer=consumer

@@ -4,7 +4,7 @@ from django.contrib.auth.models import UserManager
 from django.utils import timezone
 import datetime
 
-SERVICES_CHOICES = [('GENVZ','GENVZ'),('CALL','CALL')]
+SERVICES_CHOICES = [('GENVZ','GENVZ'),('USCALL','US')]
 PAYMENT_CHOICES = [('CASH','CASH'),('BTC','BTC')]
 
 
@@ -855,6 +855,9 @@ class ApiUsage(models.Model):
     dst_ouser=models.CharField(max_length=64,null=True,blank=True,default=None)
     dst_user =models.CharField(max_length=64,null=True,blank=True,default=None)
     dst_domain =models.CharField(max_length=128,null=True,blank=True,default=None)
+    class Meta:
+        managed=True
+        
     def __str__(self):
         return self.serviceProvided
         
