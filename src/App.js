@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { transform } from '@babel/core';
+import Calendar from './Calendar';
 
 var dateFormat = require('dateformat');
 
@@ -88,20 +89,36 @@ const NavButtons=(props)=>{
   )
 }
 const TableLineUser=(props)=>{
+  const deleteUser=(e)=>{
+    console.log("alto ahi",props.username)
+    e.preventDefault()
+    props.deleteUser(props.username)
+  }
   return(
     <>
     <tr>           
       <td>{props.username}</td>
       <td>{props.password}</td>
-      <td>-<a href="" style={{width:"30px",height:"50px"}}><img style={{width:"30px",height:"30px"}}src="svg/delete.svg" alt="Kiwi standing on oval" className="deleteIcon"/></a></td>
+      <td><a onClick={deleteUser} href="/" style={{position:"relative",bottom:"28px"}}><img style={{width:"30px",height:"30px"}}src="svg/delete.svg" alt="Kiwi standing on oval" className="deleteIcon"/></a>-</td>
       </tr>
     </>
   )
 }
 const UserLine=(props)=>{
+  const handleSelect=(e)=>{
+    e.preventDefault()
+    props.handleSelect(props.username)
+  }
+  let isSelected =false
+  props.seletedUsers.forEach(user => {
+    if(user===props.username){
+      isSelected=true
+    }
+  });
   return(
     <>
-    <a href="#">{props.username}</a>
+    <a href="#" style={{backgroundColor:isSelected?"rgb(0, 112, 186)":"",color:isSelected?"white":""}}onClick={handleSelect}>{props.username}</a>
+    <hr class="solid"></hr>
     </>
   )
 }
@@ -126,71 +143,12 @@ const FullDialog=(props)=>{
   )
 }
 
-const Calendar=(props)=>{
-  return(
-    <>
-<div className="calendar">
-  <div>
-    <h2>18, Sunday</h2>
-    <div className="row center-xs">
-      <div className="col-xs-auto">
-      <h3>November</h3>
-      </div>
-    </div>
-    
-  </div>
-  <div className="calendar__date">
-    <div className="calendar__day">M</div>
-    <div className="calendar__day">T</div>
-    <div className="calendar__day">W</div>
-    <div className="calendar__day">T</div>
-    <div className="calendar__day">F</div>
-    <div className="calendar__day">S</div>
-    <div className="calendar__day">S</div>
-    <div className="calendar__number"></div>
-    <div className="calendar__number"></div>
-    <div className="calendar__number"></div>
-    <div className="calendar__number">1</div>
-    <div className="calendar__number">2</div>
-    <div className="calendar__number">3</div>
-    <div className="calendar__number">4</div>
-    <div className="calendar__number">5</div>
-    <div className="calendar__number">6</div>
-    <div className="calendar__number">7</div>
-    <div className="calendar__number">8</div>
-    <div className="calendar__number">9</div>
-    <div className="calendar__number">10</div>
-    <div className="calendar__number">11</div>
-    <div className="calendar__number">12</div>
-    <div className="calendar__number">13</div>
-    <div className="calendar__number">14</div>
-    <div className="calendar__number">15</div>
-    <div className="calendar__number">16</div>
-    <div className="calendar__number">17</div>
-    <div className="calendar__number calendar__number--current">18</div>
-    <div className="calendar__number">19</div>
-    <div className="calendar__number">20</div>
-    <div className="calendar__number">21</div>
-    <div className="calendar__number">22</div>
-    <div className="calendar__number">23</div>
-    <div className="calendar__number">24</div>
-    <div className="calendar__number">25</div>
-    <div className="calendar__number">26</div>
-    <div className="calendar__number">27</div>
-    <div className="calendar__number">28</div>
-    <div className="calendar__number">29</div>
-    <div className="calendar__number">30</div>
-  </div>
-</div>
-</>
-  )
-}
 const NavBar=(props)=>{
   const [mobileOpen, setMobileOpen]=React.useState(false);
   const toggleRegistration=(e)=>{
-    console.log(e.target.parentElement)
+    //console.log(e.target.parentElement)
     setMobileOpen(prev=>!prev)
-    console.log(mobileOpen)
+    //console.log(mobileOpen)
   }
 
   const isMobile=props.dimensions.width<768
@@ -348,7 +306,9 @@ class App extends Component {
     element.classList.toggle('closed')
     //console.log("success",element)
   }
-
+  recargar=()=>{
+    console.log("working")
+  }
   updateDimensions=()=>{
     const w = window;
     const d = document;
@@ -419,12 +379,18 @@ class App extends Component {
     const body = d.getElementsByTagName('body')[0];
     const width = w.innerWidth || documentElement.clientWidth || body.clientWidth;
     const height = w.innerHeight || documentElement.clientHeight || body.clientHeight;
+    let mobile
+    if (width < 763){
+      mobile=true
+    }else{
+      mobile=false
+    }
     let loading = false
     //const token = window.localStorage.getItem("token")
     const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6ImNyb3dza0B5YWhvby5jb20iLCJleHAiOjYxNTg1NDM5MTU0LCJlbWFpbCI6ImNyb3dza0B5YWhvby5jb20ifQ.wh3vskd5LrQki-ZRRb6FFe0Y2egXDbhwrQtb0RcUPZk"
     window.localStorage.setItem('token',token)
     let logged=false
-    console.log(getUrl.host.substring(0,3))
+    //console.log(getUrl.host.substring(0,3))
     if(getUrl.host.substring(0,3)==="127"){
       logged=true
     }
@@ -443,11 +409,47 @@ class App extends Component {
     }
 
     this.state={
+      seletedUsers:[],
       history:[],totalCalls:0,
-      logged:logged,dimensions:{width:width, height:height, isMobile:false},loading:loading,
+      logged:logged,dimensions:{width:width, height:height, isMobile:mobile},loading:loading,
       email:myUsername,password:myPassword,customer:customerBase,loadingComponent:false,
     }
   }
+  handleSelect=(username)=>{
+    let updated=false
+    let newUsers = this.state.seletedUsers
+    newUsers.forEach(user => {
+      if(user===username){
+        newUsers = newUsers.filter(c=>c!=username)
+        this.setState({seletedUsers:newUsers})
+        updated=true
+        return
+      }
+    });
+    if(updated){return}
+    newUsers.push(username)
+    this.setState({seletedUsers:newUsers})
+    return
+  }
+  deleteUser=(subscriber)=>{
+    const token = window.localStorage.getItem("token")
+    axios.defaults.headers.post['Authorization']="JWT "+token
+    this.setState({loadingComponent:true})
+    axios.post(baseUrl + `deleteSubscriber/`,{subscriber}).then(res=>{
+      this.setState({customer:res.data})
+      this.setState({loadingComponent:false})
+    }).catch(err=>{
+      console.log("error",err)
+      this.setState({loadingComponent:false})
+    })
+    //this.setState({selectUsers:newUsers})
+  }
+  filterUser=(username)=>{
+    let newUsers = this.state.seletedUsers
+    newUsers.filter(c=>c!=username)
+    return newUsers
+  }
+  
   switchLoadingComponent=()=>{
     const newVal = !this.state.loadingComponent
     this.setState({loadingComponent:newVal})
@@ -575,30 +577,30 @@ class App extends Component {
         <>
         <NavBar dimensions={this.state.dimensions} userPack={userPack}/>
         <div id="mainBody" style={{marginLeft:marginBody,marginRight:marginBody,marginTop:"18px",marginBottom:"200px"}}>
-            
-            <div className="row">
-              <h1 className="mainTitle">Welcome {this.state.customer.name}</h1>
-            </div>
-            <div className="row">
+        <div className="row">
+              <h1 className="mainTitle" style={{marginLeft:"10px",fontSize:isMobile?"40px":"40px"}}>Welcome {this.state.customer.name}</h1>
+            </div> 
+
+            <div className="row" style={{paddingTop:"10px",marginLeft:isMobile?"0.3rem":"0px",marginRight:isMobile?"0.3rem":"0px"}}>
+
               <div className="col-xs-12 col-sm-4 caja" style={{maxHeight:"140px",paddingTop:"10px"}}>
                 
                 <div className="row center">
                 <h1 className="balance">${this.state.customer.balance}</h1>
                 </div>
-                <div className="row center">
-                <p className="infoText">Saldo Actual</p>
-                </div>
                 <div className="row center" style={{marginTop:"5px"}}>
-                  <a>Agregar saldo </a>
+                  <div className="col-xs-auto">
+                <button onClick={this.recargar} style={{marginTop:"8px",width:"150px",position:"relative",bottom:"6px"}}className="pure-material-button-contained green">Recargar</button>
+                </div>
                   </div>
                   <div className="row center" style={{marginTop:"5px"}}>
                   <p> (ICQ 742481225)</p>
                 </div>
               </div>
-              <div className="col-xs-12 col-sm-7 caja" style={{marginLeft:isMobile?"0px":this.state.dimensions.width*0.065+"px",marginTop:!isMobile?"0px":"25px",paddingTop:"10px",paddingBottom:"10px"}}>
+              <div className="col-xs-12 col-sm-7 caja" style={{marginRight:"0px",marginLeft:isMobile?"0.0px":this.state.dimensions.width*0.065+"px",marginTop:!isMobile?"0px":"25px",paddingTop:"10px",paddingBottom:"10px"}}>
               <div className="row center">
                 <div className="col-xs-auto">
-                <h1 className="secondTitle" style={{marginBottom:"5px"}}>Mis dispositivos</h1><button onClick={this.addDevice} style={{marginLeft:"35px",width:"100px",position:"relative",bottom:"6px"}}className="pure-material-button-contained">Agregar</button>
+                <h1 className="secondTitle" style={{marginBottom:"5px",fontSize:isMobile?"28px":"30px"}}>Mis dispositivos</h1><button onClick={this.addDevice} style={{marginLeft:"35px",width:"100px",position:"relative",bottom:"6px"}}className="pure-material-button-contained">Agregar</button>
                 </div>
                 </div>
                 <div className="row center">
@@ -606,67 +608,76 @@ class App extends Component {
                 <table id="customers">
                 <thead>
                 <tr>
-                <th>Usuario</th>
-                <th>Contraseña</th>
+                <th>USUARIO</th>
+                <th>CONTRASEÑA</th>
                 <th>IP</th>
               </tr>
               </thead>
-              
+
               <tbody>
+
               {this.state.loadingComponent?
-              
-                        <div className="row" style={{justifyContent:"center"}}>
-                          <div className="col-xs-auto">
-                            <div className="lds-hourglass" style={{marginLeft:"100%"}}></div>
-                          </div>
-                        
-                         
-                       </div>
+                       null
                 :
                 <>
                 {this.state.customer.subscribers.map((subscriber,index)=>(
-                  <TableLineUser key={subscriber.id} username={subscriber.username} password={subscriber.password}/>
+                  <TableLineUser deleteUser={this.deleteUser} key={subscriber.id} username={subscriber.username} password={subscriber.password}/>
             ))} 
             </>
                 }
 
 
               </tbody>
-       
+
             </table>
+            {this.state.loadingComponent?
+                        <div className="row center">
+                          <div className="col-xs-auto">
+                            <div className="lds-hourglass" ></div>
+                          </div>
+                        
+                         
+                       </div>
+                :
+                null} 
                 </div>
                 </div>
               
             </div>
             <div className="row" style={{marginTop:"30px"}}>
-            <div className="col-xs-8 col-md-8">
-            <div class="dropdown">
-              <button class="dropbtn">Usuarios</button>
-              <div class="dropdown-content" >
+            <div className="col-xs-auto" style={{marginLeft:"10px"}}>
+            <div className="dropdown">
+              <button className="dropbtn">Usuarios</button>
+              <div className="dropdown-content" >
               {this.state.customer.subscribers.map((subscriber,index)=>(
-                  <UserLine key={subscriber.id} username={subscriber.username} password={subscriber.password}/>
+                  <UserLine seletedUsers={this.state.seletedUsers}handleSelect={this.handleSelect} key={subscriber.id} username={subscriber.username} password={subscriber.password}/>
             ))} 
               </div>
+              </div>
             </div>
-            <div class="dropdown" style={{marginLeft:"15px"}}>
-              <button class="dropbtn">Fecha inicio</button>
-              <div class="dropdown-content" >
+            <div className="col-xs-auto">
+            <div className="dropdown" style={{marginLeft:"15px"}}>
+              <button className="dropbtn">Inicio</button>
+              <div className={"dropdown-content left"} >
                 <Calendar/>
               </div>
-            </div>
-            <div class="dropdown" style={{marginLeft:"15px"}}>
-              <button class="dropbtn">Fecha final</button>
-              <div class="dropdown-content" >
-              <Calendar/>
               </div>
             </div>
+            <div className="col-xs-auto">
+            <div className="dropdown" style={{marginLeft:"15px"}}>
+              <button className="dropbtn">Final</button>
+              <div className="dropdown-content right" >
+              <Calendar/>
+              </div>
+              </div>
             </div>
+            
             </div>
             <div className="col-xs-12 caja" style={{marginTop:"25px",marginBottom:"80px",overflowX:"visible"}}>
                 
                 <div className="row">
                 <div className="col-xs-12 col-md-6">
-                <h1 className="secondTitle" style={{padding:"8px"}}>Historial de llamadas</h1>
+                <h1 className="secondTitle" style={{padding:"8px",fontSize:isMobile?"28px":"30px"}}>Historial de llamadas</h1>
                 </div>
                 <div className="col-xs-12 col-md-6" >
                 {/* <p>Total consumido: {totalConsumido}</p> */}
@@ -674,13 +685,13 @@ class App extends Component {
                 </div>
                 <div className="row center">
                 {/* <p className="infoText">Saldo Actual</p> */}
-                <table id="customers" style={{overflowX:"auto !important"}}>
+                <table id="customers" style={{overflowX:"scroll !important"}}>
                 <thead>
                 <tr>
-                <th>Usuario</th>
-                <th>Destino</th>
+                <th>Desde</th>
+                <th>Hacia</th>
                 <th>Fecha</th>
-                <th>Duración (segundos)</th>
+                <th>Duración</th>
                 <th>Costo</th>
                 
               </tr>

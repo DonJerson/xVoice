@@ -27,4 +27,5 @@ urlpatterns = [
     path('consumeApiOG/', ApiUsageOG),
     path('recargaOG/', RecargaOG),
     path('getHistory/', get_history),
+    path('deleteSubscriber/', delete_subscriber),
 ]
