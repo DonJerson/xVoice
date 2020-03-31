@@ -28,7 +28,7 @@ class Worker():
         # print(myId)
         #logEnd = Acc.objects.get(callid=myId,method="BYE")
         logEnd = self.logEnd.get(callid=myId)
-        self.logEnd.exclude(callid=myId)
+        self.logEnd=self.logEnd.exclude(callid=myId)
         return logEnd
     def newBalance(self,username,cost):
         self.mainLock.acquire()
