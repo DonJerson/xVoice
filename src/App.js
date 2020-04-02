@@ -395,6 +395,7 @@ class App extends Component {
     let history = []
     const token = window.localStorage.getItem('token')
     axios.defaults.headers.post['Authorization']="JWT "+token
+    this.setState({loadingHistorial:true})
     axios.post(baseUrl + `getHistory/`,{"amount":50}).then(res=>{
       const history = res.data.history
       const totalCalls = history.length
@@ -413,17 +414,19 @@ class App extends Component {
       //     history.push(line)
       //   }
       // })
-      this.setState({history,totalCalls})
-      
+
+      this.setState({history,totalCalls,loading:false})
+      this.setState({loadingHistorial:false})
     }).catch(err=>{
       console.log("error",err)
-      this.setState({loading:false})
+      this.setState({loading:false,loadingHistorial:false})
     })
       
   }
   getUser=()=>{
     const token = window.localStorage.getItem('token')
     axios.defaults.headers.get['Authorization']="JWT "+token
+    this.setState({loading:true})
     this.fetchHistory()
     axios.get(baseUrl + `getSub/`).then(res=>{
       this.setState({customer:res.data})
@@ -450,19 +453,12 @@ class App extends Component {
       mobile=false
     }
     let loading = false
-    const token = window.localStorage.getItem("token")
-    //const token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6ImNyb3dza0B5YWhvby5jb20iLCJleHAiOjYxNTg1NDM5MTU0LCJlbWFpbCI6ImNyb3dza0B5YWhvby5jb20ifQ.wh3vskd5LrQki-ZRRb6FFe0Y2egXDbhwrQtb0RcUPZk"
-    window.localStorage.setItem('token',token)
     let logged=false
-    //console.log(getUrl.host.substring(0,3))
     if(getUrl.host.substring(0,3)==="127"){
       logged=true
     }
-    if(token){
-      loading=true
-      this.getUser()
-      
-    }
+    loading=true
+
     let myUsername = window.localStorage.getItem("username")
     let myPassword = window.localStorage.getItem("password")
     if(myUsername){
@@ -475,7 +471,7 @@ class App extends Component {
     this.state={
       seletedUsers:[],
       history:[],totalCalls:0,
-      logged:logged,dimensions:{width:width, height:height, isMobile:mobile},loading:loading,
+      logged:logged,dimensions:{width:width, height:height, isMobile:mobile},loading:loading,loadingHistorial:false,
       email:myUsername,password:myPassword,customer:customerBase,loadingComponent:false,
     }
   }
@@ -523,6 +519,18 @@ class App extends Component {
     
 
   };
+  componentDidMount(){
+    let token = window.localStorage.getItem("token")
+    if(getUrl.host.includes("127.0.0")){
+      console.log(getUrl.host.substring(0,3))
+      token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6ImNyb3dza0B5YWhvby5jb20iLCJleHAiOjYxNTg1NDM5MTU0LCJlbWFpbCI6ImNyb3dza0B5YWhvby5jb20ifQ.wh3vskd5LrQki-ZRRb6FFe0Y2egXDbhwrQtb0RcUPZk"
+    }
+    window.localStorage.setItem('token',token)
+    if(token){
+      this.getUser()
+      
+    }
+  }
   componentWillMount(){
     window.addEventListener("resize", this.updateDimensions);
   }
@@ -758,12 +766,29 @@ class App extends Component {
               </tr>
               </thead>
               <tbody>
-              {this.state.history.map((log,index)=>(
+                {this.state.loadingHistorial?
+                  null
+                :
+                this.state.history.map((log,index)=>(
                   <TableLineUsage line={log} key={index}/>
-            ))} 
+            ))
+                } 
+
 
               </tbody>
+              
             </table>
+            {console.log("truth",this.state.loadingHistorial)}
+              {this.state.loadingHistorial?
+                        <div className="row center">
+                          <div className="col-xs-auto">
+                            <div className="lds-hourglass" ></div>
+                          </div>
+                        
+                         
+                       </div>
+                :
+                null} 
                 </div>
               </div>
             {/* <div classname="row">
