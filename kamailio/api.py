@@ -63,7 +63,7 @@ def delete_device(request):
 def get_history(request):
 	amount = request.data['amount']
 
-	usageHistory = request.user.usageHistory()
+	usageHistory = request.user.apiUsageHistory()
 	totalCalls = len(usageHistory)
 	usageHistory=usageHistory[:amount]
 	
