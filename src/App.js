@@ -333,22 +333,22 @@ class App extends Component {
     axios.defaults.headers.post['Authorization']="JWT "+token
     axios.post(baseUrl + `getHistory/`,{"amount":50}).then(res=>{
       const history = res.data.history
-      const totalCalls = res.data.totalCalls
+      const totalCalls = history.length
       //console.log("respuesta",res.data)
-      history.forEach(startLog => {
-        if(startLog.method==="INVITE"){
-          let endLog = history.filter(c=>c.callid===startLog.callid && c.method==="BYE")[0]
-          const startTime = new Date(startLog.time)
-          const endTime = new Date(endLog.time)
-          //const duracion=
-          const duracion = (endTime.getTime() -startTime.getTime())/1000
-          const rate=0.010/60
-          // totalMinutos=duracion
-          // total=total +duracion*rate
-          const line={username:startLog.src_user,destination:startLog.dst_user,date:dateFormat(startTime, "mm/dd/yyyy, h:MM:ss TT"),duracion:duracion,costo:duracion*rate}
-          history.push(line)
-        }
-      })
+      // history.forEach(startLog => {
+      //   if(startLog.method==="INVITE"){
+      //     let endLog = history.filter(c=>c.callid===startLog.callid && c.method==="BYE")[0]
+      //     const startTime = new Date(startLog.time)
+      //     const endTime = new Date(endLog.time)
+      //     //const duracion=
+      //     const duracion = (endTime.getTime() -startTime.getTime())/1000
+      //     const rate=0.010/60
+      //     // totalMinutos=duracion
+      //     // total=total +duracion*rate
+      //     const line={username:startLog.src_user,destination:startLog.dst_user,date:dateFormat(startTime, "mm/dd/yyyy, h:MM:ss TT"),duracion:duracion,costo:duracion*rate}
+      //     history.push(line)
+      //   }
+      // })
       this.setState({history,totalCalls})
       
     }).catch(err=>{
