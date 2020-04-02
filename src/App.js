@@ -137,6 +137,9 @@ const TableLineUsage=(props)=>{
 }
 const FullDialog=(props)=>{
   const size = props.userPack.dimensions.width<800?"26px":"50px"
+  const picWidth = props.userPack.dimensions.width<800?"60px":"130px"
+  const picHeight = props.userPack.dimensions.width<800?"60px":"130px"
+  const smallLetter = props.userPack.dimensions.width<800?"18px":"30px"
   const myWidth = props.userPack.dimensions.width<800?"310px":"600px"
   function off(e) {
     document.getElementById("overlay").style.display = "none";
@@ -147,43 +150,43 @@ const FullDialog=(props)=>{
       <div id="text">
         <h1 style={{minWidth:myWidth,marginBottom:"8px",fontSize:size}}>Elija su método de pago:</h1>
       <div className="row center" >
-        <div className="col-xs-auto" style={{width:"130px",height:"130px",marginRight:"40px"}}>
+        <div className="col-xs-auto glowingTarjeta" style={{width:picWidth,height:picHeight,marginRight:"40px"}}>
             <div className="row center" style={{zIndex:"15",borderWidth:"10px !important",borderColor:"black !important" }}>
-              <img src="https://cdn3.iconfinder.com/data/icons/finance-223/64/x-03-512.png" style={{width:"130px",height:"130px"}}/>
-              <div className="col-xs-auto" style={{width:"130px",height:"130px"}}>
-              <div id="text" style={{position:"relative",top:"30px",fontSize:"30px"}}>Depósito</div>
+              <img src="https://cdn3.iconfinder.com/data/icons/finance-223/64/x-03-512.png" style={{width:picWidth,height:picHeight}}/>
+              <div className="col-xs-auto" style={{width:picWidth,height:picHeight}}>
+              <div id="text" style={{position:"relative",top:"30px",fontSize:smallLetter}}>Depósito</div>
               </div>
             </div>
             <div className="row center">
-              <div className="col-xs-auto" style={{width:"130px",height:"130px"}}>
+              <div className="col-xs-auto" style={{width:picWidth,height:picHeight}}>
                 
               </div>
             </div>
         </div>
-        <div className="col-xs-auto" style={{width:"130px",height:"130px",marginRight:"40px"}}>
+        <div className="col-xs-auto glowingTarjeta" style={{width:picWidth,height:picHeight,marginRight:"40px"}}>
         
         <div className="row center" style={{borderWidth:"10px !important",borderColor:"black !important" }}>
-              <img src="https://r5y5g3p7.rocketcdn.me/wp-content/uploads/2019/07/Bitcoin-dark-web-drug-dealer-caught.jpg" style={{width:"130px",height:"130px"}}/>
-              <div className="col-xs-auto" style={{width:"130px",height:"130px"}}>
-              <div id="text" style={{position:"relative",top:"30px",right:"15px",fontSize:"30px"}}>Bitcoin</div>
+              <img src="https://r5y5g3p7.rocketcdn.me/wp-content/uploads/2019/07/Bitcoin-dark-web-drug-dealer-caught.jpg" style={{width:picWidth,height:picHeight}}/>
+              <div className="col-xs-auto" style={{width:picWidth,height:picHeight}}>
+              <div id="text" style={{position:"relative",top:"30px",right:"15px",fontSize:smallLetter}}>Bitcoin</div>
               </div>
             </div>
             <div className="row center">
-              <div className="col-xs-auto" style={{width:"130px",height:"130px"}}>
+              <div className="col-xs-auto" style={{width:picWidth,height:picHeight}}>
                 
               </div>
             </div>
           </div>
-          <div className="col-xs-auto" style={{width:"130px",height:"130px",marginRight:"20px"}}>
+          <div className="col-xs-auto glowingTarjeta" style={{width:picWidth,height:picHeight,marginRight:"20px"}}>
         
         <div className="row center" style={{borderWidth:"10px !important",borderColor:"black !important" }}>
-              <img src="/svg/credit-card.svg" style={{width:"130px",height:"130px"}}/>
-              <div className="col-xs-auto" style={{width:"130px",height:"130px"}}>
-              <div id="text" style={{position:"relative",top:"30px",fontSize:"30px"}}>Tarjeta</div>
+              <img src="/svg/credit-card.svg" style={{width:picWidth,height:picHeight}}/>
+              <div className="col-xs-auto" style={{width:picWidth,height:picHeight}}>
+              <div id="text" style={{position:"relative",top:"30px",fontSize:smallLetter}}>Tarjeta</div>
               </div>
             </div>
             <div className="row center">
-              <div className="col-xs-auto" style={{width:"130px",height:"130px"}}>
+              <div className="col-xs-auto" style={{width:picWidth,height:picHeight}}>
                 
               </div>
             </div>
