@@ -62,8 +62,8 @@ def delete_device(request):
 @api_view(['POST'])
 def get_history(request):
 	amount = request.data['amount']
-
-	usageHistory = request.user.apiUsageHistoryMethod()
+	customer = Customer.objects.get(id=request.user.id)
+	usageHistory = customer.apiUsageHistoryMethod()
 	totalCalls = len(usageHistory)
 	usageHistory=usageHistory[:amount]
 	
