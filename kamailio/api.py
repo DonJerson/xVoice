@@ -70,9 +70,6 @@ def get_history(request):
 	print(totalCalls)
 	byes = Acc.objects.filter(method="BYE",consumer=request.user.id)
 	print("amount")
-	for usage in usageHistory:
-		usageHistory=usageHistory.union(byes.filter(callid=usage.callid))
-		pass
 	return Response({"history":AccSerializer(usageHistory,many=True).data,"totalCalls":totalCalls})
 
 @api_view(['POST'])
