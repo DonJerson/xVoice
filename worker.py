@@ -96,10 +96,10 @@ class Worker():
             diff = (endDate-startDate).seconds/60
             destination = newLog.dst_user
             rate=0.010
-            consumer = self.newBalance(newLog.src_user,rate*diff)
+            
             try:
                 newCall = ApiUsage.objects.get(callid=logEnd.callid)
-                
+                consumer = self.newBalance(newLog.src_user,rate*diff)
                 newLog.consumer=consumer
                 newLog.call = newCall
                 newLog.save()
@@ -109,6 +109,7 @@ class Worker():
             except Exception as e:
                 print("already created")
                 try:
+                    consumer = self.newBalance(newLog.src_user,rate*diff)
                     newCall = ApiUsage.objects.create(duration=diff,serviceProvided="USCALL",startTime=startDate,endTime=endDate,callid=logEnd.callid,consumer=consumer)
                     
                     newLog.consumer=consumer
@@ -126,9 +127,7 @@ class Worker():
             print("errorcito fetching")
             print(e)
             print(newLog.id)
-            
         connection.close()
-
         return
     def initAll(self):
         while(True):
