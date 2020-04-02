@@ -118,7 +118,7 @@ const UserLine=(props)=>{
   return(
     <>
     <a href="#" style={{backgroundColor:isSelected?"rgb(0, 112, 186)":"",color:isSelected?"white":""}}onClick={handleSelect}>{props.username}</a>
-    <hr class="solid"></hr>
+    <hr className="solid"></hr>
     </>
   )
 }
@@ -136,9 +136,69 @@ const TableLineUsage=(props)=>{
   )
 }
 const FullDialog=(props)=>{
+  const size = props.userPack.dimensions.width<800?"26px":"50px"
+  const myWidth = props.userPack.dimensions.width<800?"310px":"600px"
+  function off(e) {
+    document.getElementById("overlay").style.display = "none";
+  }
   return(
-    <><div id="overlay">
-      <div id="text">Overlay Text</div></div>
+    <><div id="overlay" onClick={off}>
+      <div className="row">
+      <div id="text">
+        <h1 style={{minWidth:myWidth,marginBottom:"8px",fontSize:size}}>Elija su método de pago:</h1>
+      <div className="row center" >
+        <div className="col-xs-auto" style={{width:"130px",height:"130px",marginRight:"40px"}}>
+            <div className="row center" style={{zIndex:"15",borderWidth:"10px !important",borderColor:"black !important" }}>
+              <img src="https://cdn3.iconfinder.com/data/icons/finance-223/64/x-03-512.png" style={{width:"130px",height:"130px"}}/>
+              <div className="col-xs-auto" style={{width:"130px",height:"130px"}}>
+              <div id="text" style={{position:"relative",top:"30px",fontSize:"30px"}}>Depósito</div>
+              </div>
+            </div>
+            <div className="row center">
+              <div className="col-xs-auto" style={{width:"130px",height:"130px"}}>
+                
+              </div>
+            </div>
+        </div>
+        <div className="col-xs-auto" style={{width:"130px",height:"130px",marginRight:"40px"}}>
+        
+        <div className="row center" style={{borderWidth:"10px !important",borderColor:"black !important" }}>
+              <img src="https://r5y5g3p7.rocketcdn.me/wp-content/uploads/2019/07/Bitcoin-dark-web-drug-dealer-caught.jpg" style={{width:"130px",height:"130px"}}/>
+              <div className="col-xs-auto" style={{width:"130px",height:"130px"}}>
+              <div id="text" style={{position:"relative",top:"30px",right:"15px",fontSize:"30px"}}>Bitcoin</div>
+              </div>
+            </div>
+            <div className="row center">
+              <div className="col-xs-auto" style={{width:"130px",height:"130px"}}>
+                
+              </div>
+            </div>
+          </div>
+          <div className="col-xs-auto" style={{width:"130px",height:"130px",marginRight:"20px"}}>
+        
+        <div className="row center" style={{borderWidth:"10px !important",borderColor:"black !important" }}>
+              <img src="/svg/credit-card.svg" style={{width:"130px",height:"130px"}}/>
+              <div className="col-xs-auto" style={{width:"130px",height:"130px"}}>
+              <div id="text" style={{position:"relative",top:"30px",fontSize:"30px"}}>Tarjeta</div>
+              </div>
+            </div>
+            <div className="row center">
+              <div className="col-xs-auto" style={{width:"130px",height:"130px"}}>
+                
+              </div>
+            </div>
+          </div>
+          <div className="row center" style={{position:"relative",top:"60px"}}>
+          <h1 style={{minWidth:myWidth,marginBottom:"8px",fontSize:size}}>Soporte ICQ: 742481225</h1>
+          </div>
+         
+     
+      </div>
+        
+        </div>
+      </div>
+
+      </div>
     </>
   )
 }
@@ -153,7 +213,7 @@ const NavBar=(props)=>{
 
   const isMobile=props.dimensions.width<768
   return(
-    <><FullDialog/>
+    <><FullDialog userPack={props.userPack}/>
         <header className="header">
         
             {isMobile?
@@ -307,6 +367,7 @@ class App extends Component {
     //console.log("success",element)
   }
   recargar=()=>{
+    document.getElementById("overlay").style.display = "block";
     console.log("working")
   }
   updateDimensions=()=>{
