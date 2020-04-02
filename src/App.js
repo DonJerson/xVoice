@@ -125,12 +125,12 @@ const UserLine=(props)=>{
 const TableLineUsage=(props)=>{
   return(
     <>
-    <tr>           
-      <td>{props.src_user}</td>
-      <td>{props.dst_user}</td>
-      <td>{props.startTime}</td>
-      <td>{props.duration}</td>
-      <td>{props.duration*0.010}</td>
+    <tr> 
+      <td>{props.line.src_user}</td>
+      <td>{props.line.dst_user}</td>
+      <td>{props.line.startTime}</td>
+      <td>{props.line.duration}</td>
+      <td>{props.line.duration*0.010}</td>
       </tr>
     </>
   )
