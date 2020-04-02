@@ -805,8 +805,9 @@ class Customer(AbstractUser):
     @property
     def recargasHistory(self):
         return self.recarga_set.all()
+
     @property
-    def apiUsageHistory(self):
+    def apiUsageHistoryMethod(self):
         return self.apiusage_set.all()
 
     def usageHistory(self):
