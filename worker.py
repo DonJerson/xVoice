@@ -99,18 +99,33 @@ class Worker():
             destination = newLog.dst_user
             rate=0.010
             try:
+                newCall = ApiUsage.objects.get(callid=logEnd.callid)
                 consumer = self.newBalance(newLog.src_user,rate*diff)
                 newCall = ApiUsage.objects.create(duration=diff,serviceProvided="USCALL",startTime=startDate,endTime=endDate,callid=logEnd.callid,consumer=consumer)
                 
                 newLog.consumer=consumer
+                newLog.call = newCall
                 newLog.save()
                 logEnd.consumer=consumer
+                logEnd.call = newCall
                 logEnd.save()
             except Exception as e:
-                print("errorcito sumando")
-                
-                print(e)
-                connection.close()
+                print("already created")
+                try:
+                    consumer = self.newBalance(newLog.src_user,rate*diff)
+                    newCall = ApiUsage.objects.create(duration=diff,serviceProvided="USCALL",startTime=startDate,endTime=endDate,callid=logEnd.callid,consumer=consumer)
+                    
+                    newLog.consumer=consumer
+                    newLog.call = newCall
+                    newLog.save()
+                    logEnd.consumer=consumer
+                    logEnd.call = newCall
+                    logEnd.save()
+                except Exception as e:
+                    print("errorcito sumando")
+                    
+                    print(e)
+                    connection.close()
                 return
 
 
