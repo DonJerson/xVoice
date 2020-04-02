@@ -44,7 +44,7 @@ class Worker():
         except:
             print("not found subscriber")
             self.mainLock.release()
-            return consumer
+            return
     def recordDataReverse(self):
         try:
             self.mainLock.acquire()
