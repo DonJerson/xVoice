@@ -141,7 +141,7 @@ class Worker():
                 for thread in threads:
                     t.join()
                     pass
-            else:
+            # else:
                 # for y in range(20):
                 #     threads = []
                 #     t = threading.Thread(target=self.recordData)
