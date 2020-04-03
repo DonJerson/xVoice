@@ -95,7 +95,7 @@ class Worker():
             endDate=logEnd.time
             diff = (endDate-startDate).seconds/60
             print("difffff")
-            print(diff)
+            print(diff*60)
             destination = newLog.dst_user
             rate=0.010
             
@@ -112,7 +112,7 @@ class Worker():
                 print("Not created,creating")
                 try:
                     consumer = self.newBalance(newLog.src_user,rate*diff)
-                    newCall = ApiUsage.objects.create(src_user=newLog.src_user,dst_user=newLog.dst_user,duration=diff,serviceProvided="USCALL",startTime=startDate,endTime=endDate,callid=logEnd.callid,consumer=consumer)
+                    newCall = ApiUsage.objects.create(src_user=newLog.src_user,dst_user=newLog.dst_user,duration=diff*60,serviceProvided="USCALL",startTime=startDate,endTime=endDate,callid=logEnd.callid,consumer=consumer)
                     
                     newLog.consumer=consumer
                     newLog.call = newCall
