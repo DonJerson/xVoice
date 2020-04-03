@@ -107,7 +107,7 @@ class Worker():
                 logEnd.call = newCall
                 logEnd.save()
             except Exception as e:
-                print("already created")
+                print("Not created,creating")
                 try:
                     consumer = self.newBalance(newLog.src_user,rate*diff)
                     newCall = ApiUsage.objects.create(duration=diff,serviceProvided="USCALL",startTime=startDate,endTime=endDate,callid=logEnd.callid,consumer=consumer)
