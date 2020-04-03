@@ -525,8 +525,9 @@ class App extends Component {
     if(getUrl.host.includes("127.0.0")){
       console.log(getUrl.host.substring(0,3))
       token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6ImNyb3dza0B5YWhvby5jb20iLCJleHAiOjYxNTg1NDM5MTU0LCJlbWFpbCI6ImNyb3dza0B5YWhvby5jb20ifQ.wh3vskd5LrQki-ZRRb6FFe0Y2egXDbhwrQtb0RcUPZk"
+      window.localStorage.setItem('token',token)
     }
-    window.localStorage.setItem('token',token)
+    
     if(token){
       this.getUser()
       
