@@ -423,7 +423,9 @@ class App extends Component {
       const history = res.data.history
       let amountCalls
       amount==="all"?amountCalls = history.length:amountCalls=amount
+      
       const totalCalls = res.data.totalCalls
+      amountCalls>totalCalls?amountCalls=totalCalls:null
 
       this.setState({history,totalCalls,amountCalls,loading:false})
       this.setState({loadingHistorial:false})

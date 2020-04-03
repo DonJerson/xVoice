@@ -131,16 +131,17 @@ class Worker():
         return
     def initAll(self):
         while(True):
-            if self.logStart.count()>0:
-                for y in range(20):
-                    threads = []
-                    t = threading.Thread(target=self.recordData)
-                    t.start()
-                    threads.append(t)
+            self.recordData()
+            # if self.logStart.count()>0:
+                # for y in range(20):
+                #     threads = []
+                #     t = threading.Thread(target=self.recordData)
+                #     t.start()
+                #     threads.append(t)
                     
-                for thread in threads:
-                    t.join()
-                    pass
+                # for thread in threads:
+                #     t.join()
+                #     pass
             # else:
                 # for y in range(20):
                 #     threads = []
