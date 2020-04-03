@@ -12,6 +12,7 @@ from rest_framework import permissions
 from datetime import timedelta
 import random
 import string
+from django.db.models import Q
 
 datetimeFormat = '%Y-%m-%d %H:%M:%S.%f'
 
@@ -75,7 +76,11 @@ def get_history(request):
 @api_view(['POST'])
 def filter_number(request):
 	number = request.data['number']
-	results = ApiUsage.objects.filter(dst_user__contains=number,src_user__contains=number)
+	print("recibido sol")
+	print(number)
+	results = ApiUsage.objects.filter(
+		Q(dst_user__contains=number) |
+    	Q(src_user__contains=number))
 
 	return Response(ApiUsageSerializer(results,many=True).data)
 
