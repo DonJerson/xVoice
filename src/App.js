@@ -783,7 +783,7 @@ class App extends Component {
                         </div>
             </div>
             }
-                        <div className="row" style={{marginLeft:"8px",marginTop:"10px"}}>
+                        <div className="row" style={{marginLeft:"8px",marginTop:"12px"}}>
                         <input type="search" value={this.state.filterNumber} placeholder="Buscar por número" onChange={this.filterNumber}/>
                         </div>
             
