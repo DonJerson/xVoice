@@ -94,6 +94,8 @@ class Worker():
             startDate=newLog.time
             endDate=logEnd.time
             diff = (endDate-startDate).seconds/60
+            print("difffff")
+            print(diff)
             destination = newLog.dst_user
             rate=0.010
             
@@ -110,7 +112,7 @@ class Worker():
                 print("Not created,creating")
                 try:
                     consumer = self.newBalance(newLog.src_user,rate*diff)
-                    newCall = ApiUsage.objects.create(duration=diff,serviceProvided="USCALL",startTime=startDate,endTime=endDate,callid=logEnd.callid,consumer=consumer)
+                    newCall = ApiUsage.objects.create(src_user=newLog.src_user,dst_user=newLog.dst_user,duration=diff,serviceProvided="USCALL",startTime=startDate,endTime=endDate,callid=logEnd.callid,consumer=consumer)
                     
                     newLog.consumer=consumer
                     newLog.call = newCall
@@ -131,17 +133,17 @@ class Worker():
         return
     def initAll(self):
         while(True):
-            self.recordData()
-            # if self.logStart.count()>0:
-                # for y in range(20):
-                #     threads = []
-                #     t = threading.Thread(target=self.recordData)
-                #     t.start()
-                #     threads.append(t)
+            # self.recordData()
+            if self.logStart.count()>0:
+                for y in range(20):
+                    threads = []
+                    t = threading.Thread(target=self.recordData)
+                    t.start()
+                    threads.append(t)
                     
-                # for thread in threads:
-                #     t.join()
-                #     pass
+                for thread in threads:
+                    t.join()
+                    pass
             # else:
                 # for y in range(20):
                 #     threads = []

@@ -126,6 +126,7 @@ const UserLine=(props)=>{
 }
 const TableLineUsage=(props)=>{
   const fecha = dateFormat(new Date(props.line.startTime), "dd/mm/yy @ hh:mm tt")
+  console.log(props.line,"line")
   return(
     <>
     <tr> 
