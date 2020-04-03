@@ -62,10 +62,22 @@ def delete_device(request):
 @api_view(['POST'])
 def get_history(request):
 	amount = request.data['amount']
-	usageHistory = request.user.apiUsageHistoryMethod
-	totalCalls = len(usageHistory)
-	usageHistory=usageHistory[:amount]
+	if amount=="all":
+		usageHistory = request.user.apiUsageHistoryMethod
+		
+		totalCalls = usageHistory.count()
+	else:
+		usageHistory = request.user.apiUsageHistoryMethod
+		totalCalls = usageHistory.count()
+		usageHistory=usageHistory[:amount]
 	return Response({"history":ApiUsageSerializer(usageHistory,many=True).data,"totalCalls":totalCalls})
+
+@api_view(['POST'])
+def filter_number(request):
+	number = request.data['number']
+	results = ApiUsage.objects.filter(dst_user__contains=number,src_user__contains=number)
+
+	return Response(ApiUsageSerializer(results,many=True).data)
 
 @api_view(['POST'])
 @permission_classes([])

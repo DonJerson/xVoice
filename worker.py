@@ -8,9 +8,9 @@ class Worker():
         self.mainLock = threading.Lock()
         self.logStart = Acc.objects.filter(call__isnull=True,method="INVITE")
         print("len")
-        print(len(self.logStart))
+        print(self.logStart.count())
         self.logEnd = Acc.objects.filter(method="BYE")
-        print(len(self.logEnd))
+        print(self.logEnd.count())
         #time.sleep(25)
         self.initAll()
 
@@ -131,7 +131,7 @@ class Worker():
         return
     def initAll(self):
         while(True):
-            if len(self.logStart)>0:
+            if self.logStart.count()>0:
                 for y in range(20):
                     threads = []
                     t = threading.Thread(target=self.recordData)
@@ -142,16 +142,25 @@ class Worker():
                     t.join()
                     pass
             else:
-                self.logEnd = Acc.objects.filter(consumer__isnull=True,method="BYE")
-                for y in range(20):
-                    threads = []
-                    t = threading.Thread(target=self.recordDataReverse)
-                    t.start()
-                    threads.append(t)
+                # for y in range(20):
+                #     threads = []
+                #     t = threading.Thread(target=self.recordData)
+                #     t.start()
+                #     threads.append(t)
                     
-                for thread in threads:
-                    t.join()
-                    pass 
+                # for thread in threads:
+                #     t.join()
+                #     pass
+                # self.logEnd = Acc.objects.filter(consumer__isnull=True,method="BYE")
+                # for y in range(20):
+                #     threads = []
+                #     t = threading.Thread(target=self.recordDataReverse)
+                #     t.start()
+                #     threads.append(t)
+                    
+                # for thread in threads:
+                #     t.join()
+                #     pass 
         return
 
 worker = Worker()

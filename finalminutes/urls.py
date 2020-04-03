@@ -28,4 +28,5 @@ urlpatterns = [
     path('recargaOG/', RecargaOG),
     path('getHistory/', get_history),
     path('deleteSubscriber/', delete_subscriber),
+    path('filterNumber/', filter_number),
 ]

@@ -808,7 +808,7 @@ class Customer(AbstractUser):
 
     @property
     def apiUsageHistoryMethod(self):
-        return self.apiusage_set.all()
+        return self.apiusage_set.all().order_by('-startTime')
 
     def usageHistory(self):
         return self.acc_set.filter(method="INVITE")

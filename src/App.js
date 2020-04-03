@@ -5,7 +5,9 @@ import { transform } from '@babel/core';
 import Calendar from './Calendar';
 
 var dateFormat = require('dateformat');
-
+function formatNumber(num) {
+  return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
+}
 const getUrl = window.location;
 let host
 if(getUrl.host.includes(":")){
@@ -123,12 +125,13 @@ const UserLine=(props)=>{
   )
 }
 const TableLineUsage=(props)=>{
+  const fecha = dateFormat(new Date(props.line.startTime), "dd/mm/yy @ hh:mm tt")
   return(
     <>
     <tr> 
       <td>{props.line.src_user}</td>
       <td>{props.line.dst_user}</td>
-      <td>{props.line.startTime}</td>
+      <td>{fecha}</td>
       <td>{props.line.duration}</td>
       <td>{props.line.duration*0.010}</td>
       </tr>
@@ -391,31 +394,38 @@ class App extends Component {
     const newDimensions={width:width, height:height, isMobile:false}
     this.setState({dimensions:newDimensions})
   }
-  fetchHistory=()=>{
+  filterNumber=(e)=>{
+    const filterNumber=e.target.value.replace(/\D/g, '')
+    this.setState({filterNumber})
+    if(filterNumber.length>0){
+      const token = window.localStorage.getItem('token')
+      axios.defaults.headers.post['Authorization']="JWT "+token
+      
+      this.setState({loadingHistorial:true})
+      axios.post(baseUrl + `filterNumber/`,{"number":filterNumber}).then(res=>{
+        const filteredResults = res.data
+        this.setState({filteredResults})
+
+        this.setState({loadingHistorial:false})
+      }).catch(err=>{
+        console.log("error",err)
+        this.setState({loadingHistorial:false})
+      })
+    }
+    
+  }
+  fetchHistory=(amount)=>{
     let history = []
     const token = window.localStorage.getItem('token')
     axios.defaults.headers.post['Authorization']="JWT "+token
     this.setState({loadingHistorial:true})
-    axios.post(baseUrl + `getHistory/`,{"amount":50}).then(res=>{
+    axios.post(baseUrl + `getHistory/`,{"amount":amount}).then(res=>{
       const history = res.data.history
-      const totalCalls = history.length
-      //console.log("respuesta",res.data)
-      // history.forEach(startLog => {
-      //   if(startLog.method==="INVITE"){
-      //     let endLog = history.filter(c=>c.callid===startLog.callid && c.method==="BYE")[0]
-      //     const startTime = new Date(startLog.time)
-      //     const endTime = new Date(endLog.time)
-      //     //const duracion=
-      //     const duracion = (endTime.getTime() -startTime.getTime())/1000
-      //     const rate=0.010/60
-      //     // totalMinutos=duracion
-      //     // total=total +duracion*rate
-      //     const line={username:startLog.src_user,destination:startLog.dst_user,date:dateFormat(startTime, "mm/dd/yyyy, h:MM:ss TT"),duracion:duracion,costo:duracion*rate}
-      //     history.push(line)
-      //   }
-      // })
+      let amountCalls
+      amount==="all"?amountCalls = history.length:amountCalls=amount
+      const totalCalls = res.data.totalCalls
 
-      this.setState({history,totalCalls,loading:false})
+      this.setState({history,totalCalls,amountCalls,loading:false})
       this.setState({loadingHistorial:false})
     }).catch(err=>{
       console.log("error",err)
@@ -427,7 +437,7 @@ class App extends Component {
     const token = window.localStorage.getItem('token')
     axios.defaults.headers.get['Authorization']="JWT "+token
     this.setState({loading:true})
-    this.fetchHistory()
+    this.fetchHistory(50)
     axios.get(baseUrl + `getSub/`).then(res=>{
       this.setState({customer:res.data})
       this.setState({loading:false})
@@ -470,8 +480,8 @@ class App extends Component {
     }
 
     this.state={
-      seletedUsers:[],
-      history:[],totalCalls:0,
+      seletedUsers:[],filteredResults:null,loadingFiltered:false,filterNumber:"",
+      history:[],totalCalls:0,amountCalls:0,
       logged:logged,dimensions:{width:width, height:height, isMobile:mobile},loading:loading,loadingHistorial:false,
       email:myUsername,password:myPassword,customer:customerBase,loadingComponent:false,
     }
@@ -523,7 +533,7 @@ class App extends Component {
   componentDidMount(){
     let token = window.localStorage.getItem("token")
     if(getUrl.host.includes("127.0.0")){
-      console.log(getUrl.host.substring(0,3))
+      //console.log(getUrl.host.substring(0,3))
       token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6ImNyb3dza0B5YWhvby5jb20iLCJleHAiOjYxNTg1NDM5MTU0LCJlbWFpbCI6ImNyb3dza0B5YWhvby5jb20ifQ.wh3vskd5LrQki-ZRRb6FFe0Y2egXDbhwrQtb0RcUPZk"
       window.localStorage.setItem('token',token)
     }
@@ -595,6 +605,14 @@ class App extends Component {
       this.setState({loadingComponent:false})
     })
   }
+  fetchMore=(e)=>{
+    e.preventDefault()
+    this.fetchHistory(this.state.amountCalls*3)
+  }
+  fetchAll=(e)=>{
+    e.preventDefault()
+    this.fetchHistory("all")
+  }
   handleRegister=(username,password,name,phoneNumber)=>{
     const token = window.localStorage.getItem('token')
     axios.defaults.headers.get['Authorization']="JWT "+token
@@ -635,6 +653,11 @@ class App extends Component {
       logged:this.state.logged,handleLogin:this.handleLogin,handleRegister:this.handleRegister,
       handleUpdate:this.handleUpdate,handleLogout:this.handleLogout,addDevice:this.addDevice,deleteDevice:this.deleteDevice
     }
+    let display
+    if(this.state.filteredResults &&this.state.filterNumber){
+      display=this.state.filteredResults
+    }else{display=this.state.history}
+    
     return ( 
       <>{this.state.loading?
         <div className="row" style={{justifyContent:"center"}}>
@@ -742,17 +765,36 @@ class App extends Component {
               </div>
               </div>
             </div>
-            
+            {this.state.dimensions.width>645?
+                        <div className="col-xs-auto" style={{position:"absolute",right:this.state.dimensions.width<762?"25px":"58px"}}>
+                        {/* Total consumido: {this.totalConsumido} */}
+                        
+                        <p>Mostrando {formatNumber(this.state.amountCalls)} de {formatNumber(this.state.totalCalls)} llamadas <a href="#" onClick={this.fetchMore}>ver más </a></p>
+                        </div>
+            :null
+            }
             </div>
+            {this.state.dimensions.width>645?null:
+            <div className="row">
+                                      <div className="col-xs-auto" style={{marginLeft:"14px",marginTop:"18px"}}>
+                        {/* Total consumido: {this.totalConsumido} */}
+                        
+                        <p>Mostrando {formatNumber(this.state.amountCalls)} de {formatNumber(this.state.totalCalls)} llamadas <a href="#" onClick={this.fetchMore}>ver más </a></p>
+                        </div>
+            </div>
+            }
+                        <div className="row" style={{marginLeft:"8px",marginTop:"10px"}}>
+                        <input type="search" value={this.state.filterNumber} placeholder="Buscar por número" onChange={this.filterNumber}/>
+                        </div>
+            
+            
             <div className="col-xs-12 caja" style={{marginTop:"25px",marginBottom:"80px",overflowX:"visible"}}>
                 
                 <div className="row">
                 <div className="col-xs-12 col-md-6">
                 <h1 className="secondTitle" style={{padding:"8px",fontSize:isMobile?"28px":"30px"}}>Historial de llamadas</h1>
                 </div>
-                <div className="col-xs-12 col-md-6" >
-                {/* <p>Total consumido: {totalConsumido}</p> */}
-                </div>
+
                 </div>
                 <div className="row center">
                 {/* <p className="infoText">Saldo Actual</p> */}
@@ -771,7 +813,8 @@ class App extends Component {
                 {this.state.loadingHistorial?
                   null
                 :
-                this.state.history.map((log,index)=>(
+                
+                display.map((log,index)=>(
                   <TableLineUsage line={log} key={index}/>
             ))
                 } 
@@ -780,7 +823,6 @@ class App extends Component {
               </tbody>
               
             </table>
-            {console.log("truth",this.state.loadingHistorial)}
               {this.state.loadingHistorial?
                         <div className="row center">
                           <div className="col-xs-auto">
