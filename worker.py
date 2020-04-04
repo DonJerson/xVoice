@@ -82,38 +82,28 @@ class Worker():
         return
 
     def recordData(self):
-        try:
-            newLog = self.fetchLog()
-        except Exception as e:
-            print("no hay aparentemente")
-            print(e)
-            return
-        try:
-            logEnd = self.fetchEndLog(newLog.callid)
-            time.sleep(1)
-            startDate=newLog.time
-            endDate=logEnd.time
-            diff = (endDate-startDate).seconds/60
-            print("difffff")
-            print(diff*60)
-            destination = newLog.dst_user
-            rate=0.010
-            
+        while True:
             try:
-                newCall = ApiUsage.objects.get(callid=logEnd.callid)
-                consumer = self.newBalance(newLog.src_user,rate*diff)
-                newLog.consumer=consumer
-                newLog.call = newCall
-                newLog.save()
-                logEnd.consumer=consumer
-                logEnd.call = newCall
-                logEnd.save()
+                newLog = self.fetchLog()
             except Exception as e:
-                print("Not created,creating")
+                print("no hay aparentemente")
+                print(e)
+                time.sleep(10)
+                continue
+            try:
+                logEnd = self.fetchEndLog(newLog.callid)
+                time.sleep(1)
+                startDate=newLog.time
+                endDate=logEnd.time
+                diff = (endDate-startDate).seconds/60
+                print("difffff")
+                print(diff*60)
+                destination = newLog.dst_user
+                rate=0.010
+                
                 try:
+                    newCall = ApiUsage.objects.get(callid=logEnd.callid)
                     consumer = self.newBalance(newLog.src_user,rate*diff)
-                    newCall = ApiUsage.objects.create(src_user=newLog.src_user,dst_user=destination,duration=diff*60,serviceProvided="USCALL",startTime=startDate,endTime=endDate,callid=logEnd.callid,consumer=consumer)
-                    
                     newLog.consumer=consumer
                     newLog.call = newCall
                     newLog.save()
@@ -121,16 +111,28 @@ class Worker():
                     logEnd.call = newCall
                     logEnd.save()
                 except Exception as e:
-                    print("errorcito sumando")
-                    
-                    print(e)
+                    print("Not created,creating")
+                    try:
+                        consumer = self.newBalance(newLog.src_user,rate*diff)
+                        newCall = ApiUsage.objects.create(src_user=newLog.src_user,dst_user=destination,duration=diff*60,serviceProvided="USCALL",startTime=startDate,endTime=endDate,callid=logEnd.callid,consumer=consumer)
+                        
+                        newLog.consumer=consumer
+                        newLog.call = newCall
+                        newLog.save()
+                        logEnd.consumer=consumer
+                        logEnd.call = newCall
+                        logEnd.save()
+                    except Exception as e:
+                        print("errorcito sumando")
+                        
+                        print(e)
 
-        except Exception as e:
-            print("errorcito fetching")
-            print(e)
-            print(newLog.id)
-        connection.close()
-        return
+            except Exception as e:
+                print("errorcito fetching")
+                print(e)
+                print(newLog.id)
+            connection.close()
+            continue
     def initAll(self):
         while(True):
             # self.recordData()
