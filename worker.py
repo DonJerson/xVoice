@@ -6,22 +6,28 @@ from django.db import connection
 class Worker():
     def __init__(self):
         self.mainLock = threading.Lock()
+        self.customerLock = threading.Lock()
         self.logStart = Acc.objects.filter(call__isnull=True,method="INVITE")
         print("len")
         print(self.logStart.count())
-        self.logEnd = Acc.objects.filter(method="BYE")
+        self.logEnd = Acc.objects.filter(call__isnull=True,method="BYE")
         print(self.logEnd.count())
         #time.sleep(25)
         self.initAll()
-
         return
 
     def fetchLog(self):
         self.mainLock.acquire()
-        newLog = self.logStart[0]
-        self.logStart= self.logStart[1:]
-        self.mainLock.release()
-        return newLog
+        try:
+            newLog = self.logStart[0]
+            self.logStart= self.logStart[1:]
+            self.mainLock.release()
+            return newLog
+        except:
+            print("no hay aparentemente")
+            self.mainLock.release()
+            return False
+        
 
     def fetchEndLog(self,myId):
         # print("my Id")
@@ -31,20 +37,18 @@ class Worker():
         self.logEnd=self.logEnd.exclude(callid=myId)
         return logEnd
     def newBalance(self,username,cost):
-        self.mainLock.acquire()
+        self.customerLock.acquire()
         try:
             consumer = Subscriber.objects.get(username=username).customer
             print("found")
-
-
             consumer.balance=float(consumer.balance)-cost
             consumer.save()
-            self.mainLock.release()
+            self.customerLock.release()
             return consumer
         except:
             print("not found subscriber")
-            self.mainLock.release()
             return
+            self.customerLock.release()
     def recordDataReverse(self):
         try:
             self.mainLock.acquire()
@@ -83,11 +87,9 @@ class Worker():
 
     def recordData(self):
         while True:
-            try:
-                newLog = self.fetchLog()
-            except Exception as e:
+            newLog = self.fetchLog()
+            if not newLog:
                 print("no hay aparentemente")
-                print(e)
                 time.sleep(10)
                 continue
             try:
@@ -100,9 +102,9 @@ class Worker():
                 print(diff*60)
                 destination = newLog.dst_user
                 rate=0.010
-                
                 try:
                     newCall = ApiUsage.objects.get(callid=logEnd.callid)
+                    print("already exists")
                     consumer = self.newBalance(newLog.src_user,rate*diff)
                     newLog.consumer=consumer
                     newLog.call = newCall
@@ -110,18 +112,21 @@ class Worker():
                     logEnd.consumer=consumer
                     logEnd.call = newCall
                     logEnd.save()
+                    print("updated tho")
                 except Exception as e:
                     print("Not created,creating")
                     try:
                         consumer = self.newBalance(newLog.src_user,rate*diff)
+                        print("updated balance")
                         newCall = ApiUsage.objects.create(src_user=newLog.src_user,dst_user=destination,duration=diff*60,serviceProvided="USCALL",startTime=startDate,endTime=endDate,callid=logEnd.callid,consumer=consumer)
-                        
+                        print("this one is done")
                         newLog.consumer=consumer
                         newLog.call = newCall
                         newLog.save()
                         logEnd.consumer=consumer
                         logEnd.call = newCall
                         logEnd.save()
+                        print("this one is safed")
                     except Exception as e:
                         print("errorcito sumando")
                         
@@ -131,12 +136,12 @@ class Worker():
                 print("errorcito fetching")
                 print(e)
                 print(newLog.id)
-            connection.close()
+            print("this one finished")
             continue
     def initAll(self):
         while(True):
             # self.recordData()
-            for y in range(20):
+            for y in range(15):
                 threads = []
                 t = threading.Thread(target=self.recordData)
                 t.start()
