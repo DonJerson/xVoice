@@ -134,7 +134,7 @@ const TableLineUsage=(props)=>{
       <td>{props.line.dst_user}</td>
       <td>{fecha}</td>
       <td>{props.line.duration}</td>
-      <td>{props.line.duration*0.010}</td>
+      <td>{props.line.duration*0.010/60}</td>
       </tr>
     </>
   )
