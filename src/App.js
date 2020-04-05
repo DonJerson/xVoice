@@ -134,7 +134,7 @@ const TableLineUsage=(props)=>{
       <td>{props.line.dst_user}</td>
       <td>{fecha}</td>
       <td>{props.line.duration}</td>
-      <td>{props.line.duration*0.010/60}</td>
+      <td>{parseFloat(props.line.duration*0.010/60).toFixed(7)}</td>
       </tr>
     </>
   )
@@ -806,7 +806,7 @@ class App extends Component {
                 <th>Desde</th>
                 <th>Hacia</th>
                 <th>Fecha</th>
-                <th>Duración</th>
+                <th>Duración (segundos)</th>
                 <th>Costo</th>
                 
               </tr>
