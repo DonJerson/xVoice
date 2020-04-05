@@ -403,7 +403,9 @@ class App extends Component {
       axios.defaults.headers.post['Authorization']="JWT "+token
       
       this.setState({loadingHistorial:true})
-      axios.post(baseUrl + `filterNumber/`,{"number":filterNumber}).then(res=>{
+      let numbers = this.state.seletedUsers
+      numbers.push(filterNumber)
+      axios.post(baseUrl + `filterNumber/`,{"numbers":numbers}).then(res=>{
         const filteredResults = res.data
         this.setState({filteredResults})
 

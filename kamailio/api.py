@@ -75,12 +75,15 @@ def get_history(request):
 
 @api_view(['POST'])
 def filter_number(request):
-	number = request.data['number']
+	number = request.data['numbers']
 	print("recibido sol")
 	print(number)
-	results = ApiUsage.objects.filter(
-		Q(dst_user__contains=number) |
-    	Q(src_user__contains=number))
+	results = ApiUsage.objects.none()
+	for number in numbers:
+		new = ApiUsage.objects.filter(
+			Q(dst_user__contains=number) |
+			Q(src_user__contains=number))
+		results = results | new
 
 	return Response(ApiUsageSerializer(results,many=True).data)
 
