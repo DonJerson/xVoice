@@ -75,14 +75,14 @@ def get_history(request):
 
 @api_view(['POST'])
 def filter_number(request):
-	
+	myId = request.data['id']
 	numbers = request.data['numbers']
 	print(numbers)
 	results = ApiUsage.objects.none()
 	for number in numbers:
 		new = ApiUsage.objects.filter(
-			Q(dst_user__contains=number) |
-			Q(src_user__contains=number))
+			Q(dst_user__contains=number,consumer_id=myId) |
+			Q(src_user__contains=number,consumer_id=myId))
 		results = results | new
 
 	return Response(ApiUsageSerializer(results,many=True).data)

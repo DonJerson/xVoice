@@ -395,18 +395,27 @@ class App extends Component {
     const newDimensions={width:width, height:height, isMobile:false}
     this.setState({dimensions:newDimensions})
   }
-  filterNumber=(e)=>{
-    const filterNumber=e.target.value.replace(/\D/g, '')
-    this.setState({filterNumber})
-    if(filterNumber.length>0){
+  filterNumber=(myVar)=>{
+    let filterNumber
+    if(myVar.target){
+      filterNumber=myVar.target.value.replace(/\D/g, '')
+      this.setState({filterNumber})
+    }
+    else{
+      filterNumber = this.state.filterNumber
+    }
+    let numbers = [...this.state.seletedUsers]
+    if(true){
       const token = window.localStorage.getItem('token')
       axios.defaults.headers.post['Authorization']="JWT "+token
       
       this.setState({loadingHistorial:true})
-      let numbers = this.state.seletedUsers
-      numbers.push(filterNumber)
+      if(filterNumber.length>1){
+        numbers.push(filterNumber)
+      }
+      
       console.log("sending data",numbers)
-      axios.post(baseUrl + `filterNumber/`,{"numbers":numbers}).then(res=>{
+      axios.post(baseUrl + `filterNumber/`,{"numbers":numbers,id:this.state.customer.id}).then(res=>{
         const filteredResults = res.data
         this.setState({filteredResults})
 
@@ -499,6 +508,7 @@ class App extends Component {
       if(user===username){
         newUsers = newUsers.filter(c=>c!=username)
         this.setState({seletedUsers:newUsers})
+        this.filterNumber(newUsers)
         updated=true
         return
       }
@@ -506,6 +516,7 @@ class App extends Component {
     if(updated){return}
     newUsers.push(username)
     this.setState({seletedUsers:newUsers})
+    this.filterNumber(newUsers)
     return
   }
   deleteUser=(subscriber)=>{
@@ -650,7 +661,6 @@ class App extends Component {
     this.setState({logged:false})
   }
   render() {
-
     //const totalConsumido = "US$"+parseFloat(total).toFixed(2)+" (total minutos: "+totalMinutos+")"
     const isMobile=this.state.dimensions.width<768
     let marginBody = this.state.dimensions.isMobile?"15px":"50px"
@@ -659,7 +669,7 @@ class App extends Component {
       handleUpdate:this.handleUpdate,handleLogout:this.handleLogout,addDevice:this.addDevice,deleteDevice:this.deleteDevice
     }
     let display
-    if(this.state.filteredResults &&this.state.filterNumber){
+    if(this.state.filteredResults && (this.state.filterNumber ||this.state.seletedUsers.length>0) ){
       display=this.state.filteredResults
     }else{display=this.state.history}
     
