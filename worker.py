@@ -25,17 +25,21 @@ class Worker():
             return newLog
         except:
             print("no hay aparentemente")
-            self.logStart = Acc.objects.filter(call__isnull=True,method="INVITE")
-            self.mainLock.release()
-            return False
+            try:
+                self.logStart = Acc.objects.filter(call__isnull=True,method="INVITE")
+                self.mainLock.release()
+            except:
+                print("errorcito")
+                self.mainLock.release()
+                return False
+                
         
 
     def fetchEndLog(self,myId):
         # print("my Id")
         # print(myId)
         #logEnd = Acc.objects.get(callid=myId,method="BYE")
-        logEnd = self.logEnd.get(callid=myId)
-        self.logEnd=self.logEnd.exclude(callid=myId)
+        logEnd = Acc.objects.get(callid=myId,method="BYE")
         return logEnd
     def newBalance(self,username,cost):
         self.customerLock.acquire()
