@@ -75,7 +75,9 @@ def get_history(request):
 
 @api_view(['POST'])
 def filter_number(request):
+	
 	numbers = request.data['numbers']
+	print(numbers)
 	results = ApiUsage.objects.none()
 	for number in numbers:
 		new = ApiUsage.objects.filter(
