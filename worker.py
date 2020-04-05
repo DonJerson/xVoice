@@ -40,7 +40,7 @@ class Worker():
         # print(myId)
         #logEnd = Acc.objects.get(callid=myId,method="BYE")
         try:
-            logEnds = Acc.objects.get(callid=myId,method="BYE",sip_code='200')
+            logEnd = Acc.objects.get(callid=myId,method="BYE",sip_code='200')
         except Exception as e:
             print("y qloq")
             print(e)
