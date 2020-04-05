@@ -25,6 +25,7 @@ class Worker():
             return newLog
         except:
             print("no hay aparentemente")
+            self.logStart = Acc.objects.filter(call__isnull=True,method="INVITE")
             self.mainLock.release()
             return False
         

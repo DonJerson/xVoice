@@ -530,8 +530,6 @@ class App extends Component {
   }
   componentDidUpdate(){
     this.updateDimensions();
-    
-
   };
   componentDidMount(){
     let token = window.localStorage.getItem("token")
@@ -579,6 +577,7 @@ class App extends Component {
       window.localStorage.setItem('token',res.data.token)
       this.setState({customer:res.data.user})
       const newStatus=!this.state.logged
+      this.fetchHistory()
       this.setState({logged:newStatus})
       this.setState({loading:false})
     }).catch(err=>{
