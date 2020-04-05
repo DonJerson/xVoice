@@ -405,6 +405,7 @@ class App extends Component {
       this.setState({loadingHistorial:true})
       let numbers = this.state.seletedUsers
       numbers.push(filterNumber)
+      console.log("sending data",numbers)
       axios.post(baseUrl + `filterNumber/`,{"numbers":numbers}).then(res=>{
         const filteredResults = res.data
         this.setState({filteredResults})
