@@ -39,7 +39,12 @@ class Worker():
         # print("my Id")
         # print(myId)
         #logEnd = Acc.objects.get(callid=myId,method="BYE")
-        logEnd = Acc.objects.get(callid=myId,method="BYE")
+        try:
+            logEnd = Acc.objects.get(callid=myId,method="BYE")
+        except Exception as e:
+            print("y qloq")
+            print(e)
+            print(logEnd[0], logEnd[1])
         return logEnd
     def newBalance(self,username,cost):
         self.customerLock.acquire()
