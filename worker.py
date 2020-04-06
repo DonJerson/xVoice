@@ -7,10 +7,8 @@ class Worker():
     def __init__(self):
         self.mainLock = threading.Lock()
         self.customerLock = threading.Lock()
+        self.working =[]
         self.logStart = Acc.objects.filter(call__isnull=True,method="INVITE")
-        print("len")
-        print(self.logStart.count())
-        self.logEnd = Acc.objects.filter(call__isnull=True,method="BYE")
         print(self.logEnd.count())
         #time.sleep(25)
         self.initAll()
@@ -21,6 +19,11 @@ class Worker():
         try:
             newLog = self.logStart[0]
             self.logStart= self.logStart[1:]
+            for working in self.working:
+                if working.callid==newLog.callid:
+                    self.mainLock.release()
+                    return False
+            self.working.append(newLog.callid)
             self.mainLock.release()
             return newLog
         except:
@@ -40,7 +43,7 @@ class Worker():
         # print(myId)
         #logEnd = Acc.objects.get(callid=myId,method="BYE")
         try:
-            logEnd = Acc.objects.get(callid=myId,method="BYE",sip_code='200')
+            logEnd = Acc.objects.get(call__isnull=True,callid=myId,method="BYE",sip_code='200')
         except Exception as e:
             print("y qloq")
             print(e)

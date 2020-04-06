@@ -92,7 +92,6 @@ const NavButtons=(props)=>{
 }
 const TableLineUser=(props)=>{
   const deleteUser=(e)=>{
-    console.log("alto ahi",props.username)
     e.preventDefault()
     props.deleteUser(props.username)
   }
@@ -397,24 +396,25 @@ class App extends Component {
   }
   filterNumber=(myVar)=>{
     let filterNumber
+    let numbers
     if(myVar.target){
       filterNumber=myVar.target.value.replace(/\D/g, '')
       this.setState({filterNumber})
+      numbers = [...this.state.seletedUsers]
     }
     else{
       filterNumber = this.state.filterNumber
+      numbers = [...myVar]
     }
-    let numbers = [...this.state.seletedUsers]
     if(true){
       const token = window.localStorage.getItem('token')
       axios.defaults.headers.post['Authorization']="JWT "+token
       
       this.setState({loadingHistorial:true})
-      if(filterNumber.length>1){
+      if(filterNumber.length>0){
         numbers.push(filterNumber)
       }
       
-      console.log("sending data",numbers)
       axios.post(baseUrl + `filterNumber/`,{"numbers":numbers,id:this.state.customer.id}).then(res=>{
         const filteredResults = res.data
         this.setState({filteredResults})
@@ -495,7 +495,7 @@ class App extends Component {
     }
 
     this.state={
-      seletedUsers:[],filteredResults:null,loadingFiltered:false,filterNumber:"",
+      seletedUsers:[],filteredResults:[],loadingFiltered:false,filterNumber:"",
       history:[],totalCalls:0,amountCalls:0,
       logged:logged,dimensions:{width:width, height:height, isMobile:mobile},loading:loading,loadingHistorial:false,
       email:myUsername,password:myPassword,customer:customerBase,loadingComponent:false,
@@ -503,7 +503,7 @@ class App extends Component {
   }
   handleSelect=(username)=>{
     let updated=false
-    let newUsers = this.state.seletedUsers
+    let newUsers = [...this.state.seletedUsers]
     newUsers.forEach(user => {
       if(user===username){
         newUsers = newUsers.filter(c=>c!=username)
@@ -533,7 +533,7 @@ class App extends Component {
     //this.setState({selectUsers:newUsers})
   }
   filterUser=(username)=>{
-    let newUsers = this.state.seletedUsers
+    let newUsers = [...this.state.seletedUsers]
     newUsers.filter(c=>c!=username)
     return newUsers
   }
@@ -662,6 +662,7 @@ class App extends Component {
   }
   render() {
     //const totalConsumido = "US$"+parseFloat(total).toFixed(2)+" (total minutos: "+totalMinutos+")"
+    let showing
     const isMobile=this.state.dimensions.width<768
     let marginBody = this.state.dimensions.isMobile?"15px":"50px"
     const userPack={dimensions:this.state.dimensions,customer:this.state.customer,email:this.email,password:this.password,
@@ -669,9 +670,14 @@ class App extends Component {
       handleUpdate:this.handleUpdate,handleLogout:this.handleLogout,addDevice:this.addDevice,deleteDevice:this.deleteDevice
     }
     let display
-    if(this.state.filteredResults && (this.state.filterNumber ||this.state.seletedUsers.length>0) ){
+    //console.log(this.state.seletedUsers.length, "length")
+    if((this.state.filterNumber.length>0)  ||this.state.seletedUsers.length>0){
       display=this.state.filteredResults
-    }else{display=this.state.history}
+      showing = this.state.filteredResults.length
+    }else{
+      display=this.state.history
+      showing = this.state.amountCalls
+    }
     
     return ( 
       <>{this.state.loading?
@@ -784,7 +790,7 @@ class App extends Component {
                         <div className="col-xs-auto" style={{position:"absolute",right:this.state.dimensions.width<762?"25px":"58px"}}>
                         {/* Total consumido: {this.totalConsumido} */}
                         
-                        <p>Mostrando {formatNumber(this.state.amountCalls)} de {formatNumber(this.state.totalCalls)} llamadas <a href="#" onClick={this.fetchMore}>ver más </a></p>
+                        <p>Mostrando {formatNumber(showing)} de {formatNumber(this.state.totalCalls)} llamadas <a href="#" onClick={this.fetchMore}>ver más </a></p>
                         </div>
             :null
             }
@@ -794,7 +800,7 @@ class App extends Component {
                                       <div className="col-xs-auto" style={{marginLeft:"14px",marginTop:"18px"}}>
                         {/* Total consumido: {this.totalConsumido} */}
                         
-                        <p>Mostrando {formatNumber(this.state.amountCalls)} de {formatNumber(this.state.totalCalls)} llamadas <a href="#" onClick={this.fetchMore}>ver más </a></p>
+                        <p>Mostrando {formatNumber(showing)} de {formatNumber(this.state.totalCalls)} llamadas <a href="#" onClick={this.fetchMore}>ver más </a></p>
                         </div>
             </div>
             }
@@ -806,7 +812,7 @@ class App extends Component {
             <div className="col-xs-12 caja" style={{marginTop:"25px",marginBottom:"80px",overflowX:"visible"}}>
                 
                 <div className="row">
-                <div className="col-xs-12 col-md-6">
+                <div className="col-xs-12">
                 <h1 className="secondTitle" style={{padding:"8px",fontSize:isMobile?"28px":"30px"}}>Historial de llamadas</h1>
                 </div>
 
