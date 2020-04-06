@@ -105,7 +105,7 @@ class Worker():
             newLog = self.fetchLog()
             if not newLog:
                 print("no hay aparentemente")
-                time.sleep(10)
+                time.sleep(1)
                 continue
             try:
                 logEnd = self.fetchEndLog(newLog.callid)
