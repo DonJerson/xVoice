@@ -152,6 +152,7 @@ class Worker():
                 print(e)
                 print(newLog.id)
             print("this one finished")
+            if newLog.callid in self.working: self.working.remove(newLog.callid)
             continue
     def initAll(self):
         while(True):
