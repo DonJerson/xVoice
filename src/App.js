@@ -701,7 +701,7 @@ class App extends Component {
               <div className="col-xs-12 col-sm-4 caja" style={{maxHeight:"140px",paddingTop:"10px"}}>
                 
                 <div className="row center">
-                <h1 className="balance">${this.state.customer.balance}</h1>
+                <h1 className="balance">US${this.state.customer.balance}</h1>
                 </div>
                 <div className="row center" style={{marginTop:"5px"}}>
                   <div className="col-xs-auto">
@@ -826,7 +826,7 @@ class App extends Component {
                 <th>Hacia</th>
                 <th>Fecha</th>
                 <th>Duración (segundos)</th>
-                <th>Costo</th>
+                <th>Costo (US$)</th>
                 
               </tr>
               </thead>
