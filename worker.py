@@ -9,7 +9,7 @@ class Worker():
         self.customerLock = threading.Lock()
         self.working =[]
         self.logStart = Acc.objects.filter(call__isnull=True,method="INVITE")
-        print(self.logEnd.count())
+        print(self.logStart.count())
         #time.sleep(25)
         self.initAll()
         return
@@ -28,8 +28,11 @@ class Worker():
             return newLog
         except:
             print("no hay aparentemente")
+            
             try:
                 self.logStart = Acc.objects.filter(call__isnull=True,method="INVITE")
+                print("new count")
+                print(self.logStart.count())
                 self.mainLock.release()
             except:
                 print("errorcito")
@@ -39,7 +42,7 @@ class Worker():
         
 
     def fetchEndLog(self,myId):
-        # print("my Id")
+        # print("my Id") 
         # print(myId)
         #logEnd = Acc.objects.get(callid=myId,method="BYE")
         try:
@@ -61,41 +64,41 @@ class Worker():
             print("not found subscriber")
             return
             self.customerLock.release()
-    def recordDataReverse(self):
-        try:
-            self.mainLock.acquire()
-            newLog = self.logEnd[0]
-            self.logEnd= self.logEnd[1:]
-            self.mainLock.release()
-        except Exception as e:
-            print("no hay aparentemente")
-            print(e)
-            return
-        try:
-            logStart = self.objects.get(callid=myId,method="INVITE")
-            time.sleep(1)
-            startDate=logStart.time
-            endDate=newLog.time
-            diff = (endDate-startDate).seconds/60
-            destination = newLog.dst_user
-            rate=0.010
-            try:
-                consumer = self.newBalance(newLog.src_user,rate*diff)
-                newLog.consumer=consumer
-                newLog.save()
-                logStart.consumer=consumer
-                logStart.save()
-            except Exception as e:
-                print("errorcito sumando")
+    # def recordDataReverse(self):
+    #     try:
+    #         self.mainLock.acquire()
+    #         newLog = self.logEnd[0]
+    #         self.logEnd= self.logEnd[1:]
+    #         self.mainLock.release()
+    #     except Exception as e:
+    #         print("no hay aparentemente")
+    #         print(e)
+    #         return
+    #     try:
+    #         logStart = self.objects.get(callid=myId,method="INVITE")
+    #         time.sleep(1)
+    #         startDate=logStart.time
+    #         endDate=newLog.time
+    #         diff = (endDate-startDate).seconds/60
+    #         destination = newLog.dst_user
+    #         rate=0.010
+    #         try:
+    #             consumer = self.newBalance(newLog.src_user,rate*diff)
+    #             newLog.consumer=consumer
+    #             newLog.save()
+    #             logStart.consumer=consumer
+    #             logStart.save()
+    #         except Exception as e:
+    #             print("errorcito sumando")
                 
-                print(e)
+    #             print(e)
 
-        except Exception as e:
-            print("errorcito fetching")
-            print(e)
-            print(newLog.id)
-        connection.close()
-        return
+    #     except Exception as e:
+    #         print("errorcito fetching")
+    #         print(e)
+    #         print(newLog.id)
+    #     connection.close()
+    #     return
 
     def recordData(self):
         while True:
