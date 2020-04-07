@@ -452,7 +452,7 @@ class App extends Component {
     const token = window.localStorage.getItem('token')
     axios.defaults.headers.get['Authorization']="JWT "+token
     this.setState({loading:true})
-    this.fetchHistory(50)
+    this.fetchHistory(15)
     axios.get(baseUrl + `getSub/`).then(res=>{
       this.setState({customer:res.data})
       this.setState({loading:false})
@@ -786,36 +786,37 @@ class App extends Component {
               </div>
               </div>
             </div>
-            {this.state.dimensions.width>645?
-                        <div className="col-xs-auto" style={{position:"absolute",right:this.state.dimensions.width<762?"25px":"58px"}}>
-                        {/* Total consumido: {this.totalConsumido} */}
-                        
-                        <p>Mostrando {formatNumber(showing)} de {formatNumber(this.state.totalCalls)} llamadas <a href="#" onClick={this.fetchMore}>ver más </a></p>
-                        </div>
-            :null
-            }
+
             </div>
-            {this.state.dimensions.width>645?null:
-            <div className="row">
-                                      <div className="col-xs-auto" style={{marginLeft:"14px",marginTop:"18px"}}>
-                        {/* Total consumido: {this.totalConsumido} */}
-                        
-                        <p>Mostrando {formatNumber(showing)} de {formatNumber(this.state.totalCalls)} llamadas <a href="#" onClick={this.fetchMore}>ver más </a></p>
-                        </div>
-            </div>
-            }
+            
                         <div className="row" style={{marginLeft:"8px",marginTop:"16px"}}>
                         <input type="search" value={this.state.filterNumber} placeholder="Buscar por número" onChange={this.filterNumber}/>
+
+
                         </div>
             
             
             <div className="col-xs-12 caja" style={{marginTop:"25px",marginBottom:"80px",overflowX:"visible"}}>
                 
                 <div className="row">
-                <div className="col-xs-12">
-                <h1 className="secondTitle" style={{padding:"8px",fontSize:isMobile?"28px":"30px"}}>Historial de llamadas</h1>
-                </div>
+                <div className="col-xs-12 col-md-6" >
+                <h1 className="secondTitle" style={{marginTop:"10px",padding:"8px",fontSize:isMobile?"24px":"34px"}}>Historial de llamadas               </h1>
 
+                </div>
+                <div className="col-xs-12 col-md-6">
+                {this.state.dimensions.width<1024?
+                        <div className="col-xs-auto">
+                        {/* Total consumido: {this.totalConsumido} */}
+                        
+                        <p style={{paddingTop:"8px",paddingBottom:"8px"}}>Mostrando {formatNumber(showing)} de {formatNumber(this.state.totalCalls)} llamadas <a href="#" onClick={this.fetchMore}>ver más </a></p>
+                        </div>
+            :                        <div className="col-xs-auto" style={{position:"absolute",right:"70px"}}>
+            {/* Total consumido: {this.totalConsumido} */}
+            
+            <p style={{paddingTop:"5px"}}>Mostrando {formatNumber(showing)} de {formatNumber(this.state.totalCalls)} llamadas <a href="#" onClick={this.fetchMore}>ver más </a></p>
+            </div>
+            }
+</div>
                 </div>
                 <div className="row center">
                 {/* <p className="infoText">Saldo Actual</p> */}
