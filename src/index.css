@@ -662,11 +662,7 @@ input {
 	display: block;
 	position: relative;
 	z-index: 0;
-	margin: 4rem auto 0;
-  padding: 5rem 4rem 0 4rem;
-	width: 100%;
 	max-width: 525px;
-	min-height: 680px;
   /*background-image: url(https://s3-us-west-2.amazonaws.com/s.cdpn.io/283591/login-background.jpg);*/
   background-image: url(/media/18rg9fv8xp54ejpg.webp);
   background-size:cover;

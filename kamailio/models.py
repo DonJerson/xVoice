@@ -864,7 +864,7 @@ class ApiUsage(models.Model):
         
 class Acc(models.Model):
     consumer = models.ForeignKey(Customer,on_delete=models.CASCADE,null=True,blank=True)
-    call = models.ForeignKey(ApiUsage,on_delete=models.CASCADE,null=True,blank=True,default=None)
+    call = models.ForeignKey(ApiUsage,on_delete=models.SET_NULL,null=True,blank=True,default=None)
     method = models.CharField(max_length=16)
     from_tag = models.CharField(max_length=64)
     to_tag = models.CharField(max_length=64)

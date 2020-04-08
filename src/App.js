@@ -262,7 +262,7 @@ const Registration=(props)=>{
   const [agree,setAgree]=React.useState(false)
   const [name,setName]=React.useState("")
   const [cellphone,setCellphone]=React.useState("")
-
+  const [error,setError]=React.useState(null)
   const handleName=(e)=>{
     setName(e.target.value)
   }
