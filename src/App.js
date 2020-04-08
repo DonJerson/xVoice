@@ -482,8 +482,16 @@ class App extends Component {
     }else{
       mobile=false
     }
-    let logged=false
-    let loading=true
+    const token = window.localStorage.getItem("token")
+    let logged
+    let loading
+    if(token){
+      logged=false
+      loading=false
+    }else{
+    logged=true
+    loading=true
+  }
     if(getUrl.host.substring(0,3)==="127"){
       logged=true
       loading=false
