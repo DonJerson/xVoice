@@ -104,7 +104,6 @@ class Worker():
         while True:
             newLog = self.fetchLog()
             if not newLog:
-                print("no hay aparentemente")
                 time.sleep(1)
                 continue
             try:
