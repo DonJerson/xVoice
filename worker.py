@@ -26,9 +26,9 @@ class Worker():
             self.working.append(newLog.callid)
             self.mainLock.release()
             return newLog
-        except:
+        except Exception as e:
             print("no hay aparentemente")
-            
+            print(e)
             try:
                 self.logStart = Acc.objects.filter(call__isnull=True,method="INVITE")
                 print("new count")
