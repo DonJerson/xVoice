@@ -314,11 +314,13 @@ const Registration=(props)=>{
   const settingUp = registration?"active":""
   const logging = !registration?"active":""
   //console.log(active, "act")
+  const width = props.userPack.dimensions.width
+  const isMobile = width<600
   return(
     <>
-    <div className="login-container" style={{marginBottom:"62px"}}>
+    <div className="login-container" style={{minHeight:isMobile?props.userPack.dimensions.height+"px":(props.userPack.dimensions.height-60)+"px",marginTop:isMobile?"0px":"62px",padding:"4rem 4rem 0 4rem",margin:isMobile?"":"30px auto 30px"}}>
 	<div className="form-login">
-		<ul className="login-nav">
+		<ul className="login-nav" >
 			<li className={"login-nav__item "+logging}>
 				<a onClick={setLogging}>Sign In</a>
 			</li>
@@ -406,15 +408,16 @@ class App extends Component {
       filterNumber = this.state.filterNumber
       numbers = [...myVar]
     }
-    if(true){
+    if(filterNumber.length>0){
+      numbers.push(filterNumber)
+    }
+    if(numbers.length>0){
       const token = window.localStorage.getItem('token')
       axios.defaults.headers.post['Authorization']="JWT "+token
       
       this.setState({loadingHistorial:true})
-      if(filterNumber.length>0){
-        numbers.push(filterNumber)
-      }
-      
+
+      console.log("sending",numbers)
       axios.post(baseUrl + `filterNumber/`,{"numbers":numbers,id:this.state.customer.id}).then(res=>{
         const filteredResults = res.data
         this.setState({filteredResults})
