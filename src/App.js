@@ -486,11 +486,13 @@ class App extends Component {
     let logged
     let loading
     if(token){
-      logged=false
-      loading=false
+      logged=true
+      loading=true
+      console.log("true")
     }else{
-    logged=true
-    loading=true
+    logged=false
+    loading=false
+    console.log("false")
   }
     if(getUrl.host.substring(0,3)==="127"){
       logged=true
