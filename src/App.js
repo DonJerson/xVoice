@@ -315,7 +315,7 @@ const Registration=(props)=>{
   const logging = !registration?"active":""
   //console.log(active, "act")
   const width = props.userPack.dimensions.width
-  const isMobile = width<600
+  const isMobile = width<522
   return(
     <>
     <div className="login-container" style={{minHeight:isMobile?props.userPack.dimensions.height+"px":(props.userPack.dimensions.height-60)+"px",marginTop:isMobile?"0px":"62px",padding:"4rem 4rem 0 4rem",margin:isMobile?"":"30px auto 30px"}}>
