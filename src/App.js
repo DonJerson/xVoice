@@ -482,7 +482,7 @@ class App extends Component {
       mobile=false
     }
     let logged=false
-    let loading=false
+    let loading=true
     if(getUrl.host.substring(0,3)==="127"){
       logged=true
       loading=false
