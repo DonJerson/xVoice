@@ -20,7 +20,7 @@ class Worker():
             newLog = self.logStart[0]
             self.logStart= self.logStart[1:]
             for working in self.working:
-                if working.callid==newLog.callid:
+                if working==newLog.callid:
                     self.mainLock.release()
                     return False
             self.working.append(newLog.callid)
