@@ -454,8 +454,10 @@ class App extends Component {
     this.setState({loading:true})
     this.fetchHistory(15)
     axios.get(baseUrl + `getSub/`).then(res=>{
-      this.setState({logged:true})
-      this.setState({customer:res.data,loading:false})
+      this.setState({logged:true},()=>{
+        this.setState({customer:res.data,loading:false})
+      })
+      
     }).catch(err=>{
       console.log("error",err)
       this.setState({loading:false})
