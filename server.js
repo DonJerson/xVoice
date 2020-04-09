@@ -51,7 +51,8 @@ async function start(){
 
 const httpApp = express();
 
-httpApp.get('*', function(req, res) {  
+httpApp.get('*', function(req, res) {
+  console.log('tenenemos', req.headers.host + req.url)
   res.redirect('https://' + req.headers.host + req.url);
   console.log(req.headers.host + req.url,'redirecting')
 })
