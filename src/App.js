@@ -477,6 +477,8 @@ class App extends Component {
     const width = w.innerWidth || documentElement.clientWidth || body.clientWidth;
     const height = w.innerHeight || documentElement.clientHeight || body.clientHeight;
     let mobile
+    let superToken = sessionStorage.getItem('superToken');
+    console.log("producto superToken",superToken)
     if (width < 763){
       mobile=true
     }else{
