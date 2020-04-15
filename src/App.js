@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { transform } from '@babel/core';
-
+import Dialer from './Dialer';
 import UserDashBoard from './DashBoard';
 import { Router } from "@reach/router";
 import { tsExpressionWithTypeArguments } from '@babel/types';
@@ -663,6 +663,7 @@ class App extends Component {
         <NavBar dimensions={this.state.dimensions} userPack={userPack}/>
         <Router>
           <UserDashBoard path="/" userPack={userPack} />
+          <Dialer path="/" userPack={userPack} />
         </Router>
         
         </>
