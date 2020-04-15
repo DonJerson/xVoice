@@ -8,7 +8,7 @@ SECRET_KEY = 'c06bxt!5&^yk8h&3pt!qeki69+_42v0j^fnydk1b*4wd6l@p7l'
     
 DEBUG = True
 CORS_ORIGIN_ALLOW_ALL = True
-ALLOWED_HOSTS = ['xvoice.xyz','192.168.1.100','127.0.0.1','www.xvoice.xyz','http://xvoice.xyz','https://xvoice.xyz']
+ALLOWED_HOSTS = ['xvoice.xyz','192.168.2.109','192.168.1.100','127.0.0.1','www.xvoice.xyz','http://xvoice.xyz','https://xvoice.xyz']
 
 INSTALLED_APPS = [
     "sslserver",
