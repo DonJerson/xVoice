@@ -663,7 +663,7 @@ class App extends Component {
         <NavBar dimensions={this.state.dimensions} userPack={userPack}/>
         <Router>
           <UserDashBoard path="/" userPack={userPack} />
-          <Dialer path="/" userPack={userPack} />
+          <Dialer path="/dialer" userPack={userPack} />
         </Router>
         
         </>
