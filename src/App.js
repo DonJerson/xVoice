@@ -411,7 +411,7 @@ class App extends Component {
     
     axios.get(baseUrl + `getSub/`).then(res=>{
       this.setState({customer:res.data}, ()=>{
-        this.setState({loading:false})
+        this.setState({loading:false,logged:true})
       })
       
       
@@ -518,11 +518,11 @@ class App extends Component {
   };
   componentDidMount(){
     let token = window.localStorage.getItem("token")
-    if(getUrl.host.includes("127.0.0")){
-      //console.log(getUrl.host.substring(0,3))
-      token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6ImNyb3dza0B5YWhvby5jb20iLCJleHAiOjYxNTg1NDM5MTU0LCJlbWFpbCI6ImNyb3dza0B5YWhvby5jb20ifQ.wh3vskd5LrQki-ZRRb6FFe0Y2egXDbhwrQtb0RcUPZk"
-      window.localStorage.setItem('token',token)
-    }
+    // if(getUrl.host.includes("127.0.0")){
+    //   //console.log(getUrl.host.substring(0,3))
+    //   token = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyLCJ1c2VybmFtZSI6ImNyb3dza0B5YWhvby5jb20iLCJleHAiOjYxNTg1NDM5MTU0LCJlbWFpbCI6ImNyb3dza0B5YWhvby5jb20ifQ.wh3vskd5LrQki-ZRRb6FFe0Y2egXDbhwrQtb0RcUPZk"
+    //   window.localStorage.setItem('token',token)
+    // }
     
     if(token){
       this.getUser()
@@ -564,7 +564,7 @@ class App extends Component {
       console.log("resultado",res.data.user)
       const newStatus=!this.state.logged
       this.fetchHistory()
-      this.setState({logged:newStatus})
+      this.setState({logged:true})
       this.setState({loading:false})
     }).catch(err=>{
       console.log("error",err)
