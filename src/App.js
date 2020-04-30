@@ -563,7 +563,7 @@ class App extends Component {
       this.setState({customer:res.data.user})
       console.log("resultado",res.data.user)
       const newStatus=!this.state.logged
-      this.fetchHistory()
+      this.fetchHistory(15)
       this.setState({logged:true})
       this.setState({loading:false})
     }).catch(err=>{
