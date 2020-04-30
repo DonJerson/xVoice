@@ -447,13 +447,13 @@ class App extends Component {
       console.log("true")
     }else{
     logged=false
-    loading=true
+    loading=false
     console.log("false")
   }
-    if(getUrl.host.substring(0,3)==="127"){
-      logged=false
-      loading=true
-    }
+    // if(getUrl.host.substring(0,3)==="127"){
+    //   logged=false
+    //   loading=f
+    // }
     
 
     let myUsername = window.localStorage.getItem("username")
