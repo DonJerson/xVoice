@@ -408,7 +408,7 @@ class App extends Component {
     const token = window.localStorage.getItem('token')
     axios.defaults.headers.get['Authorization']="JWT "+token
     this.setState({loading:true})
-    this.fetchHistory(15)
+    
     axios.get(baseUrl + `getSub/`).then(res=>{
       this.setState({customer:res.data}, ()=>{
         this.setState({loading:false})
@@ -419,6 +419,7 @@ class App extends Component {
       console.log("error",err)
       this.setState({loading:false})
     })
+    this.fetchHistory(15)
   }
   constructor(props){
     super(props)
@@ -441,17 +442,17 @@ class App extends Component {
     let logged
     let loading
     if(token){
-      logged=true
+      logged=false
       loading=true
       console.log("true")
     }else{
     logged=false
-    loading=false
+    loading=true
     console.log("false")
   }
     if(getUrl.host.substring(0,3)==="127"){
-      logged=true
-      loading=false
+      logged=false
+      loading=true
     }
     
 
@@ -468,7 +469,7 @@ class App extends Component {
       selectedUsers:[],filteredResults:[],loadingFiltered:false,filterNumber:"",
       history:[],totalCalls:0,amountCalls:0,
       logged:logged,dimensions:{width:width, height:height, isMobile:mobile},loading:loading,loadingHistorial:false,
-      email:myUsername,password:myPassword,customer:customerBase,loadingComponent:false,
+      email:myUsername,password:myPassword,customer:null,loadingComponent:false,
     }
   }
   handleSelect=(username)=>{
@@ -560,6 +561,7 @@ class App extends Component {
     axios.post(baseUrl + `token-auth/`,{username:email,password:myPass}).then(res=>{
       window.localStorage.setItem('token',res.data.token)
       this.setState({customer:res.data.user})
+      console.log("resultado",res.data.user)
       const newStatus=!this.state.logged
       this.fetchHistory()
       this.setState({logged:newStatus})
