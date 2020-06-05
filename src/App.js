@@ -216,6 +216,7 @@ const Registration=(props)=>{
   const [name,setName]=React.useState("")
   const [cellphone,setCellphone]=React.useState("")
   const [error,setError]=React.useState(null)
+
   const handleName=(e)=>{
     setName(e.target.value)
   }
@@ -383,12 +384,19 @@ class App extends Component {
     }
     
   }
-  fetchHistory=(amount)=>{
+  virtualUpdate=(customer)=>{
+    this.setState({customer})
+    this.fetchHistory(50,{id:customer.id},true)
+    console.log("feched for",{id:customer.id},true)
+  }
+  fetchHistory=(amount,customer={id:null},changed=false)=>{
     let history = []
     const token = window.localStorage.getItem('token')
     axios.defaults.headers.post['Authorization']="JWT "+token
     this.setState({loadingHistorial:true})
-    axios.post(baseUrl + `getHistory/`,{"amount":amount}).then(res=>{
+    console.log("changed?",changed)
+    axios.post(changed?baseUrl + 'getHistoryAdmin/':baseUrl + 'getHistory/',{"amount":amount,"userId":customer.id}).then(res=>{
+      console.log("results",res.data.totalCalls)
       const history = res.data.history
       let amountCalls
       amount==="all"?amountCalls = history.length:amountCalls=amount
@@ -635,7 +643,9 @@ class App extends Component {
   render() {
     //const totalConsumido = "US$"+parseFloat(total).toFixed(2)+" (total minutos: "+totalMinutos+")"
 
-    const userPack={dimensions:this.state.dimensions,customer:this.state.customer,email:this.email,
+    const userPack={
+      virtualUpdate:this.virtualUpdate,
+      dimensions:this.state.dimensions,customer:this.state.customer,email:this.email,
       password:this.password,history:this.state.history,totalCalls:this.state.totalCalls,
       amountCalls:this.state.amountCalls,filteredResults:this.state.filteredResults,
       loadingFiltered:this.state.loadingFiltered,selectedUsers:this.state.selectedUsers,
@@ -665,6 +675,7 @@ class App extends Component {
         <NavBar dimensions={this.state.dimensions} userPack={userPack}/>
         <Router>
           <UserDashBoard path="/" userPack={userPack} />
+          <UserDashBoard path="user/:userId" userPack={userPack} />
           <Dialer path="/dialer" userPack={userPack} />
         </Router>
         

@@ -1,6 +1,18 @@
 import React, { Component } from 'react';
 import Calendar from './Calendar';
 
+const getUrl = window.location;
+let host
+if(getUrl.host.includes(":")){
+  host = getUrl.host.substring(0, getUrl.host.length - 5);
+}else{host = getUrl.host;}
+
+const baseUrl = getUrl.protocol+ "//" + host +":8181/";
+const axios = require('axios');
+axios.defaults.xsrfCookieName = 'csrftoken';
+axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+axios.defaults.withCredentials = false;
+
 var dateFormat = require('dateformat');
 function formatNumber(num) {
   return num.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
@@ -55,10 +67,30 @@ const TableLineUser=(props)=>{
     )
   }
 
-
+let myUserId
 class DashBoard extends Component {
-    state = {  }
+    state={customer:false}
+    
+    constructor(props){
+      super(props)
+      myUserId=props.userId
+
+    }
+    componentWillMount(props){
+      console.log(props)
+      if(myUserId){
+        axios.post(baseUrl + `getSubscriberAdmin/`,{userId:myUserId}).then(res=>{
+          if(res.data.id){
+            console.log("success set",res.data.id)
+            this.props.userPack.virtualUpdate(res.data)
+          }
+        }).catch(err=>{
+          console.log("error nuevo",err)
+        })
+      }
+    }
     render() { 
+     
         let showing
         const isMobile=this.props.userPack.dimensions.width<768
         let marginBody = this.props.userPack.dimensions.isMobile?"15px":"50px"
@@ -71,11 +103,17 @@ class DashBoard extends Component {
           display=this.props.userPack.history
           showing = this.props.userPack.amountCalls
         }
-        
+        let customer
+        if(this.state&& this.state.customer){
+          customer = this.state.customer
+        }else{
+          customer=this.props.userPack.customer
+        }
+        console.log("rendered",customer.id)
         return ( <>
         <div id="mainBody" style={{marginLeft:marginBody,marginRight:marginBody,marginTop:"18px",marginBottom:"200px"}}>
         <div className="row">
-              <h1 className="mainTitle" style={{marginLeft:"10px",fontSize:isMobile?"40px":"40px"}}>Welcome {this.props.userPack.customer.name}</h1>
+              <h1 className="mainTitle" style={{marginLeft:"10px",fontSize:isMobile?"40px":"40px"}}>Welcome {customer.name}</h1>
             </div> 
 
             <div className="row" style={{paddingTop:"10px",marginLeft:isMobile?"0.3rem":"0px",marginRight:isMobile?"0.3rem":"0px"}}>
@@ -83,7 +121,7 @@ class DashBoard extends Component {
               <div className="col-xs-12 col-sm-4 caja" style={{maxHeight:"140px",paddingTop:"10px"}}>
                 
                 <div className="row center">
-                <h1 className="balance">US${this.props.userPack.customer.balance}</h1>
+                <h1 className="balance">US${customer.balance}</h1>
                 </div>
                 <div className="row center" style={{marginTop:"5px"}}>
                   <div className="col-xs-auto">
@@ -117,7 +155,7 @@ class DashBoard extends Component {
                        null
                 :
                 <>
-                {this.props.userPack.customer.subscribers.map((subscriber,index)=>(
+                {customer.subscribers.map((subscriber,index)=>(
                   <TableLineUser userPack={this.props.userPack} deleteUser={this.deleteUser} key={subscriber.id} username={subscriber.username} password={subscriber.password}/>
             ))} 
             </>
@@ -146,7 +184,7 @@ class DashBoard extends Component {
             <div className="dropdown">
               <button className="dropbtn">Usuarios</button>
               <div className="dropdown-content" >
-              {this.props.userPack.customer.subscribers.map((subscriber,index)=>(
+              {customer.subscribers.map((subscriber,index)=>(
                   <UserLine userPack={this.props.userPack} selectedUsers={this.props.userPack.selectedUsers} handleSelect={this.props.userPack.methods.handleSelect} key={subscriber.id} username={subscriber.username} password={subscriber.password}/>
             ))} 
               </div>
@@ -242,7 +280,7 @@ class DashBoard extends Component {
             {/* <div classname="row">
               <h1 className="mainGrayTitle">Mis dispositivos</h1>
             </div>
-            {this.props.userPack.customer.subscribers.map((subscriber,index)=>(
+            {customer.subscribers.map((subscriber,index)=>(
                           <div classname="row" style={{backgroundColor:"#5e5c5b"}}>
                           <p style={{color:"white"}}>Username: {subscriber.username} Password: {subscriber.password} </p>
                         </div>

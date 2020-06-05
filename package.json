@@ -17,7 +17,7 @@
     "maxima": "node server.js",
     "start": "set PORT=80 && react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "export PORT=80 && HTTPS=TRUE&&react-scripts start",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {

@@ -25,8 +25,10 @@ urlpatterns = [
     path('newCustomer/', new_customer),
     path('api/',include(router.urls)),
     path('consumeApiOG/', ApiUsageOG),
+    path('getSubscriberAdmin/', get_subscriber_admin),
     path('recargaOG/', RecargaOG),
     path('getHistory/', get_history),
+    path('getHistoryAdmin/', get_history_admin),
     path('deleteSubscriber/', delete_subscriber),
     path('filterNumber/', filter_number),
 ]

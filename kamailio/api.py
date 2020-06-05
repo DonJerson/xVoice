@@ -36,6 +36,15 @@ def get_subscriber(request):
 
 @api_view(['POST'])
 #@permission_classes([])
+def get_subscriber_admin(request):
+	if(request.user.is_superuser):
+		return Response(CustomerSerializer(Customer.objects.get(id=request.data["userId"]),many=False).data)
+	#subscribers = Customer.objects.get(id=request.data["id"])
+	#return Response(CustomerSerializer(subscribers,many=False).data)
+	return Response("declined")
+
+@api_view(['POST'])
+#@permission_classes([])
 def delete_subscriber(request):
 	#subscribers = Customer.objects.get(id=request.data["id"])
 	#return Response(CustomerSerializer(subscribers,many=False).data)
@@ -71,7 +80,32 @@ def get_history(request):
 		usageHistory = request.user.apiUsageHistoryMethod
 		totalCalls = usageHistory.count()
 		usageHistory=usageHistory[:amount]
+
 	return Response({"history":ApiUsageSerializer(usageHistory,many=True).data,"totalCalls":totalCalls})
+
+@api_view(['POST'])
+def get_history_admin(request):
+	amount = request.data['amount']
+	userId = request.data['userId']
+	if(request.user.is_superuser):
+		customer = Customer.objects.get(id=userId)
+		
+		if amount=="all":
+
+			
+			usageHistory = customer.apiUsageHistoryMethod
+			
+			totalCalls = usageHistory.count()
+
+		else:
+			usageHistory = customer.apiUsageHistoryMethod
+			totalCalls = usageHistory.count()
+			usageHistory=usageHistory[:amount]
+	print("user ID COMING")
+	print(userId)
+	print(totalCalls)
+	return Response({"history":ApiUsageSerializer(usageHistory,many=True).data,"totalCalls":totalCalls})
+
 
 @api_view(['POST'])
 def filter_number(request):
