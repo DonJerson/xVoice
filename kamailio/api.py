@@ -138,6 +138,35 @@ def new_customer(request):
 	
 	return Response(CustomerSerializer(newCustomer,many=False).data)
 
+@api_view(['POST'])
+@permission_classes([])
+def bill_call(request):
+	try:
+		callId = request.data["callId"]
+		logStart = Acc.objects.get(consumer__isnull=True,method="INVITE",callid=callId)
+		logEnd = Acc.objects.get(consumer__isnull=True,method="BYE",callid=callId)
+		#logs = Acc.objects.all()
+		consumer = Subscriber.objects.get(username=logStart.src_user).customer
+		startDate=logStart.time
+		endDate=logEnd.time
+		logStart.consumer=consumer
+		logEnd.consumer=consumer
+		logStart.save()
+		logEnd.save()
+		diff = (endDate-startDate).seconds/60
+		destination = logs[index].dst_user
+		if destination[0]=="1":
+			rate=0.010
+		
+		consumer.balance=float(consumer.balance)-rate*diff
+		consumer.balance=-rate*diff
+		consumer.save()
+		#return Response(AccSerializer(logs,many=True).data)
+		return Response("SUCCESS")
+	except Exception as e:
+		print(e)
+		return Response({"BOBO":"BOBO","error":e})
+
 @api_view(['GET'])
 @permission_classes([])
 def update_balance(request):
