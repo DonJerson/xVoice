@@ -8,7 +8,9 @@
 # testing
 /coverage
 
-# production
+# Venv
+/xvoicevenv
+
 
 # misc
 .DS_Store
