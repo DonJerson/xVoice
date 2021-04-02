@@ -14,7 +14,9 @@ if(getUrl.host.includes(":")){
   host = getUrl.host.substring(0, getUrl.host.length - 5);
 }else{host = getUrl.host;}
 
-const baseUrl = getUrl.protocol+ "//" + host +":8181/";
+//const baseUrl = getUrl.protocol+ "//" + host +":8181/";
+
+const baseUrl = "http://3.137.193.102:8181/";
 const axios = require('axios');
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
