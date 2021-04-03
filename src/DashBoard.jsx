@@ -53,7 +53,7 @@ const TableLineUser=(props)=>{
   }
   const TableLineUsage=(props)=>{
     console.log(new Date(props.line.startTime))
-    const fecha = dateFormat(new Date(props.line.startTime), "dd/mm/yy @ HH:MM ss ")
+    const fecha = dateFormat(new Date(props.line.startTime), "dd/mm/yy @ HH:MM:ss - ")+dateFormat(new Date(props.line.endTime), "HH:MM:ss")
     //console.log(props.line,"line")
     return(
       <>
