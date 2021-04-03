@@ -879,7 +879,7 @@ class Acc(models.Model):
     dst_user =models.CharField(max_length=64)
     dst_domain =models.CharField(max_length=128)
     class Meta:
-        managed=False
+        managed=True
         db_table = 'acc'
 
 
