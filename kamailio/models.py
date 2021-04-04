@@ -885,13 +885,20 @@ class Acc(models.Model):
 
 
 class Recarga(models.Model):
-	beneficiary = models.ForeignKey(Customer,on_delete=models.CASCADE)
-	amount = models.DecimalField(max_digits=4,decimal_places=3)
-	validated = models.BooleanField(default=False)
-	methodOfPayment = models.CharField(max_length=10,choices=PAYMENT_CHOICES,default="CASH")
-	def __str__(self):
-		return self.amount
-	pass
+    beneficiary = models.ForeignKey(Customer,on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=4,decimal_places=3)
+    validated = models.BooleanField(default=False)
+    methodOfPayment = models.CharField(max_length=10,choices=PAYMENT_CHOICES,default="CASH")
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            print("test")
+            print(self.beneficiary.balance)
+            self.beneficiary.balance = self.beneficiary.balance+self.amount
+            self.beneficiary.save()
+        super(Recarga, self).save(*args, **kwargs)
+    def __str__(self):
+        return self.beneficiary.name
+    pass
         
 
 
