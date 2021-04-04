@@ -398,7 +398,7 @@ class App extends Component {
     this.setState({loadingHistorial:true})
     console.log("changed?",changed)
     let historyReq =axios.post(changed?baseUrl + 'getHistoryAdmin/':baseUrl + 'getHistory/',{"amount":amount,"userId":customer.id})
-    let recargasReq =axios.post(changed?baseUrl + 'getRecargasHistory/':baseUrl + 'getRecargasHistory/',{"userId":customer.id})
+    let recargasReq =axios.post(baseUrl + 'getRecargasHistory/',{"userId":customer.id})
     Promise.all([historyReq,recargasReq,]).then(res => {
       console.log("results",res.data.totalCalls)
       const history = res.data[0].history
