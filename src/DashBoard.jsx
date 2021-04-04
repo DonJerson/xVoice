@@ -58,7 +58,7 @@ const TableLineUser=(props)=>{
       <>
       <tr> 
         <td>{fecha}</td>
-        <td>{parseFloat(props.line.monto).toFixed(3)}</td>
+        <td>{parseFloat(props.line.amount).toFixed(3)}</td>
         </tr>
       </>
     )
@@ -333,8 +333,8 @@ class DashBoard extends Component {
                   null
                 :
                 
-                recargasHistory.map((log,index)=>(
-                  <TableLineUsage line={log} key={index}/>
+                recargasHistory.reverse().map((log,index)=>(
+                  <TableLineRecarga line={log} key={index}/>
             ))
                 } 
 
