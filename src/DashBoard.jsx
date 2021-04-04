@@ -109,8 +109,7 @@ class DashBoard extends Component {
         const isMobile=this.props.userPack.dimensions.width<768
         let marginBody = this.props.userPack.dimensions.isMobile?"15px":"50px"
         let display
-        let recargas=this.props.userPack.historyRecargas
-        let recargasAmount = this.props.userPack.recargasAmount
+        let recargasHistory=this.props.userPack.recargasHistory
         //console.log(this.props.usethis.rPack.userPack.selectedUsers.length, "length")
         if((this.props.userPack.filterNumber)&&(this.props.userPack.filterNumber.length>0  ||this.props.userPack.selectedUsers.length>0)){
           display=this.props.userPack.filteredResults
@@ -308,12 +307,12 @@ class DashBoard extends Component {
                         <div className="col-xs-auto">
                         {/* Total consumido: {this.totalConsumido} */}
                         
-                        <p style={{paddingTop:"8px",paddingBottom:"8px"}}>Mostrando {formatNumber(showing)} de {formatNumber(this.props.userPack.totalCalls)} llamadas <a href="#" onClick={this.props.userPack.methods.fetchMore}>ver más </a></p>
+                        <p style={{paddingTop:"8px",paddingBottom:"8px"}}>Mostrando {formatNumber(showing)} de {formatNumber(this.props.userPack.recargasHistory.length)} recargas</p>
                         </div>
             :                        <div className="col-xs-auto" style={{position:"absolute",right:"70px"}}>
             {/* Total consumido: {this.totalConsumido} */}
             
-            <p style={{paddingTop:"5px"}}>Mostrando {formatNumber(showing)} de {formatNumber(this.props.userPack.totalCalls)} llamadas <a href="#" onClick={this.props.userPack.methods.fetchMore}>ver más </a></p>
+            <p style={{paddingTop:"5px"}}>Mostrando {formatNumber(showing)} de {formatNumber(this.props.userPack.recargasHistory.length)} recargas</p>
             </div>
             }
 </div>
@@ -333,7 +332,7 @@ class DashBoard extends Component {
                   null
                 :
                 
-                display.map((log,index)=>(
+                recargasHistory.map((log,index)=>(
                   <TableLineUsage line={log} key={index}/>
             ))
                 } 
