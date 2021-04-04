@@ -106,6 +106,14 @@ def get_history_admin(request):
 	print(totalCalls)
 	return Response({"history":ApiUsageSerializer(usageHistory,many=True).data,"totalCalls":totalCalls})
 
+@api_view(['POST'])
+def get_recargas_history(request):
+	userId = request.data['userId']
+	if(request.user.is_authenticated):
+		customer = Customer.objects.get(id=userId)
+		recargasHistory = customer.recargasHistory
+	return Response({"history":RecargaSerializer(recargasHistory,many=True).data})
+
 
 @api_view(['POST'])
 def filter_number(request):

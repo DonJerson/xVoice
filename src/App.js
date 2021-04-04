@@ -397,16 +397,21 @@ class App extends Component {
     axios.defaults.headers.post['Authorization']="JWT "+token
     this.setState({loadingHistorial:true})
     console.log("changed?",changed)
-    axios.post(changed?baseUrl + 'getHistoryAdmin/':baseUrl + 'getHistory/',{"amount":amount,"userId":customer.id}).then(res=>{
+    let historyReq =axios.post(changed?baseUrl + 'getHistoryAdmin/':baseUrl + 'getHistory/',{"amount":amount,"userId":customer.id})
+    let recargasReq =axios.post(changed?baseUrl + 'getRecargasHistory/':baseUrl + 'getRecargasHistory/',{"userId":customer.id})
+    Promise.all([historyReq,recargasReq,]).then(res => {
       console.log("results",res.data.totalCalls)
-      const history = res.data.history
+      const history = res.data[0].history
       let amountCalls
       amount==="all"?amountCalls = history.length:amountCalls=amount
       
       const totalCalls = res.data.totalCalls
       if(amountCalls>totalCalls){amountCalls=totalCalls}
 
-      this.setState({history,totalCalls,amountCalls,loading:false})
+      const recargasHistory = res.data[1].history
+      
+
+      this.setState({recargasHistory,history,totalCalls,amountCalls,loading:false})
       this.setState({loadingHistorial:false})
     }).catch(err=>{
       console.log("error",err)

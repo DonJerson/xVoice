@@ -29,6 +29,7 @@ urlpatterns = [
     path('recargaOG/', RecargaOG),
     path('getHistory/', get_history),
     path('getHistoryAdmin/', get_history_admin),
+    path('getRecargasHistory/', get_recargas_history),
     path('billCall/', bill_call),
     path('deleteSubscriber/', delete_subscriber),
     path('filterNumber/', filter_number),

@@ -51,6 +51,19 @@ const TableLineUser=(props)=>{
       </>
     )
   }
+  const TableLineRecarga=(props)=>{
+    const fecha = dateFormat(new Date(props.line.date), "dd/mm/yy @ HH:MM:ss")
+    //console.log(props.line,"line")
+    return(
+      <>
+      <tr> 
+        <td>{fecha}</td>
+        <td>{parseFloat(props.line.monto).toFixed(3)}</td>
+        </tr>
+      </>
+    )
+  }
+
   const TableLineUsage=(props)=>{
     console.log(new Date(props.line.startTime))
     const fecha = dateFormat(new Date(props.line.startTime), "dd/mm/yy @ HH:MM:ss - ")+dateFormat(new Date(props.line.endTime), "HH:MM:ss")
@@ -96,6 +109,8 @@ class DashBoard extends Component {
         const isMobile=this.props.userPack.dimensions.width<768
         let marginBody = this.props.userPack.dimensions.isMobile?"15px":"50px"
         let display
+        let recargas=this.props.userPack.historyRecargas
+        let recargasAmount = this.props.userPack.recargasAmount
         //console.log(this.props.usethis.rPack.userPack.selectedUsers.length, "length")
         if((this.props.userPack.filterNumber)&&(this.props.userPack.filterNumber.length>0  ||this.props.userPack.selectedUsers.length>0)){
           display=this.props.userPack.filteredResults
@@ -258,6 +273,67 @@ class DashBoard extends Component {
                 :
                 
                 display.map((log,index)=>(
+                  <TableLineRecarga line={log} key={index}/>
+            ))
+                } 
+
+
+              </tbody>
+              
+            </table>
+              {this.props.userPack.loadingHistorial?
+                        <div className="row center">
+                          <div className="col-xs-auto">
+                            <div className="lds-hourglass" ></div>
+                          </div>
+                        
+                         
+                       </div>
+                :
+                null} 
+                </div>
+              </div>
+
+
+
+              <div className="col-xs-12 caja" style={{marginTop:"25px",marginBottom:"80px",overflowX:"visible"}}>
+                
+                <div className="row">
+                <div className="col-xs-12 col-md-6" >
+                <h1 className="secondTitle" style={{marginTop:"10px",padding:"8px",fontSize:isMobile?"24px":"34px"}}>Historial de recargas               </h1>
+
+                </div>
+                <div className="col-xs-12 col-md-6">
+                {this.props.userPack.dimensions.width<1024?
+                        <div className="col-xs-auto">
+                        {/* Total consumido: {this.totalConsumido} */}
+                        
+                        <p style={{paddingTop:"8px",paddingBottom:"8px"}}>Mostrando {formatNumber(showing)} de {formatNumber(this.props.userPack.totalCalls)} llamadas <a href="#" onClick={this.props.userPack.methods.fetchMore}>ver más </a></p>
+                        </div>
+            :                        <div className="col-xs-auto" style={{position:"absolute",right:"70px"}}>
+            {/* Total consumido: {this.totalConsumido} */}
+            
+            <p style={{paddingTop:"5px"}}>Mostrando {formatNumber(showing)} de {formatNumber(this.props.userPack.totalCalls)} llamadas <a href="#" onClick={this.props.userPack.methods.fetchMore}>ver más </a></p>
+            </div>
+            }
+</div>
+                </div>
+                <div className="row center">
+                {/* <p className="infoText">Saldo Actual</p> */}
+                <table id="customers" style={{overflowX:"scroll !important"}}>
+                <thead>
+                <tr>
+                <th>Fecha</th>
+                <th>Monto</th>
+                
+              </tr>
+              </thead>
+              <tbody>
+                {this.props.userPack.loadingHistorial?
+                  null
+                :
+                
+                display.map((log,index)=>(
                   <TableLineUsage line={log} key={index}/>
             ))
                 } 
@@ -278,6 +354,8 @@ class DashBoard extends Component {
                 null} 
                 </div>
               </div>
+
+
             {/* <div classname="row">
               <h1 className="mainGrayTitle">Mis dispositivos</h1>
             </div>
@@ -288,6 +366,9 @@ class DashBoard extends Component {
             ))} */}
 
         </div>
+
+
+        
         </> );
     }
 }

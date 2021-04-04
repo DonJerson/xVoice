@@ -7,6 +7,9 @@ import datetime
 SERVICES_CHOICES = [('GENVZ','GENVZ'),('USCALL','US')]
 PAYMENT_CHOICES = [('CASH','CASH'),('BTC','BTC')]
 
+class AutoDateTimeField(models.DateTimeField):
+    def pre_save(self, model_instance, add):
+        return timezone.now()
 
 class ActiveWatchers(models.Model):
     presentity_uri = models.CharField(max_length=128)
@@ -885,6 +888,7 @@ class Acc(models.Model):
 
 
 class Recarga(models.Model):
+    date = AutoDateTimeField(default=timezone.now)
     beneficiary = models.ForeignKey(Customer,on_delete=models.CASCADE)
     amount = models.DecimalField(max_digits=4,decimal_places=3)
     validated = models.BooleanField(default=False)
