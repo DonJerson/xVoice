@@ -398,23 +398,26 @@ class App extends Component {
     this.setState({loadingHistorial:true})
     console.log("changed?",changed)
     let historyReq =axios.post(changed?baseUrl + 'getHistoryAdmin/':baseUrl + 'getHistory/',{"amount":amount,"userId":customer.id})
-    let recargasReq =axios.post(changed?baseUrl + 'getRecargasHistory/':baseUrl + 'getRecargasHistory/',{"userId":customer.id})
+    let recargasReq =axios.post(baseUrl + 'getRecargasHistory/',{"userId":customer.id})
+    console.log("recargas historyyy")
     Promise.all([historyReq,recargasReq,]).then(res => {
-      console.log("results",res.data.totalCalls)
-      const history = res.data[0].history
+      console.log("results",res[0].data)
+      const history = res[0].data.history
+      console.log("hishis",res[0].data)
+
       let amountCalls
       amount==="all"?amountCalls = history.length:amountCalls=amount
       
-      const totalCalls = res.data.totalCalls
+      const totalCalls = res[0].data.totalCalls
       if(amountCalls>totalCalls){amountCalls=totalCalls}
 
-      const recargasHistory = res.data[1].history
-      
+      let recargasHistory = res[1].data.history
+      console.log("recargas history",recargasHistory)
 
       this.setState({recargasHistory,history,totalCalls,amountCalls,loading:false})
       this.setState({loadingHistorial:false})
     }).catch(err=>{
-      console.log("error",err)
+      console.log("errorrr",err)
       this.setState({loading:false,loadingHistorial:false})
     })
       
@@ -482,7 +485,7 @@ class App extends Component {
 
     this.state={
       selectedUsers:[],filteredResults:[],loadingFiltered:false,filterNumber:"",
-      history:[],totalCalls:0,amountCalls:0,
+      history:[],totalCalls:0,amountCalls:0,recargasHistory:[],
       logged:logged,dimensions:{width:width, height:height, isMobile:mobile},loading:loading,loadingHistorial:false,
       email:myUsername,password:myPassword,customer:null,loadingComponent:false,
     }
@@ -651,7 +654,7 @@ class App extends Component {
     //const totalConsumido = "US$"+parseFloat(total).toFixed(2)+" (total minutos: "+totalMinutos+")"
 
     const userPack={
-      virtualUpdate:this.virtualUpdate,
+      virtualUpdate:this.virtualUpdate,recargasHistory:this.state.recargasHistory,
       dimensions:this.state.dimensions,customer:this.state.customer,email:this.email,
       password:this.password,history:this.state.history,totalCalls:this.state.totalCalls,
       amountCalls:this.state.amountCalls,filteredResults:this.state.filteredResults,

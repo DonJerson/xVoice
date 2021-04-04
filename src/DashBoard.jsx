@@ -52,13 +52,13 @@ const TableLineUser=(props)=>{
     )
   }
   const TableLineRecarga=(props)=>{
-    const fecha = dateFormat(new Date(props.line.date), "dd/mm/yy @ HH:MM:ss")
+    const fecha = dateFormat(new Date(props.line.date), "dd/mm/yy @ HH:MM")
     //console.log(props.line,"line")
     return(
       <>
       <tr> 
         <td>{fecha}</td>
-        <td>{parseFloat(props.line.monto).toFixed(3)}</td>
+        <td>{parseFloat(props.line.amount).toFixed(3)}</td>
         </tr>
       </>
     )
@@ -110,6 +110,7 @@ class DashBoard extends Component {
         let marginBody = this.props.userPack.dimensions.isMobile?"15px":"50px"
         let display
         let recargasHistory=this.props.userPack.recargasHistory
+        console.log(recargasHistory, "recargasHistory")
         //console.log(this.props.usethis.rPack.userPack.selectedUsers.length, "length")
         if((this.props.userPack.filterNumber)&&(this.props.userPack.filterNumber.length>0  ||this.props.userPack.selectedUsers.length>0)){
           display=this.props.userPack.filteredResults
@@ -124,7 +125,7 @@ class DashBoard extends Component {
         }else{
           customer=this.props.userPack.customer
         }
-        console.log("rendered",customer.id)
+        console.log("hishis",this.props.userPack.history)
         return ( <>
         <div id="mainBody" style={{marginLeft:marginBody,marginRight:marginBody,marginTop:"18px",marginBottom:"200px"}}>
         <div className="row">
@@ -272,7 +273,7 @@ class DashBoard extends Component {
                 :
                 
                 display.map((log,index)=>(
-                  <TableLineRecarga line={log} key={index}/>
+                  <TableLineUsage line={log} key={index}/>
             ))
                 } 
 
@@ -307,12 +308,12 @@ class DashBoard extends Component {
                         <div className="col-xs-auto">
                         {/* Total consumido: {this.totalConsumido} */}
                         
-                        <p style={{paddingTop:"8px",paddingBottom:"8px"}}>Mostrando {formatNumber(showing)} de {formatNumber(this.props.userPack.recargasHistory.length)} recargas</p>
+                        <p style={{paddingTop:"8px",paddingBottom:"8px"}}>Mostrando {formatNumber(recargasHistory.length)} de {formatNumber(recargasHistory.length)} recargas</p>
                         </div>
             :                        <div className="col-xs-auto" style={{position:"absolute",right:"70px"}}>
             {/* Total consumido: {this.totalConsumido} */}
             
-            <p style={{paddingTop:"5px"}}>Mostrando {formatNumber(showing)} de {formatNumber(this.props.userPack.recargasHistory.length)} recargas</p>
+            <p style={{paddingTop:"5px"}}>Mostrando {formatNumber(recargasHistory.length)} de {formatNumber(recargasHistory.length)} recargas</p>
             </div>
             }
 </div>
@@ -323,7 +324,7 @@ class DashBoard extends Component {
                 <thead>
                 <tr>
                 <th>Fecha</th>
-                <th>Monto</th>
+                <th>Monto (US$)</th>
                 
               </tr>
               </thead>
@@ -332,8 +333,8 @@ class DashBoard extends Component {
                   null
                 :
                 
-                recargasHistory.map((log,index)=>(
-                  <TableLineUsage line={log} key={index}/>
+                recargasHistory.reverse().map((log,index)=>(
+                  <TableLineRecarga line={log} key={index}/>
             ))
                 } 
 
