@@ -111,9 +111,9 @@ SECURE_SSL_REDIRECT=False
 
 if True:
     # aws settings
-    AWS_ACCESS_KEY_ID = 'AKIAJSDAPWVWN4OZZHQA'
-    AWS_SECRET_ACCESS_KEY = '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'
-    AWS_STORAGE_BUCKET_NAME = 'carenmarketplace'
+    AWS_ACCESS_KEY_ID = 'AKIAQY6YLJZ5JEDFZAOQ'
+    AWS_SECRET_ACCESS_KEY = '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'
+    AWS_STORAGE_BUCKET_NAME = 'xvoicebucket'
     AWS_DEFAULT_ACL = 'public-read'
     AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com'%(AWS_STORAGE_BUCKET_NAME)
     AWS_S3_OBJECT_PARAMETERS = {'CacheControl': 'max-age=86400'}

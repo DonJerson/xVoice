@@ -108,12 +108,11 @@ def get_history_admin(request):
 
 @api_view(['POST'])
 def get_recargas_history(request):
-	userId = request.data['userId']
 	if(request.user.is_authenticated):
-		customer = Customer.objects.get(id=userId)
-		recargasHistory = customer.recargasHistory
-	return Response({"history":RecargaSerializer(recargasHistory,many=True).data})
-
+		recargasHistory = request.user.recargasHistory
+		return Response({"history":RecargaSerializer(recargasHistory,many=True).data})
+	else:
+		return Response("")
 
 @api_view(['POST'])
 def filter_number(request):
