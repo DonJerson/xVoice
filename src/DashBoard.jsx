@@ -324,7 +324,7 @@ class DashBoard extends Component {
                 <thead>
                 <tr>
                 <th>Fecha</th>
-                <th>Monto</th>
+                <th>Monto (US$)</th>
                 
               </tr>
               </thead>
