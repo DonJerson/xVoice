@@ -52,7 +52,7 @@ const TableLineUser=(props)=>{
     )
   }
   const TableLineRecarga=(props)=>{
-    const fecha = dateFormat(new Date(props.line.date), "dd/mm/yy @ HH:MM:ss")
+    const fecha = dateFormat(new Date(props.line.date), "dd/mm/yy @ HH:MM")
     //console.log(props.line,"line")
     return(
       <>
