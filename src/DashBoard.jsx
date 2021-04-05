@@ -137,7 +137,7 @@ class DashBoard extends Component {
               <div className="col-xs-12 col-sm-4 caja" style={{maxHeight:"140px",paddingTop:"10px"}}>
                 
                 <div className="row center">
-                <h1 className="balance">US${Math.round(customer.balance * 100) / 100}</h1>
+                <h1 className="balance">US${parseFloat(customer.balance).toFixed(2)}</h1>
                 </div>
                 <div className="row center" style={{marginTop:"5px"}}>
                   <div className="col-xs-auto">
