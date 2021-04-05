@@ -796,7 +796,7 @@ class SpeedDial(models.Model):
 
 class Customer(AbstractUser):
     name = models.CharField(max_length=20,null=True,blank=True)
-    balance = models.DecimalField(max_digits=7,decimal_places=3,null=True,blank=True,default=0)
+    balance = models.DecimalField(max_digits=11,decimal_places=7,null=True,blank=True,default=0)
     phoneNumber = models.CharField(max_length=10,null=True,blank=True)
     
     def __str__(self):
@@ -890,7 +890,7 @@ class Acc(models.Model):
 class Recarga(models.Model):
     date = AutoDateTimeField(default=timezone.now)
     beneficiary = models.ForeignKey(Customer,on_delete=models.CASCADE)
-    amount = models.DecimalField(max_digits=7,decimal_places=3)
+    amount = models.DecimalField(max_digits=11,decimal_places=7)
     validated = models.BooleanField(default=False)
     methodOfPayment = models.CharField(max_length=10,choices=PAYMENT_CHOICES,default="CASH")
     def save(self, *args, **kwargs):
