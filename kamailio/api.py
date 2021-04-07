@@ -86,6 +86,8 @@ def get_history(request):
 @api_view(['POST'])
 def get_history_admin(request):
 	amount = request.data['amount']
+	print("la cantidad")
+	print(amount)
 	userId = request.data['userId']
 	if(request.user.is_superuser):
 		customer = Customer.objects.get(id=userId)

@@ -387,7 +387,6 @@ class App extends Component {
   virtualUpdate=(customer)=>{
     this.setState({customer})
     this.fetchHistory(50,{id:customer.id},true)
-    console.log("feched for",{id:customer.id},true)
   }
   fetchHistory=(amount,customer={id:null},changed=false)=>{
     let history = []
@@ -611,7 +610,7 @@ class App extends Component {
   }
   fetchMore=(e)=>{
     e.preventDefault()
-    this.fetchHistory(this.state.amountCalls*3)
+    this.fetchHistory(this.state.amountCalls*3,{id:{...this.state.customer}.id},true)
   }
   fetchAll=(e)=>{
     e.preventDefault()
