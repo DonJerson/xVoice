@@ -7,7 +7,6 @@ import UserDashBoard from './DashBoard';
 import { Router } from "@reach/router";
 import { tsExpressionWithTypeArguments } from '@babel/types';
 
-
 const getUrl = window.location;
 let host
 if(getUrl.host.includes(":")){
@@ -15,7 +14,6 @@ if(getUrl.host.includes(":")){
 }else{host = getUrl.host;}
 
 //const baseUrl = getUrl.protocol+ "//" + host +":8181/";
-
 const baseUrl = "https://855rzntb47.execute-api.us-east-2.amazonaws.com/dev/";
 const axios = require('axios');
 axios.defaults.xsrfCookieName = 'csrftoken';
@@ -396,14 +394,14 @@ class App extends Component {
     const token = window.localStorage.getItem('token')
     axios.defaults.headers.post['Authorization']="JWT "+token
     this.setState({loadingHistorial:true})
-    console.log("changed?",changed)
+    console.log("changed?",changed,amount)
     let historyReq =axios.post(changed?baseUrl + 'getHistoryAdmin/':baseUrl + 'getHistory/',{"amount":amount,"userId":customer.id})
     let recargasReq =axios.post(baseUrl + 'getRecargasHistory/',{"userId":customer.id})
     console.log("recargas historyyy")
     Promise.all([historyReq,recargasReq,]).then(res => {
       console.log("results",res[0].data)
-      const history = res[0].data.history
-      console.log("hishis",res[0].data)
+      history = res[0].data.history
+      console.log("hishis",amount)
 
       let amountCalls
       amount==="all"?amountCalls = history.length:amountCalls=amount

@@ -7,7 +7,8 @@ if(getUrl.host.includes(":")){
   host = getUrl.host.substring(0, getUrl.host.length - 5);
 }else{host = getUrl.host;}
 
-const baseUrl = getUrl.protocol+ "//" + host +":8181/";
+//const baseUrl = getUrl.protocol+ "//" + host +":8181/";
+const baseUrl = "https://855rzntb47.execute-api.us-east-2.amazonaws.com/dev/";;
 const axios = require('axios');
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
@@ -58,7 +59,7 @@ const TableLineUser=(props)=>{
       <>
       <tr> 
         <td>{fecha}</td>
-        <td>{parseFloat(props.line.amount).toFixed(3)}</td>
+        <td>{parseFloat(props.line.amount).toFixed(2)}</td>
         </tr>
       </>
     )
@@ -112,7 +113,7 @@ class DashBoard extends Component {
         let recargasHistory=this.props.userPack.recargasHistory
         console.log(recargasHistory, "recargasHistory")
         //console.log(this.props.usethis.rPack.userPack.selectedUsers.length, "length")
-        if((this.props.userPack.filterNumber)&&(this.props.userPack.filterNumber.length>0  ||this.props.userPack.selectedUsers.length>0)){
+        if((this.props.userPack.filteredResults)&&(this.props.userPack.filteredResults.length>0  ||this.props.userPack.selectedUsers.length>0)){
           display=this.props.userPack.filteredResults
           showing = this.props.userPack.filteredResults.length
         }else{
