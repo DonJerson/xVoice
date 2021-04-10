@@ -76,7 +76,7 @@ const TableLineUser=(props)=>{
         <td>{props.line.dst_user}</td>
         <td>{fecha}</td>
         <td>{props.line.duration}</td>
-        <td>{parseFloat(props.line.duration*0.011/60).toFixed(7)}</td>
+        <td>{parseFloat(props.line.duration*0.0144/60).toFixed(7)}</td>
         </tr>
       </>
     )

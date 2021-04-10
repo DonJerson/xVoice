@@ -28,15 +28,15 @@ async function start(){
     verbose: true
   }))
 
-  // async function getCerts(){
-  //   const certdir = (await fs.readdir("/etc/letsencrypt/live"))[1];
-  //   return {
-  //     key: await fs.readFile(`/etc/letsencrypt/live/${certdir}/privkey.pem`),
-  //     cert: await fs.readFile(`/etc/letsencrypt/live/${certdir}/fullchain.pem`)
-  //   }
-  // }
+  async function getCerts(){
+    const certdir = (await fs.readdir("/etc/letsencrypt/live"))[1];
+    return {
+      key: await fs.readFile(`/etc/letsencrypt/live/${certdir}/privkey.pem`),
+      cert: await fs.readFile(`/etc/letsencrypt/live/${certdir}/fullchain.pem`)
+    }
+  }
   
-  // const {key, cert} = await getCerts()
+  const {key, cert} = await getCerts()
   
   // the __dirname is the current directory from where the script is running
   app.use(serveStatic(path.join(__dirname, './build'), { 
@@ -53,12 +53,12 @@ const httpApp = express();
 
 httpApp.get('*', function(req, res) {
   // console.log('tenenemos', req.headers.host + req.url)
-  // res.redirect('https://' + req.headers.host + req.url);
+  res.redirect('https://' + req.headers.host + req.url);
   // console.log(req.headers.host + req.url,'redirecting')
-  res.sendfile(path.resolve(__dirname, './build/index.html'));
+  // res.sendfile(path.resolve(__dirname, './build/index.html'));
 })
 const httpServer = http.createServer(httpApp).listen(80);
-//https.createServer({key, cert}, app).listen(443)
+https.createServer({key, cert}, app).listen(443)
 }
 
 function setCustomCacheControl (res, path) {
