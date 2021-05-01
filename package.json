@@ -4,12 +4,12 @@
   "private": false,
   "dependencies": {
     "@testing-library/jest-dom": "^4.2.4",
-    "@testing-library/react": "^9.4.0",
+    "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
     "express": "^4.17.1",
     "mysql": "^2.18.1",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0",
     "react-scripts": "3.3.1"
   },
   "scripts": {
@@ -39,10 +39,10 @@
   "proxy": "http://localhost",
   "devDependencies": {
     "@moebius/http-graceful-shutdown": "^1.1.0",
-    "@reach/router": "^1.3.3",
+    "@reach/router": "^1.3.4",
     "axios": "^0.19.2",
     "dateformat": "^3.0.3",
     "mz": "^2.7.0",
-    "sip.js": "^0.15.10"
+    "sip.js": "^0.15.11"
   }
 }

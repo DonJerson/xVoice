@@ -30,9 +30,10 @@ async function start(){
 
   async function getCerts(){
     const certdir = (await fs.readdir("/etc/letsencrypt/live"))[1];
+    console.log("mira esto es una maldita prueba", certdir)
     return {
-      key: await fs.readFile(`/etc/letsencrypt/live/${certdir}/privkey.pem`),
-      cert: await fs.readFile(`/etc/letsencrypt/live/${certdir}/fullchain.pem`)
+      key: await fs.readFile(`/etc/letsencrypt/live/xvoice.club/privkey.pem`),
+      cert: await fs.readFile(`/etc/letsencrypt/live/xvoice.club/fullchain.pem`)
     }
   }
   
