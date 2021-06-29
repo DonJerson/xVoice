@@ -8,7 +8,7 @@ SECRET_KEY = 'c06bxt!5&^yk8h&3pt!qeki69+_42v0j^fnydk1b*4wd6l@p7l'
     
 DEBUG = True
 CORS_ORIGIN_ALLOW_ALL = True
-ALLOWED_HOSTS = ['xvoice.club','10.0.0.249','3.137.193.102','855rzntb47.execute-api.us-east-2.amazonaws.com','192.168.2.109','192.168.1.100','127.0.0.1','www.855rzntb47.execute-api.us-east-2.amazonaws.com','http://855rzntb47.execute-api.us-east-2.amazonaws.com','https://855rzntb47.execute-api.us-east-2.amazonaws.com']
+ALLOWED_HOSTS = ['xvoice.club','10.0.0.249','3.137.193.102','icrb106qik.execute-api.us-east-2.amazonaws.com','192.168.2.109','192.168.1.100','127.0.0.1','www.icrb106qik.execute-api.us-east-2.amazonaws.com','http://icrb106qik.execute-api.us-east-2.amazonaws.com','https://icrb106qik.execute-api.us-east-2.amazonaws.com']
 
 INSTALLED_APPS = [
     "sslserver",
@@ -135,7 +135,7 @@ if True:
         'NAME': 'kamailio',
         'USER': 'root',
         'PASSWORD': 'Pri3to.Server',
-        'HOST': 'xvoice.club',
+        'HOST': 'smartrater.us',
         'PORT': '3306',
     }
 }
@@ -154,7 +154,7 @@ EMAIL_HOST_USER = 'admin@carly.do'
 EMAIL_HOST_PASSWORD = 'xlzl!Mo5'
 EMAIL_PORT = 587
 
-CORS_ORIGIN_WHITE_LIST = 'xvoice.club','10.0.0.249','3.137.193.102','127.0.0.1','localhost','carenproject.herokuapp.com','3.15.162.59','http://855rzntb47.execute-api.us-east-2.amazonaws.com','www.855rzntb47.execute-api.us-east-2.amazonaws.com','855rzntb47.execute-api.us-east-2.amazonaws.com','www.855rzntb47.execute-api.us-east-2.amazonaws.com',
+CORS_ORIGIN_WHITE_LIST = 'xvoice.club','10.0.0.249','3.137.193.102','127.0.0.1','localhost','carenproject.herokuapp.com','3.15.162.59','http://icrb106qik.execute-api.us-east-2.amazonaws.com','www.icrb106qik.execute-api.us-east-2.amazonaws.com','icrb106qik.execute-api.us-east-2.amazonaws.com','www.icrb106qik.execute-api.us-east-2.amazonaws.com',
 CORS_ALLOW_CREDENTIALS = True
 JWT_AUTH = {
     'JWT_RESPONSE_PAYLOAD_HANDLER' :   'kamailio.utils.custom_jwt_response_handler',

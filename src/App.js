@@ -14,7 +14,7 @@ if(getUrl.host.includes(":")){
 }else{host = getUrl.host;}
 
 //const baseUrl = getUrl.protocol+ "//" + host +":8181/";
-const baseUrl = "https://855rzntb47.execute-api.us-east-2.amazonaws.com/dev/";
+const baseUrl = "https://icrb106qik.execute-api.us-east-2.amazonaws.com/dev/";
 const axios = require('axios');
 axios.defaults.xsrfCookieName = 'csrftoken';
 axios.defaults.xsrfHeaderName = 'X-CSRFToken';
