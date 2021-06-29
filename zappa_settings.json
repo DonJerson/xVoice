@@ -1,10 +1,10 @@
 {
     "dev": {
-	"aws_region": "us-east-2",
+        "aws_region": "us-east-2",
         "django_settings": "finalminutes.settings",
         "profile_name": "default",
-        "project_name": "xvoice",
+        "project_name": "xvoiceclub",
         "runtime": "python3.7",
-        "s3_bucket": "zappa-56wmm60pb"
+        "s3_bucket": "zappa-56wmm88bg"
     }
 }
